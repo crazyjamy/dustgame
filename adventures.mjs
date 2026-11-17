@@ -1,3 +1,4 @@
+import{keepPostcard}from'./dust-life.mjs';
 import{activeLevel}from'./furniture.mjs';
 export const QUESTS=[
  {id:'bookshelf',name:'책장 아래 숲',duration:20000,description:'작은 풀잎 사이로 첫 모험을 떠나요.',color:'#c6d7ae',rewards:[['group','daily',1],['rarity','common',1],['essence','leaf',3],['essence','dew',2]],sparkles:2},
@@ -25,7 +26,7 @@ export function claimAdventure(s,uid,now=Date.now()){
  const d=s.dusts.find(x=>x.uid===uid),route=QUESTS.find(x=>x.id===q.route);
  for(const [key,id,amount]of route.rewards)s.materials[key][id]+=amount+(key==='essence'?activeLevel(s,'basket'):0);
  s.sparkles+=route.sparkles;s.adventureCount++;s.adventures=s.adventures.filter(x=>x.uid!==uid);d.goldAt=now+d.goldRemaining;s.selectedUid=uid;
- return {ok:true,dust:d,route};
+ const letter=keepPostcard(s,d,route.id,now);return {ok:true,dust:d,route,...letter};
 }
 
 // A click changes the selection, never the individual, its species or its position.

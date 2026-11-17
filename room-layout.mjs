@@ -1,5 +1,6 @@
+import{FURNITURE_SPOTS}from'./dust-life.mjs';
 import {isAway} from './adventures.mjs';
-export const DEFAULT_DECOR={rug:{x:50,y:66},plant:{x:9,y:52},lamp:{x:89,y:45},cushion:{x:80,y:84},bookshelf:{x:20,y:27},teacup:{x:28,y:78},basket:{x:84,y:60},windchime:{x:45,y:18},hourglass:{x:76,y:40},musicbox:{x:65,y:86}};
+export const DEFAULT_DECOR=FURNITURE_SPOTS;
 export const insideKeeper=(box,x,y)=>x>=box.left-12&&x<=box.right+12&&y>=box.top-12&&y<=box.bottom+12;
 export function initRoomLayout(s){
  if(s.roomPositions===undefined)s.roomPositions={dust:{},furniture:{}};

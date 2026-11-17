@@ -1,4 +1,6 @@
-import {DUSTS} from './dust-data.mjs';
+import{personalPostcard}from'./postcard-voices.mjs?v=1.0.0-504b5635';
+import{characterProfile}from'./dust-character.mjs?v=1.0.0-504b5635';
+import {DUSTS} from './dust-data.mjs?v=1.0.0-504b5635';
 
 export const FAVORITES=[
  {id:'rug',name:'폭신한 러그',action:'러그 위에서 몸을 동그랗게 말아요.',words:'폭신한 곳에 있으면 마음도 느긋해져.',memory:'처음에는 가장자리만 밟았어요. 오래된 러그의 자수가 늘어날수록 조금씩 가운데로 들어왔고, 이제는 옆자리를 친구에게 내어줘요.'},
@@ -20,7 +22,7 @@ const MOODS=[
  {name:'장난꾸러기',idle:'자기 그림자와 누가 더 멀리 뛰나 시합했어요.'}
 ];
 const favoriteOrder=[0,3,1,7,4,8,5,5,2,2,3,1,6,9,2,4,6,5,8,9];
-export function personality(id){const i=DUSTS.findIndex(d=>d.id===id);if(i<0)throw Error('unknown dust');const favorite=FAVORITES[favoriteOrder[i]??((i*7+3)%10)],mood=MOODS[(i*3)%5];return {favorite,mood,index:i};}
+export function personality(id){const i=DUSTS.findIndex(d=>d.id===id);if(i<0)throw Error('unknown dust');const favorite=FAVORITES[favoriteOrder[i]??((i*7+3)%10)],mood=MOODS[(i*3)%5];const c=characterProfile(id);return {favorite:c?{...favorite,action:c.action,words:c.words}:favorite,mood,index:i};}
 export const DEFAULT_SPOTS=[[45,40],[22,52],[66,54],[36,62],[58,23],[15,26],[76,29],[49,65],[72,68]];
 export const FURNITURE_SPOTS={rug:{x:50,y:66},plant:{x:9,y:52},lamp:{x:89,y:45},cushion:{x:80,y:84},bookshelf:{x:20,y:27},teacup:{x:28,y:78},basket:{x:84,y:60},windchime:{x:45,y:18},hourglass:{x:76,y:40},musicbox:{x:65,y:86}};
 const residents=s=>s.dusts.filter(d=>!d.stored&&!s.adventures.some(q=>q.uid===d.uid));
@@ -76,7 +78,7 @@ const LETTERS={
 export function keepPostcard(s,d,route,now=Date.now()){
  initLife(s,now);const id=d.id+':'+route;if(s.life.postcards.some(p=>p.id===id))return {postcard:s.life.postcards.find(p=>p.id===id),isNew:false};
  const p=personality(d.id),[title,text]=LETTERS[route][(p.index*3)%5];const memory=s.life.memories.includes(String(d.uid))?` 돌아오면 ${p.favorite.name} 곁에서 이 이야기를 들려줄게요.`:'';
- const postcard={id,dustId:d.id,route,title,text:text+memory,at:now};s.life.postcards.unshift(postcard);record(s,'postcard',lookup(d.id).name+'에게서 온 엽서',title,now);return {postcard,isNew:true};
+ const postcard={id,dustId:d.id,route,title,text:personalPostcard(d.id,route,text)+memory,at:now};s.life.postcards.unshift(postcard);record(s,'postcard',lookup(d.id).name+'에게서 온 엽서',title,now);return {postcard,isNew:true};
 }
 export function resumeLife(s,now=Date.now()){
  initLife(s,now);const gap=now-s.life.lastSeen;s.life.lastSeen=now;if(gap<60000)return null;

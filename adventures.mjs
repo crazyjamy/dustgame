@@ -1,5 +1,7 @@
-import{keepPostcard}from'./dust-life.mjs';
-import{activeLevel}from'./furniture.mjs';
+import{pauseGoldClock}from'./gold-clock.mjs?v=1.0.0-504b5635';
+import{keepPostcard}from'./dust-life.mjs?v=1.0.0-504b5635';
+import{activeLevel}from'./furniture.mjs?v=1.0.0-504b5635';
+import{goldInterval}from'./gold-rates.mjs?v=1.0.0-504b5635';
 export const QUESTS=[
  {id:'bookshelf',name:'책장 아래 숲',duration:20000,description:'작은 풀잎 사이로 첫 모험을 떠나요.',color:'#c6d7ae',rewards:[['group','daily',1],['rarity','common',1],['essence','leaf',3],['essence','dew',2]],sparkles:2},
  {id:'window',name:'햇살 창가',duration:45000,description:'바람을 타고 반짝이는 햇살을 찾아요.',color:'#efdc9e',rewards:[['group','pop',1],['rarity','rare',1],['essence','spark',5],['essence','ember',2]],sparkles:3},
@@ -17,7 +19,7 @@ export function initAdventures(s){
 export function startAdventure(s,uid,routeId,now=Date.now()){
  const d=s.dusts.find(x=>x.uid===uid),route=QUESTS.find(x=>x.id===routeId);
  if(!d||d.stored||isAway(s,uid)||!route)return {ok:false,message:'방에서 쉬고 있는 먼지를 골라주세요.'};
- d.goldRemaining=Math.max(0,d.goldAt-now);const duration=Math.round(route.duration*(1-activeLevel(s,'windchime')*.05));s.adventures.push({uid,route:route.id,start:now,end:now+duration,duration});
+ pauseGoldClock(d,goldInterval(s,d),now);const duration=Math.round(route.duration*(1-activeLevel(s,'windchime')*.05));s.adventures.push({uid,route:route.id,start:now,end:now+duration,duration});
  if(s.selectedUid===uid)s.selectedUid=s.dusts.find(x=>!x.stored&&!isAway(s,x.uid))?.uid??null;
  return {ok:true,quest:s.adventures.at(-1)};
 }

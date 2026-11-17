@@ -1,4 +1,4 @@
-import{MORE_FURNITURE_STORIES}from'./furniture-extra.mjs';
+import{MORE_FURNITURE_STORIES}from'./furniture-extra.mjs?v=1.0.0-504b5635';
 export const FURNITURE_STORIES={
  rug:[
  ['첫 번째 자리','아무도 앉지 않던 러그 한가운데, 작은 먼지가 처음 몸을 눕혔어요. 주름 하나가 조용히 펴졌어요. 이제 이곳에는 돌아와 쉴 자리가 생겼어요.'],

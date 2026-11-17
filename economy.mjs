@@ -1,0 +1,63 @@
+import{MORE_FURNITURE}from'./furniture-extra.mjs';
+import{ROOMS}from'./rooms.mjs';
+export{ROOMS}from'./rooms.mjs';
+import{initFurniture,activeLevel,furnitureLevel,upgradeCost,lampFactor,cushionBonus}from'./furniture.mjs';
+import{isAway}from'./adventures.mjs';
+import{initRoomLayout}from'./room-layout.mjs';
+import {DUSTS,GROUPS,RARITIES,ESSENCES} from './dust-data.mjs';
+
+export const FURNITURE=[
+ {id:'rug',name:'폭신한 러그',price:60,description:'반짝이 주기 3회마다 사용한 반짝이 1개를 돌려줘요.',effect:'반짝이 절약',color:'#dfb0aa'},
+ {id:'plant',name:'작은 화분',price:80,description:'쓰다듬기로 얻는 반짝이가 1개에서 2개로 늘어요.',effect:'쓰다듬기 +1',color:'#aabd91'},
+ {id:'lamp',name:'달빛 조명',price:100,description:'방에 있는 모든 먼지의 골드 대기 시간이 20% 줄어요.',effect:'골드 시간 −20%',color:'#ead591'},
+ {id:'cushion',name:'구름 쿠션',price:120,description:'모든 먼지의 골드 보상이 25% 늘어요.',effect:'골드 보상 +25%',color:'#bfcfe0'}
+];
+FURNITURE.push(...MORE_FURNITURE);
+const lists={group:GROUPS,rarity:RARITIES,essence:ESSENCES};
+export const materialPrice=(key,id)=>key==='group'?8:key==='essence'?3:({common:10,rare:18,legend:30}[id]||0);
+export const installed=(s,id)=>s.decorations.includes(id);
+export const FAIRY_PRICE=120;
+export function goldInterval(s,d){const i=DUSTS.findIndex(x=>x.id===d.id);return Math.round((20+i*3)*1000*lampFactor(s));}
+export function goldAmount(s,d){const data=DUSTS.find(x=>x.id===d.id),base={common:6,rare:9,legend:13}[data.rarity]+Math.floor(d.xp/2);return Math.floor(base*(1+ROOMS[s.roomLevel-1].bonus/100+cushionBonus(s)))+activeLevel(s,'hourglass')*2;}
+export function startClock(s,d,now=Date.now()){d.goldAt=now+goldInterval(s,d);d.goldRemaining=goldInterval(s,d);}
+export function initEconomy(s,now=Date.now()){
+ if(s.gold===undefined)s.gold=180;
+ if(s.roomLevel===undefined)s.roomLevel=1;
+ if(s.ownedFurniture===undefined)s.ownedFurniture=[];
+ if(s.decorations===undefined)s.decorations=[];
+ if(s.feedCount===undefined)s.feedCount=0;
+ if(s.fairyOwned===undefined)s.fairyOwned=false;
+ if(typeof s.fairyOwned!=='boolean')throw Error('invalid fairy');
+ if(!Number.isSafeInteger(s.gold)||s.gold<0||!Number.isInteger(s.roomLevel)||s.roomLevel<1||s.roomLevel>ROOMS.length||!Number.isSafeInteger(s.feedCount)||s.feedCount<0)throw Error('invalid economy');
+ for(const key of ['ownedFurniture','decorations'])if(!Array.isArray(s[key])||new Set(s[key]).size!==s[key].length||!s[key].every(id=>FURNITURE.some(f=>f.id===id)))throw Error('invalid furniture');
+ if(!s.decorations.every(id=>s.ownedFurniture.includes(id)))throw Error('unowned decoration');
+ initFurniture(s);for(const d of s.dusts){if(d.goldAt===undefined)startClock(s,d,now);if(!Number.isFinite(d.goldAt)||d.goldAt<0||!Number.isFinite(d.goldRemaining)||d.goldRemaining<0)throw Error('invalid clock');}
+ return initRoomLayout(s);
+}
+export function goldReady(s,d,now=Date.now()){return !d.stored&&!isAway(s,d.uid)&&now>=d.goldAt;}
+export function collectGold(s,uid,now=Date.now()){
+ const d=s.dusts.find(x=>x.uid===uid);if(!d||!goldReady(s,d,now))return {ok:false,message:'골드가 모일 때까지 조금 기다려주세요.'};
+ const amount=goldAmount(s,d);s.gold+=amount;startClock(s,d,now);const sparkles=activeLevel(s,'musicbox');s.sparkles+=sparkles;return {ok:true,amount,sparkles};
+}
+export function collectAllGold(s,now=Date.now()){if(!s.fairyOwned)return {ok:false,amount:0,message:'골드 모으는 요정을 먼저 데려와 주세요.'};let amount=0,sparkles=0;for(const d of s.dusts){const r=collectGold(s,d.uid,now);if(r.ok){amount+=r.amount;sparkles+=r.sparkles;}}return {ok:amount>0,amount,sparkles};}
+export function buyFairy(s){if(s.fairyOwned)return {ok:false,message:'이미 요정과 함께하고 있어요.'};if(s.gold<FAIRY_PRICE)return {ok:false,message:'골드가 조금 더 필요해요.'};s.gold-=FAIRY_PRICE;s.fairyOwned=true;return {ok:true};}
+export function buyMaterial(s,key,id,quantity=1){
+ if(!lists[key]?.some(x=>x.id===id)||!Number.isInteger(quantity)||quantity<1||quantity>99)return {ok:false,message:'구매할 재료를 확인해주세요.'};
+ const price=materialPrice(key,id)*quantity;if(s.gold<price)return {ok:false,message:'골드가 조금 더 필요해요.'};
+ s.gold-=price;s.materials[key][id]+=quantity;return {ok:true,price};
+}
+export function upgradeRoom(s){const next=ROOMS[s.roomLevel];if(!next)return {ok:false,message:'가장 포근한 방이에요.'};if(s.gold<next.cost)return {ok:false,message:'골드가 조금 더 필요해요.'};s.gold-=next.cost;s.roomLevel++;return {ok:true};}
+export function toggleFurniture(s,id,now=Date.now()){
+ const f=FURNITURE.find(x=>x.id===id);if(!f)return {ok:false,message:'가구를 확인해주세요.'};
+ if(!s.ownedFurniture.includes(id)){if(s.gold<f.price)return {ok:false,message:'골드가 조금 더 필요해요.'};s.gold-=f.price;s.ownedFurniture.push(id);s.furnitureLevels[id]=1;}
+ const old=s.dusts.map(d=>goldInterval(s,d)),on=installed(s,id);if(on)s.decorations=s.decorations.filter(x=>x!==id);else s.decorations.push(id);
+ if(id==='lamp')s.dusts.forEach((d,i)=>{const ratio=goldInterval(s,d)/old[i];if(d.stored||isAway(s,d.uid))d.goldRemaining=Math.round(d.goldRemaining*ratio);else d.goldAt=now+Math.round(Math.max(0,d.goldAt-now)*ratio);});
+ return {ok:true,placed:!on};
+}
+
+export function upgradeFurniture(s,id,now=Date.now()){
+ const price=upgradeCost(s,id);if(price===null)return {ok:false,message:furnitureLevel(s,id)===5?'가장 포근한 가구예요.':'가구를 먼저 데려와 주세요.'};if(s.gold<price)return {ok:false,message:'골드가 조금 더 필요해요.'};
+ const old=s.dusts.map(d=>goldInterval(s,d));s.gold-=price;s.furnitureLevels[id]=furnitureLevel(s,id)+1;
+ if(id==='lamp'&&installed(s,id))s.dusts.forEach((d,i)=>{const ratio=goldInterval(s,d)/old[i];if(d.stored||isAway(s,d.uid))d.goldRemaining=Math.round(d.goldRemaining*ratio);else d.goldAt=now+Math.round(Math.max(0,d.goldAt-now)*ratio);});
+ return {ok:true,level:s.furnitureLevels[id],price};
+}

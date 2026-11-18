@@ -1,4 +1,4 @@
-export const APP_VERSION='1.0.0';
+export const APP_VERSION='1.3.2';
 export const PREFS_KEY='tiny-dust-settings-v1';
 export const BACKUP_KEY='tiny-dust-before-import-v1';
 export function defaultPreferences(existing=false){return {version:1,sound:false,volume:35,motionReduced:false,visualEffects:true,introSeen:existing};}

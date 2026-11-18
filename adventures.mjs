@@ -1,20 +1,21 @@
-import{pauseGoldClock}from'./gold-clock.mjs?v=1.0.0-504b5635';
-import{keepPostcard}from'./dust-life.mjs?v=1.0.0-504b5635';
-import{activeLevel}from'./furniture.mjs?v=1.0.0-504b5635';
-import{goldInterval}from'./gold-rates.mjs?v=1.0.0-504b5635';
+import{initDesk}from'./desk-exploration.mjs?v=1.3.2-e34f35c0';
+import{pauseGoldClock}from'./gold-clock.mjs?v=1.3.2-e34f35c0';
+import{keepPostcard}from'./dust-life.mjs?v=1.3.2-e34f35c0';
+import{activeLevel}from'./furniture.mjs?v=1.3.2-e34f35c0';
+import{goldInterval}from'./gold-rates.mjs?v=1.3.2-e34f35c0';
 export const QUESTS=[
  {id:'bookshelf',name:'책장 아래 숲',duration:20000,description:'작은 풀잎 사이로 첫 모험을 떠나요.',color:'#c6d7ae',rewards:[['group','daily',1],['rarity','common',1],['essence','leaf',3],['essence','dew',2]],sparkles:2},
  {id:'window',name:'햇살 창가',duration:45000,description:'바람을 타고 반짝이는 햇살을 찾아요.',color:'#efdc9e',rewards:[['group','pop',1],['rarity','rare',1],['essence','spark',5],['essence','ember',2]],sparkles:3},
  {id:'moonpath',name:'달빛 다락길',duration:90000,description:'조용한 밤길 끝에 희귀한 재료가 기다려요.',color:'#d0c5e4',rewards:[['group','dream',1],['rarity','legend',1],['essence','moon',8],['essence','stardust',2]],sparkles:5}
 ];
-export const isAway=(s,uid)=>s.adventures?.some(q=>q.uid===uid)||false;
+export const isAway=(s,uid)=>(s.adventures?.some(q=>q.uid===uid)||s.deskRun?.uid===uid)||false;
 export function initAdventures(s){
  if(s.adventures===undefined)s.adventures=[];
  if(s.keeperRoute===undefined)s.keeperRoute='bookshelf';if(!QUESTS.some(q=>q.id===s.keeperRoute))throw Error('invalid keeper route');
  if(s.adventureCount===undefined)s.adventureCount=0;
  if(!Number.isSafeInteger(s.adventureCount)||s.adventureCount<0||!Array.isArray(s.adventures)||new Set(s.adventures.map(q=>q.uid)).size!==s.adventures.length)throw Error('invalid adventures');
  for(const q of s.adventures){const route=QUESTS.find(x=>x.id===q.route),d=s.dusts.find(x=>x.uid===q.uid);if(!route||!d||d.stored||!Number.isFinite(q.start)||q.start<0||!Number.isFinite(q.duration??route.duration)||(q.duration??route.duration)<route.duration*.75||(q.duration??route.duration)>route.duration||q.end!==q.start+(q.duration??route.duration))throw Error('invalid quest');}
- return s;
+ return initDesk(s);
 }
 export function startAdventure(s,uid,routeId,now=Date.now()){
  const d=s.dusts.find(x=>x.uid===uid),route=QUESTS.find(x=>x.id===routeId);

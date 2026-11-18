@@ -1,12 +1,12 @@
-import{restore}from'./dust-engine.mjs?v=1.0.0-504b5635';
-import{APP_VERSION,validatePreferences,PREFS_KEY,BACKUP_KEY}from'./player-settings.mjs?v=1.0.0-504b5635';
+import{restore}from'./dust-engine.mjs?v=1.3.2-e34f35c0';
+import{APP_VERSION,validatePreferences,PREFS_KEY,BACKUP_KEY}from'./player-settings.mjs?v=1.3.2-e34f35c0';
 export const MAX_SAVE_BYTES=5*1024*1024;
-export function encodeSave(state,preferences,now=Date.now()){return JSON.stringify({format:'tiny-dust-save',schemaVersion:2,appVersion:APP_VERSION,exportedAt:new Date(now).toISOString(),data:state,preferences:validatePreferences(preferences)},null,2);}
+export function encodeSave(state,preferences,now=Date.now()){return JSON.stringify({format:'tiny-dust-save',schemaVersion:3,appVersion:APP_VERSION,exportedAt:new Date(now).toISOString(),data:state,preferences:validatePreferences(preferences)},null,2);}
 export function decodeSave(raw,now=Date.now()){
  if(typeof raw!=='string'||new TextEncoder().encode(raw).length>MAX_SAVE_BYTES)throw Error('5MB 이하의 게임 기록 파일을 골라주세요.');
  let value;try{value=JSON.parse(raw);}catch{throw Error('JSON 기록 파일을 읽을 수 없어요. 현재 기록은 바뀌지 않았어요.');}
  if(value?.format==='tiny-dust-save'){
-  if(value.schemaVersion!==2)throw Error('지원하지 않는 저장 버전이에요. 현재 기록은 유지돼요.');
+  if(![2,3].includes(value.schemaVersion))throw Error('지원하지 않는 저장 버전이에요. 현재 기록은 유지돼요.');
   return {state:restore(JSON.stringify(value.data),now),preferences:validatePreferences(value.preferences)};
  }
  return {state:restore(raw,now),preferences:null};

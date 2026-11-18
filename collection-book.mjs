@@ -1,4 +1,4 @@
-import{DUSTS,RARITIES}from'./dust-data.mjs?v=1.0.0-504b5635';
+import{DUSTS,RARITIES}from'./dust-data.mjs?v=1.3.2-e34f35c0';
 export const THEMES=[
  {id:'neighbors',name:'작은 이웃들',description:'서로 다른 버릇을 가진 첫 다섯 친구가 한집에 모여요.',members:['crumb','soot','pink','puff','violet'],reward:'다섯 친구 액자',color:'#e6c58c'},
  {id:'forest',name:'풀잎 산책',description:'풀잎 정수에서 태어난 친구들과 작은 숲을 완성해요.',members:DUSTS.filter(d=>d.essence==='leaf').map(d=>d.id),reward:'풀잎 가랜드',color:'#b8ce9c'},
@@ -20,4 +20,4 @@ export function targetDust(s){return DUSTS.find(d=>d.id===s.collectionBook.targe
 export function materialNeeds(s,id){const d=DUSTS.find(d=>d.id===id);if(!d)return [];const cost=RARITIES.find(r=>r.id===d.rarity).cost;return [['group',d.group,1],['rarity',d.rarity,1],['essence',d.essence,cost]].map(([key,id,need])=>({key,id,need,have:s.materials[key][id],missing:Math.max(0,need-s.materials[key][id])}));}
 export function claimTheme(s,id){const p=themeProgress(s,id);if(!p||!p.complete||p.claimed)return {ok:false};s.collectionBook.claimed.push(id);s.collectionBook.placed.push(id);return {ok:true,theme:p.theme};}
 export function toggleThemeDecor(s,id){if(!s.collectionBook.claimed.includes(id))return false;const b=s.collectionBook;b.placed=b.placed.includes(id)?b.placed.filter(x=>x!==id):[...b.placed,id];return true;}
-export function routeCollection(s,route){const letters=(s.life?.postcards||[]).filter(p=>p.route===route),sent=new Set(letters.map(p=>p.dustId));return {letters,missing:DUSTS.filter(d=>!sent.has(d.id)),candidates:s.dusts.filter(d=>!d.stored&&!s.adventures.some(q=>q.uid===d.uid)&&!sent.has(d.id)).filter((d,i,a)=>a.findIndex(x=>x.id===d.id)===i)};}
+export function routeCollection(s,route){const letters=(s.life?.postcards||[]).filter(p=>p.route===route),sent=new Set(letters.map(p=>p.dustId));return {letters,missing:DUSTS.filter(d=>!sent.has(d.id)),candidates:s.dusts.filter(d=>!d.stored&&!s.adventures.some(q=>q.uid===d.uid)&&s.deskRun?.uid!==d.uid&&!sent.has(d.id)).filter((d,i,a)=>a.findIndex(x=>x.id===d.id)===i)};}

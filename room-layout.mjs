@@ -1,5 +1,5 @@
-import{FURNITURE_SPOTS}from'./dust-life.mjs?v=1.0.0-504b5635';
-import {isAway} from './adventures.mjs?v=1.0.0-504b5635';
+import{FURNITURE_SPOTS}from'./dust-life.mjs?v=1.3.2-e34f35c0';
+import {isAway} from './adventures.mjs?v=1.3.2-e34f35c0';
 export const DEFAULT_DECOR=FURNITURE_SPOTS;
 export const insideKeeper=(box,x,y)=>x>=box.left-12&&x<=box.right+12&&y>=box.top-12&&y<=box.bottom+12;
 export function initRoomLayout(s){

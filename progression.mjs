@@ -1,8 +1,8 @@
-import{mergeCandidates}from'./dust-engine.mjs?v=1.5.0-f00f57e0';
-import{DUSTS}from'./dust-data.mjs?v=1.5.0-f00f57e0';
-import{ROOMS,ROOM_CHAPTERS}from'./rooms.mjs?v=1.5.0-f00f57e0';
-import{isAway}from'./adventures.mjs?v=1.5.0-f00f57e0';
-import{goldProduction,FURNITURE,FAIRY_PRICE}from'./economy.mjs?v=1.5.0-f00f57e0';
+import{mergeCandidates}from'./dust-engine.mjs?v=1.7.1-da305733';
+import{DUSTS}from'./dust-data.mjs?v=1.7.1-da305733';
+import{ROOMS,ROOM_CHAPTERS}from'./rooms.mjs?v=1.7.1-da305733';
+import{isAway}from'./adventures.mjs?v=1.7.1-da305733';
+import{goldProduction,FURNITURE,FAIRY_PRICE}from'./economy.mjs?v=1.7.1-da305733';
 
 export function firstSteps(s){return [
  {id:'birth',label:'먼지 탄생',done:s.nextUid>2||s.dusts.some(d=>d.xp>0)||s.ownedFurniture.length>0||s.roomLevel>1},

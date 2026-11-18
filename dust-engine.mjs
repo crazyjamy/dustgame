@@ -1,10 +1,10 @@
-import{syncCollection}from'./collection-book.mjs?v=1.5.0-f00f57e0';
-import{initLife}from'./dust-life.mjs?v=1.5.0-f00f57e0';
-import{hasHomeSpace,hasStorageSpace,roomCapacity,storageCapacity}from'./rooms.mjs?v=1.5.0-f00f57e0';
-import{activeLevel}from'./furniture.mjs?v=1.5.0-f00f57e0';
-import{isAway,initAdventures}from'./adventures.mjs?v=1.5.0-f00f57e0';
-import{initEconomy,pauseGold,startClock,installed,collectGold}from'./economy.mjs?v=1.5.0-f00f57e0';
-import{DUSTS,GROUPS,RARITIES,ESSENCES,STORIES}from'./dust-data.mjs?v=1.5.0-f00f57e0';
+import{syncCollection}from'./collection-book.mjs?v=1.7.1-da305733';
+import{initLife}from'./dust-life.mjs?v=1.7.1-da305733';
+import{hasHomeSpace,hasStorageSpace,roomCapacity,storageCapacity}from'./rooms.mjs?v=1.7.1-da305733';
+import{activeLevel}from'./furniture.mjs?v=1.7.1-da305733';
+import{isAway,initAdventures}from'./adventures.mjs?v=1.7.1-da305733';
+import{initEconomy,pauseGold,startClock,installed,collectGold}from'./economy.mjs?v=1.7.1-da305733';
+import{DUSTS,GROUPS,RARITIES,ESSENCES,STORIES}from'./dust-data.mjs?v=1.7.1-da305733';
 export const getDust=id=>DUSTS.find(d=>d.id===id);
 export const stage=xp=>xp>=6?2:xp>=2?1:0;
 export const level=xp=>1+Math.floor(xp/2);

@@ -1,9 +1,9 @@
-import{routeUnlocked,routeUnlockLevel}from'./rooms.mjs?v=1.5.0-f00f57e0';
-import{initDesk}from'./desk-exploration.mjs?v=1.5.0-f00f57e0';
-import{pauseGoldClock}from'./gold-clock.mjs?v=1.5.0-f00f57e0';
-import{keepPostcard}from'./dust-life.mjs?v=1.5.0-f00f57e0';
-import{activeLevel}from'./furniture.mjs?v=1.5.0-f00f57e0';
-import{goldInterval}from'./gold-rates.mjs?v=1.5.0-f00f57e0';
+import{routeUnlocked,routeUnlockLevel}from'./rooms.mjs?v=1.7.1-da305733';
+import{initDesk}from'./desk-exploration.mjs?v=1.7.1-da305733';
+import{pauseGoldClock}from'./gold-clock.mjs?v=1.7.1-da305733';
+import{keepPostcard}from'./dust-life.mjs?v=1.7.1-da305733';
+import{activeLevel}from'./furniture.mjs?v=1.7.1-da305733';
+import{goldInterval}from'./gold-rates.mjs?v=1.7.1-da305733';
 export const QUESTS=[
  {id:'bookshelf',name:'책장 아래 숲',duration:20000,description:'작은 풀잎 사이로 첫 모험을 떠나요.',color:'#c6d7ae',rewards:[['group','daily',1],['rarity','common',1],['essence','leaf',3],['essence','dew',2]],sparkles:2},
  {id:'window',name:'햇살 창가',duration:45000,description:'바람을 타고 반짝이는 햇살을 찾아요.',color:'#efdc9e',rewards:[['group','pop',1],['rarity','rare',1],['essence','spark',5],['essence','ember',2]],sparkles:3},

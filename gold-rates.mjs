@@ -1,5 +1,5 @@
-import{DUSTS}from'./dust-data.mjs?v=1.5.0-f00f57e0';
-import{lampFactor}from'./furniture.mjs?v=1.5.0-f00f57e0';
+import{DUSTS}from'./dust-data.mjs?v=1.7.1-da305733';
+import{lampFactor}from'./furniture.mjs?v=1.7.1-da305733';
 export function baseGoldInterval(d){
  const i=DUSTS.findIndex(x=>x.id===d.id);
  return ({common:20,rare:30,legend:40}[DUSTS[i].rarity]+i%3*3)*1000;

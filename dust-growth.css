@@ -24,3 +24,112 @@ html.reduce-motion .rg-prop{animation:none}
  .app-shell>.navigation{bottom:calc(8px + env(safe-area-inset-bottom,0px))}
 }
 
+
+.room-open,
+.room-open body {
+  overflow: hidden;
+}
+.room-open .app-shell {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: 100svh;
+  height: 100dvh;
+  max-width: none;
+  padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px);
+}
+.room-open .app-shell > .topbar {
+  width: min(1180px, calc(100% - 36px));
+  justify-self: center;
+  height: auto;
+  min-height: 60px;
+  padding-block: 8px;
+  margin-bottom: 0;
+}
+.room-open .app-shell > .navigation {
+  position: relative;
+  inset: auto;
+  margin: 4px auto;
+  width: min(570px, calc(100% - 24px));
+}
+.room-open .app-shell > footer {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.room-open #main {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+}
+.room-open #main > .dust-room {
+  width: 100%;
+  max-width: none;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: auto;
+  margin: 0;
+  border-inline: 0;
+  border-radius: 0;
+}
+.quest-guide {
+  position: absolute;
+  z-index: 25;
+  inset-inline-start: 50%;
+  top: 10px;
+  translate: -50% 0;
+  display: grid;
+  justify-items: center;
+  width: 58px;
+  min-height: 58px;
+  padding: 2px;
+  color: #625776;
+  background: #faf7f3e8;
+  border: 1px solid #d9d2e1;
+  border-radius: 18px;
+  font-size: 11px;
+  line-height: 1.25;
+}
+.quest-guide svg { width: 43px; height: 37px; }
+.quest-guide:hover { background: #fffdf8; }
+.quest-guide-dialog #goalPanel { margin: 14px 0 0; text-align: left; }
+#dustPopup .care-dock {
+  position: absolute;
+  z-index: 35;
+  inset-inline-start: 50%;
+  translate: -50% 0;
+  bottom: 58px;
+  width: min(420px, calc(100% - 24px));
+  max-height: calc(100% - 82px);
+  margin: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  box-shadow: 0 5px 22px #53604826;
+}
+#dustPopup .compact-top { padding-right: 52px; }
+#dustPopup .dust-popup-close {
+  position: absolute;
+  top: 3px;
+  right: 5px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  font-size: 21px;
+  border: 0;
+  background: none;
+  color: #65765d;
+}
+#dustPopup .dust-popup-close:focus-visible { outline-offset: -3px; }
+#dustPopup .compact-name h2 { overflow-wrap: anywhere; }
+@media (max-width: 700px) {
+  .room-open .app-shell > .topbar { min-height: 52px; padding-block: 4px; }
+  .quest-guide { width: 48px; min-height: 44px; align-items: center; }
+  .quest-guide > span { display: none; }
+  .quest-guide svg { width: 36px; height: 31px; }
+}

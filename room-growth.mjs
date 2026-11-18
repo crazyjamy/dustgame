@@ -1,6 +1,6 @@
 // 방 레벨에 맞춰 창문·바닥·빛·소품을 조금씩 바꿔 보여주는 장식 레이어.
 // 게임 로직과 저장 데이터는 건드리지 않고, 방이 그려질 때마다 겉모습만 덧입혀요.
-import{ROOMS,ROOM_TIERS}from'./rooms.mjs?v=1.5.0-f00f57e0';
+import{ROOMS,ROOM_TIERS}from'./rooms.mjs?v=1.7.1-da305733';
 const PROPS=[['✦',14,70],['·',30,84],['✧',88,24],['❋',8,40],['✦',92,72],['·',55,10],['✧',40,90],['☾',72,8],['✦',22,16],['❋',60,88]];
 function build(level){
  const room=ROOMS[level-1],tier=room.tier,step=room.step,props=PROPS.slice(0,step).map(([g,x,y],i)=>`<i class="rg-prop" style="left:${x}%;top:${y}%;--i:${i}">${g}</i>`).join('');

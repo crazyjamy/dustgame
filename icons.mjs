@@ -25,18 +25,28 @@ const shapes={
  rug:'<ellipse cx="26" cy="30" rx="23" ry="13" fill="#dfb0aa"/><ellipse cx="26" cy="30" rx="17" ry="8" stroke="#f8e3ce"/><path d="M8 37L5 41M16 41L14 45M35 41L37 45M43 37L47 41"/>',
  plant:'<path d="M18 31H36L33 46H21Z" fill="#d8b89a"/><path d="M27 32V16"/><path d="M27 23C12 26 11 12 13 10C24 9 30 15 27 23Z" fill="#aabd91"/><path d="M27 18C26 5 37 4 42 7C42 17 36 22 27 18Z" fill="#bdce9f"/>',
  lamp:'<path d="M26 27V44M17 45H35"/><path d="M17 10H35L43 29H9Z" fill="#ead591"/><path d="M26 29V34" stroke="#d4b252"/>',
- cushion:'<path d="M7 20Q10 13 18 17Q26 11 34 17Q44 13 46 23L44 38Q35 43 27 39Q16 43 8 38Z" fill="#bfcfe0"/><path d="M16 24Q26 20 37 24M14 32Q26 37 40 31" stroke="#eaf0f5"/>'
+ cushion:'<path d="M7 20Q10 13 18 17Q26 11 34 17Q44 13 46 23L44 38Q35 43 27 39Q16 43 8 38Z" fill="#bfcfe0"/><path d="M16 24Q26 20 37 24M14 32Q26 37 40 31" stroke="#eaf0f5"/>',
+starlamp:'<path d="M26 6l5 11 12 2-9 8 2 12-10-6-10 6 2-12-9-8 12-2Z" fill="#dfcce9"/><path d="M26 38v8M17 47h18"/>',
+glassjar:'<path d="M17 10h18v6l6 8v19q-15 7-30 0V24l6-8Z" fill="#d4e7df"/><path d="M15 8h22M14 18h24"/><path d="M25 23l3 7 7 2-7 3-3 7-2-7-7-3 7-2Z" fill="#f5dfa0"/>',
+wishboard:'<path d="M10 13h32v29H10ZM16 42l-3 6M36 42l3 6" fill="#dbc9ac"/><path d="M17 19h18v15H17Z" fill="#fcf5db"/><path d="M21 23h10M21 28h7M18 7l8-4 8 4"/>',
+postbox:'<path d="M9 17q0-11 17-11t17 11v22H9ZM26 39v8M19 48h14" fill="#dcb6bd"/><path d="M15 18h22M16 25h20v10H16Z"/><path d="M16 25l10 7 10-7"/>',
+prism:'<path d="M25 8L6 42h39Z" fill="#d4d9ed"/><path d="M3 22h18M31 23l18-8M34 28l15-1M36 33l13 7" stroke="#b6b0d7"/><path d="M25 8v34M6 42l19-10 20 10"/>',
+starmobile:'<path d="M26 3v8M7 17q19-12 38 0M12 15v15M26 11v29M40 15v15"/><path d="M12 26l3 6 6 1-5 5 1 6-5-3-5 3 1-6-5-5 6-1ZM40 26l2 4 5 1-4 4 1 5-4-3-4 3 1-5-4-4 5-1Z" fill="#e8d49e"/><circle cx="26" cy="43" r="5" fill="#d8c8df"/>',
+workbench:'<path d="M5 22h42v7H5ZM10 29v18M42 29v18M10 37h32" fill="#cbb398"/><path d="M12 9h9v12h-9ZM24 13h7v8h-7ZM34 7h7v14h-7Z" fill="#d5d4b9"/>',
+candle:'<ellipse cx="26" cy="44" rx="19" ry="5" fill="#d4c5ac"/><path d="M17 21h18v21q-9 5-18 0Z" fill="#edc7a3"/><path d="M26 20v-5M26 3q12 11 0 14Q14 14 26 3Z" fill="#f4dc8d"/><path d="M17 24q5 8 9 0q5 6 9-1"/>',
+blanket:'<path d="M8 12q17-7 35 0l3 29q-18-6-36 2Z" fill="#c1d5c9"/><path d="M11 19q14-6 30 0M12 28q14-6 30 0M11 41v6M19 40v7M28 40v7M37 40v7M45 41v6"/><path d="M24 11l6 28" stroke="#e9edce"/>',
+terrarium:'<path d="M18 7h16v10l9 11v14q-17 8-34 0V28l9-11Z" fill="#d4e5d5"/><path d="M11 37q17-10 30 2M25 37V24"/><path d="M25 31q-13-1-10-10 11-1 10 10ZM25 28q0-12 12-9 0 11-12 9Z" fill="#a9c797"/><circle cx="31" cy="12" r="2" fill="#a7d6df"/>'
 };
 export function icon(id,cls=''){return `<svg class="material-icon ${cls}" viewBox="0 0 52 52" fill="none" stroke="#78816f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${shapes[id]||shapes.dream}</svg>`;}
 
 export function furnitureArt(id,level=1){
- const lv=Math.max(1,Math.min(5,level)),trim=['#c7b995','#b3c5a1','#c4adc5','#d7bd84','#b6b5d5'][lv-1];
+ const lv=Math.max(1,Math.min(10,level)),trim=['#c7b995','#b3c5a1','#c4adc5','#d7bd84','#b6b5d5','#b3cbbc','#dac3a3','#bfb4d7','#e3c98e','#c2cce4'][lv-1];
  const ornaments={
  rug:['<ellipse cx="26" cy="30" rx="13" ry="6" stroke="ACC"/>','<path d="M19 30L22 27L26 30L30 27L33 30L30 33L26 30L22 33Z" fill="ACC" stroke="none"/>','<path d="M6 28L3 25M46 28L49 25M13 40L11 46M40 40L42 46" stroke="ACC"/>','<path d="M26 24L28 28L32 30L28 32L26 36L24 32L20 30L24 28Z" fill="#f8eac4" stroke="ACC"/>'],
  plant:['<path d="M26 27Q35 19 42 24Q40 33 27 30" fill="ACC"/>','<circle cx="15" cy="12" r="4" fill="#e7c5bc"/><circle cx="38" cy="10" r="4" fill="#ead9a3"/>','<path d="M20 37H34M21 42H33" stroke="ACC"/><circle cx="30" cy="15" r="4" fill="#e3b5c4"/>','<path d="M13 9L15 5L17 9L21 11L17 13L15 17L13 13L9 11Z" fill="#f1d78c" stroke="none"/>'],
  lamp:['<path d="M13 26H39M18 14H34" stroke="ACC"/>','<path d="M17 28V34M35 28V34" stroke="ACC"/><circle cx="17" cy="36" r="2" fill="ACC"/><circle cx="35" cy="36" r="2" fill="ACC"/>','<path d="M26 15L28 19L32 20L28 22L26 26L24 22L20 20L24 19Z" fill="#fcf6dd" stroke="none"/>','<path d="M29 5A4 4 0 1 0 32 10A4 4 0 0 1 29 5Z" fill="ACC" stroke="none"/>'],
  cushion:['<path d="M11 20Q26 15 42 20M12 36Q26 41 41 36" stroke="ACC"/>','<circle cx="19" cy="28" r="2" fill="ACC"/><circle cx="34" cy="28" r="2" fill="ACC"/>','<path d="M26 22L29 28L26 34L23 28Z" fill="#f8edd3" stroke="ACC"/>','<path d="M26 36Q16 30 17 36Q16 42 26 38Q36 42 35 36Q36 30 26 36Z" fill="ACC"/>']
  };
- let extra='';for(let i=0;i<lv-1;i++)extra+=(ornaments[id]?.[i]||`<path d="M${9+i*9} ${10+i%2*4}l2 -3l2 3l-2 3Z" fill="ACC" stroke="none"/>`).replaceAll('ACC',trim);
+ let extra='';for(let i=0;i<lv-1;i++)extra+=(ornaments[id]?.[i]||(i>=4?`<circle cx="${7+(i-4)*9}" cy="46" r="2" fill="ACC" stroke="none"/>`: `<path d="M${9+i*9} ${10+i%2*4}l2 -3l2 3l-2 3Z" fill="ACC" stroke="none"/>`)).replaceAll('ACC',trim);
  return icon(id,'furniture-art').replace('</svg>',extra+'</svg>');
 }

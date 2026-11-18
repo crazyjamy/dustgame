@@ -1,6 +1,7 @@
-import{personalPostcard}from'./postcard-voices.mjs?v=1.3.2-e34f35c0';
-import{characterProfile}from'./dust-character.mjs?v=1.3.2-e34f35c0';
-import {DUSTS} from './dust-data.mjs?v=1.3.2-e34f35c0';
+import{wishReward}from'./furniture.mjs?v=1.5.0-f00f57e0';
+import{personalPostcard}from'./postcard-voices.mjs?v=1.5.0-f00f57e0';
+import{characterProfile}from'./dust-character.mjs?v=1.5.0-f00f57e0';
+import {DUSTS} from './dust-data.mjs?v=1.5.0-f00f57e0';
 
 export const FAVORITES=[
  {id:'rug',name:'폭신한 러그',action:'러그 위에서 몸을 동그랗게 말아요.',words:'폭신한 곳에 있으면 마음도 느긋해져.',memory:'처음에는 가장자리만 밟았어요. 오래된 러그의 자수가 늘어날수록 조금씩 가운데로 들어왔고, 이제는 옆자리를 친구에게 내어줘요.'},
@@ -31,8 +32,8 @@ const lookup=id=>DUSTS.find(d=>d.id===id);
 const topic=id=>{const name=lookup(id).name;return name+((name.charCodeAt(name.length-1)-44032)%28?'은':'는');};
 export function roomSpot(s,d,index=residents(s).findIndex(x=>x.uid===d.uid)){
  const saved=s.roomPositions.dust[d.uid];if(saved)return saved;
- const like=personality(d.id).favorite.id;if(s.decorations.includes(like)){const p=s.roomPositions.furniture[like]||FURNITURE_SPOTS[like];return {x:Math.max(8,Math.min(92,p.x+(d.uid%2?8:-8))),y:Math.min(90,p.y+7)};}
- const count=residents(s).length,p=count>9?[14+(index%6)*14,25+Math.floor(index/6)*12]:DEFAULT_SPOTS[index]||[50,50];return {x:p[0],y:p[1]};
+ const like=personality(d.id).favorite.id;if(residents(s).length<=9&&s.decorations.includes(like)){const p=s.roomPositions.furniture[like]||FURNITURE_SPOTS[like];return {x:Math.max(8,Math.min(92,p.x+(d.uid%2?8:-8))),y:Math.min(90,p.y+7)};}
+ const count=residents(s).length,cols=Math.ceil(Math.sqrt(count*1.25)),rows=Math.ceil(count/cols),p=count>9?[9+(index%cols)*80/Math.max(1,cols-1),24+Math.floor(index/cols)*65/Math.max(1,rows-1)]:DEFAULT_SPOTS[index]||[50,50];return {x:p[0],y:p[1]};
 }
 export function nearFavorite(s,d){if(!residents(s).some(x=>x.uid===d.uid))return false;const id=personality(d.id).favorite.id;return s.decorations.includes(id)&&dist(roomSpot(s,d),s.roomPositions.furniture[id]||FURNITURE_SPOTS[id])<=18;}
 export function companionship(s,d){if(!residents(s).some(x=>x.uid===d.uid))return null;const other=residents(s).find(x=>x.uid!==d.uid&&dist(roomSpot(s,d),roomSpot(s,x))<=14);if(!other)return null;const nap=personality(d.id).favorite.id===personality(other.id).favorite.id||[d,other].some(x=>personality(x.id).mood.name==='느긋한 꿈꾸미');return {other,kind:nap?'nap':'play',label:nap?'나란히 낮잠 중':'그림자 놀이 중'};}
@@ -64,11 +65,11 @@ export function smallWish(s,d,now=Date.now()){
  const day=localDay(now),p=personality(d.id);let kind=(day+d.uid)%3;if(kind===2&&residents(s).length<2)kind=1;
  const text=kind===0?`${p.favorite.name} 곁에 있고 싶어.`:kind===1?'오늘은 햇살이 드는 창가에 있고 싶어.':'다른 친구와 가까이 있고 싶어.';
  const ready=kind===0?nearFavorite(s,d):kind===1?residents(s).some(x=>x.uid===d.uid)&&dist(roomSpot(s,d),{x:68,y:22})<=14:!!companionship(s,d);
- return {day,kind,text,ready,done:s.life.requests[d.uid]===day,reward:3};
+ return {day,kind,text,ready,done:s.life.requests[d.uid]===day,reward:wishReward(s)};
 }
 export function claimWish(s,uid,now=Date.now()){
  initLife(s,now);const d=residents(s).find(x=>x.uid===uid);if(!d)return {ok:false,message:'방에서 함께하는 먼지의 부탁을 들어주세요.'};const w=smallWish(s,d,now);if(w.done||!w.ready)return {ok:false,message:w.done?'오늘의 고마움은 이미 받았어요.':'원하는 자리로 옮겨주면 고마움을 전할 거예요.'};
- s.life.requests[uid]=w.day;s.sparkles+=w.reward;record(s,'wish',lookup(d.id).name+'의 작은 고마움','“'+w.text+'” 그 작은 마음을 알아주었어요. 반짝이 3개를 나누었어요.',now);return {ok:true,amount:w.reward};
+ s.life.requests[uid]=w.day;s.sparkles+=w.reward;record(s,'wish',lookup(d.id).name+'의 작은 고마움','“'+w.text+'” 그 작은 마음을 알아주었어요. 반짝이 '+w.reward+'개를 나누었어요.',now);return {ok:true,amount:w.reward};
 }
 const LETTERS={
  bookshelf:[['잎맥 사이의 길','풀잎의 줄을 따라 한참 걸었어요. 길의 끝보다 길 위에서 들리던 사각거림이 오래 기억날 것 같아요.'],['먼저 건넨 인사','잎 아래 숨어 있던 친구에게 조심스럽게 인사했어요. 대답 대신 작은 풀잎을 건네받았어요. 말이 없어도 반가운 마음은 전해졌어요.'],['주머니 속 지도','잎 뒷면에 길을 그려왔어요. 모퉁이마다 다른 무늬가 있었어요. 다음번에는 아직 그리지 못한 빈칸도 찾아보고 싶어요.'],['숲의 베개','나뭇잎 위에 누웠더니 바람이 천천히 흔들어줬어요. 짧게 잤는데도 아주 긴 여행을 다녀온 기분이에요.'],['풀잎과 숨바꼭질','잎 뒤에 숨었다가 내 그림자에게 먼저 들켰어요. 숲이 사각사각 웃는 것 같아서 나도 소리 없이 웃었어요.']],
@@ -87,3 +88,5 @@ export function resumeLife(s,now=Date.now()){
  const entry=record(s,'offline','네가 없는 동안에도',parts.join('\n'),now);s.life.welcome=entry.id;return entry;
 }
 export function readLife(s){for(const e of s.life.journal)e.seen=true;s.life.welcome=null;}
+
+Object.assign(FURNITURE_SPOTS,{starlamp:{x:20,y:18},glassjar:{x:78,y:76},wishboard:{x:38,y:18},postbox:{x:10,y:61},prism:{x:80,y:44},starmobile:{x:48,y:15},workbench:{x:72,y:60},candle:{x:34,y:73},blanket:{x:58,y:70},terrarium:{x:18,y:79}});

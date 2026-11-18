@@ -1,7 +1,7 @@
-import{DUSTS}from'./dust-data.mjs?v=1.3.2-e34f35c0';
-import{goldInterval}from'./gold-rates.mjs?v=1.3.2-e34f35c0';
-import{pauseGoldClock}from'./gold-clock.mjs?v=1.3.2-e34f35c0';
-import{activeLevel}from'./furniture.mjs?v=1.3.2-e34f35c0';
+import{DUSTS}from'./dust-data.mjs?v=1.5.0-f00f57e0';
+import{goldInterval}from'./gold-rates.mjs?v=1.5.0-f00f57e0';
+import{pauseGoldClock}from'./gold-clock.mjs?v=1.5.0-f00f57e0';
+import{activeLevel}from'./furniture.mjs?v=1.5.0-f00f57e0';
 export const DESK={width:20,height:14,tile:48,start:{x:3.5,y:11.5}};
 export const DESK_ITEMS=[
  {id:'cotton',x:5.5,y:11.5,key:'group',material:'daily',amount:1,name:'포근한 솜뭉치',label:'포근 재료',color:'#e4d9ae'},
@@ -41,5 +41,5 @@ export function pushDesk(r){if(!canPushDesk(r))return {ok:false};r.pushed=true;c
 export function finishDesk(s,now=Date.now()){
  const r=s.deskRun;if(!r||!deskProgress(r).atExit)return {ok:false,message:'집으로 이어지는 종이 표지판까지 돌아와 주세요.'};const d=s.dusts.find(d=>d.uid===r.uid),complete=deskProgress(r).complete,rewards=[];
  for(const id of r.picked){const item=DESK_ITEMS.find(i=>i.id===id),amount=item.amount+(item.key==='essence'?activeLevel(s,'basket'):0);s.materials[item.key][item.material]+=amount;rewards.push({...item,amount});}
- const record={dustId:d.id,name:d.nickname||DUSTS.find(x=>x.id===d.id).name,at:now,complete,items:[...r.picked]};s.deskArchive.records.unshift(record);s.deskArchive.records=s.deskArchive.records.slice(0,12);if(complete){s.deskArchive.clears++;s.adventureCount++;}d.goldAt=now+d.goldRemaining;s.selectedUid=d.uid;s.deskRun=null;return {ok:true,complete,rewards,record};
+ const record={dustId:d.id,name:d.nickname||DUSTS.find(x=>x.id===d.id).name,at:now,complete,items:[...r.picked]};s.deskArchive.records.unshift(record);s.deskArchive.records=s.deskArchive.records.slice(0,12);const sparkles=complete?activeLevel(s,'terrarium'):0;s.sparkles+=sparkles;if(complete){s.deskArchive.clears++;s.adventureCount++;}d.goldAt=now+d.goldRemaining;s.selectedUid=d.uid;s.deskRun=null;return {ok:true,complete,rewards,record,sparkles};
 }

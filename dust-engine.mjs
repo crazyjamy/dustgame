@@ -1,10 +1,10 @@
-import{syncCollection}from'./collection-book.mjs?v=1.3.2-e34f35c0';
-import{initLife}from'./dust-life.mjs?v=1.3.2-e34f35c0';
-import{hasHomeSpace,hasStorageSpace,roomCapacity,storageCapacity}from'./rooms.mjs?v=1.3.2-e34f35c0';
-import{activeLevel}from'./furniture.mjs?v=1.3.2-e34f35c0';
-import{isAway,initAdventures}from'./adventures.mjs?v=1.3.2-e34f35c0';
-import{initEconomy,pauseGold,startClock,installed,collectGold}from'./economy.mjs?v=1.3.2-e34f35c0';
-import{DUSTS,GROUPS,RARITIES,ESSENCES,STORIES}from'./dust-data.mjs?v=1.3.2-e34f35c0';
+import{syncCollection}from'./collection-book.mjs?v=1.5.0-f00f57e0';
+import{initLife}from'./dust-life.mjs?v=1.5.0-f00f57e0';
+import{hasHomeSpace,hasStorageSpace,roomCapacity,storageCapacity}from'./rooms.mjs?v=1.5.0-f00f57e0';
+import{activeLevel}from'./furniture.mjs?v=1.5.0-f00f57e0';
+import{isAway,initAdventures}from'./adventures.mjs?v=1.5.0-f00f57e0';
+import{initEconomy,pauseGold,startClock,installed,collectGold}from'./economy.mjs?v=1.5.0-f00f57e0';
+import{DUSTS,GROUPS,RARITIES,ESSENCES,STORIES}from'./dust-data.mjs?v=1.5.0-f00f57e0';
 export const getDust=id=>DUSTS.find(d=>d.id===id);
 export const stage=xp=>xp>=6?2:xp>=2?1:0;
 export const level=xp=>1+Math.floor(xp/2);
@@ -25,15 +25,15 @@ export function mergeDust(s,uid,otherUid,now=Date.now()){
  if(!other)return {ok:false,message:'방에 있는 같은 종류·같은 레벨의 다른 먼지를 골라주세요.'};
  // Settle old-level production before the donor disappears or the recipient grows.
  const gold=[uid,otherUid].reduce((sum,id)=>sum+(collectGold(s,id,now).amount||0),0),prev=stage(dust.xp);
- dust.xp=level(dust.xp)*2;dust.readStories=[...new Set([...dust.readStories,...other.readStories])].sort();
+ dust.sparkleDropDay=Math.max(dust.sparkleDropDay,other.sparkleDropDay);dust.xp=level(dust.xp)*2;dust.readStories=[...new Set([...dust.readStories,...other.readStories])].sort();
  if(s.life.memories.includes(String(otherUid))&&!s.life.memories.includes(String(uid)))s.life.memories.push(String(uid));
  const claimed=s.life.requests[otherUid];if(claimed!==undefined)s.life.requests[uid]=Math.max(s.life.requests[uid]??0,claimed);
  delete s.roomPositions.dust[otherUid];delete s.life.requests[otherUid];
  s.dusts=s.dusts.filter(d=>d.uid!==otherUid);s.selectedUid=uid;
- const bonus=activeLevel(s,'rug');s.sparkles+=bonus;syncCollection(s);
+ const bonus=activeLevel(s,'rug')+(level(dust.xp)>=3?Math.ceil(activeLevel(s,'starmobile')/2):0);s.sparkles+=bonus;syncCollection(s);
  return {ok:true,dust,consumed:other,gold,bonus,grew:stage(dust.xp)>prev,leveled:true,chapter:level(dust.xp)-2};
 }
-export function pet(s,now=Date.now(),uid=s.selectedUid){const dust=s.dusts.find(d=>d.uid===uid);if(!dust||dust.stored||isAway(s,uid))return{ok:false,message:'방에 있는 먼지를 쓰다듬어주세요.'};if(now<s.petAt)return{ok:false,message:'좋아서 몽글거리는 중이에요.'};const amount=1+activeLevel(s,'plant');s.sparkles+=amount;s.petAt=now+1100-activeLevel(s,'teacup')*50;return{ok:true,amount};}
+export function pet(s,now=Date.now(),uid=s.selectedUid){const dust=s.dusts.find(d=>d.uid===uid);if(!dust||dust.stored||isAway(s,uid))return{ok:false,message:'방에 있는 먼지를 쓰다듬어주세요.'};if(now<s.petAt)return{ok:false,message:'좋아서 몽글거리는 중이에요.'};const amount=1+activeLevel(s,'plant')+(getDust(dust.id).rarity==='legend'?Math.ceil(activeLevel(s,'prism')/2):0);s.sparkles+=amount;s.petAt=now+1100-activeLevel(s,'teacup')*50;return{ok:true,amount};}
 
 export function storeDust(s,uid,now=Date.now()){const d=s.dusts.find(d=>d.uid===uid);if(!d||d.stored||isAway(s,uid))return{ok:false,message:'보관할 먼지를 골라주세요.'};if(!hasStorageSpace(s))return {ok:false,message:'보관함 '+storageCapacity(s)+'자리가 가득 찼어요. 방을 업그레이드해 주세요.'};pauseGold(s,d,now);d.stored=true;if(s.selectedUid===uid)s.selectedUid=inRoom(s)[0]?.uid??null;return{ok:true,dust:d};}
 export function takeOutDust(s,uid,now=Date.now()){const d=s.dusts.find(d=>d.uid===uid);if(!d||!d.stored)return{ok:false,message:'이미 방에 있는 먼지예요.'};if(!hasHomeSpace(s))return {ok:false,message:'방 '+roomCapacity(s)+'자리가 가득 찼어요. 모험 중인 친구 자리도 포함돼요.'};d.stored=false;d.goldAt=now+d.goldRemaining;s.selectedUid=uid;return{ok:true,dust:d};}

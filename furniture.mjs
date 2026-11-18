@@ -1,4 +1,5 @@
-import{MORE_FURNITURE_STORIES}from'./furniture-extra.mjs?v=1.3.2-e34f35c0';
+import{NEW_FURNITURE,furnitureChapters}from'./furniture-twenty.mjs?v=1.5.0-f00f57e0';
+import{MORE_FURNITURE_STORIES}from'./furniture-extra.mjs?v=1.5.0-f00f57e0';
 export const FURNITURE_STORIES={
  rug:[
  ['첫 번째 자리','아무도 앉지 않던 러그 한가운데, 작은 먼지가 처음 몸을 눕혔어요. 주름 하나가 조용히 펴졌어요. 이제 이곳에는 돌아와 쉴 자리가 생겼어요.'],
@@ -30,16 +31,26 @@ export const FURNITURE_STORIES={
  ]
 };
 Object.assign(FURNITURE_STORIES,MORE_FURNITURE_STORIES);
+for(const id of Object.keys(FURNITURE_STORIES))FURNITURE_STORIES[id].push(...furnitureChapters(id).slice(5));
+for(const f of NEW_FURNITURE)FURNITURE_STORIES[f.id]=furnitureChapters(f.id);
+export const MAX_FURNITURE_LEVEL=10;
+export const FURNITURE_UPGRADE_COSTS=[0,40,80,140,220,320,450,600,800,1050];
+export const furnitureCategory=id=>['lamp','cushion','hourglass'].includes(id)?'gold':['basket','windchime','blanket','terrarium','postbox'].includes(id)?'adventure':'sparkles';
 export const furnitureLevel=(s,id)=>s.ownedFurniture.includes(id)?s.furnitureLevels?.[id]||1:0;
 export const activeLevel=(s,id)=>s.decorations.includes(id)?furnitureLevel(s,id):0;
-export const upgradeCost=(s,id)=>{const l=furnitureLevel(s,id);return l>0&&l<5?[0,40,80,140,220][l]:null;};
+export const upgradeCost=(s,id)=>{const l=furnitureLevel(s,id);return l>0&&l<MAX_FURNITURE_LEVEL?FURNITURE_UPGRADE_COSTS[l]:null;};
 export const lampFactor=s=>activeLevel(s,'lamp')?1-(.2+.05*(activeLevel(s,'lamp')-1)):1;
 export const cushionBonus=s=>activeLevel(s,'cushion')?.25+.1*(activeLevel(s,'cushion')-1):0;
 
-export function furnitureEffect(s,id){const l=furnitureLevel(s,id)||1;return {rug:`합치기 반짝이 +${l}`,plant:`쓰다듬기 +${l}`,lamp:`골드 시간 −${20+(l-1)*5}%`,cushion:`골드 보상 +${25+(l-1)*10}%`,bookshelf:`첫 이야기 읽기 반짝이 +${l}`,teacup:`쓰다듬기 간격 −${l*50}ms`,basket:`모험 정수 +${l}`,windchime:`모험 시간 −${l*5}%`,hourglass:`골드 수령 +${l*2}`,musicbox:`골드 받을 때 반짝이 +${l}`}[id];}
+export const dailySparkleBonus=s=>activeLevel(s,'starlamp');
+export const jarInterval=s=>activeLevel(s,'glassjar')?(60-5*(activeLevel(s,'glassjar')-1))*1000:0;
+export const wishReward=s=>3+activeLevel(s,'wishboard');
+export function furnitureEffect(s,id){const l=furnitureLevel(s,id)||1;return {rug:`합치기 반짝이 +${l}`,plant:`쓰다듬기 반짝이 +${l}`,lamp:`골드 시간 −${20+(l-1)*5}%`,cushion:`골드 보상 +${25+(l-1)*10}%`,bookshelf:`먼지 이야기 첫 읽기 반짝이 +${l}`,teacup:`쓰다듬기 간격 −${l*50}ms`,basket:`모험 정수 +${l}`,windchime:`모험 시간 −${l*5}%`,hourglass:`골드 수령 +${l*2}`,musicbox:`골드 받을 때 반짝이 +${l}`,starlamp:`하루 반짝이 생성량 +${l}`,glassjar:`방을 보는 동안 ${60-5*(l-1)}초마다 하루 반짝이 모두 줍기`,wishboard:`부탁 보상 반짝이 +${l}`,postbox:`새 엽서 첫 수령 반짝이 +${l}`,prism:`희귀 먼지 쓰다듬기 반짝이 +${Math.ceil(l/2)}`,starmobile:`Lv.3 이상 합치기 추가 반짝이 +${Math.ceil(l/2)}`,workbench:`희귀도 재료 가격 반짝이 −${l} (최소 1)`,candle:`오늘 첫 골드 수령 반짝이 +${l*2}`,blanket:`모험 귀환 반짝이 +${Math.ceil(l/2)}`,terrarium:`책상 아래 완주 반짝이 +${l}`}[id];}
 export function initFurniture(s){
+ if(s.furnitureDaily===undefined)s.furnitureDaily={candleDay:-1,jarAt:0};
+ if(!s.furnitureDaily||!Number.isSafeInteger(s.furnitureDaily.candleDay)||s.furnitureDaily.candleDay< -1||!Number.isFinite(s.furnitureDaily.jarAt)||s.furnitureDaily.jarAt<0)throw Error('invalid furniture daily');
  if(s.furnitureLevels===undefined)s.furnitureLevels={};
  if(!s.furnitureLevels||typeof s.furnitureLevels!=='object'||Array.isArray(s.furnitureLevels))throw Error('invalid furniture levels');
- for(const [id,l]of Object.entries(s.furnitureLevels))if(!s.ownedFurniture.includes(id)||!Number.isInteger(l)||l<1||l>5)throw Error('invalid furniture level');
+ for(const [id,l]of Object.entries(s.furnitureLevels))if(!s.ownedFurniture.includes(id)||!Number.isInteger(l)||l<1||l>MAX_FURNITURE_LEVEL)throw Error('invalid furniture level');
  for(const id of s.ownedFurniture)if(s.furnitureLevels[id]===undefined)s.furnitureLevels[id]=1;
 }

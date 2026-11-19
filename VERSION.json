@@ -1,6 +1,6 @@
 {
-  "version": "1.11.0",
-  "build": "1.11.0-dbbdbd2f",
-  "sourceCommit": "dbbdbd2f57ab27c1db11c66682cec2aa8675dbd8",
+  "version": "1.13.12",
+  "build": "1.13.12-8b3c460c",
+  "sourceCommit": "8b3c460c96c92367505713ed4f5d6e72dc2b0fe9",
   "basePath": "/dustgame/"
 }

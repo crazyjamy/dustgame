@@ -51,3 +51,22 @@ export function starAppearance(shape) {
   const [outline, motif] = collectionLooks[variant - 1] || [shape, baseMotifs[shape]];
   return { path: outlines[outline] || outlines.round, pattern: motifs[motif] || '' };
 }
+
+// Use the same soft light in the catalog, on the planet and in the canvas map.
+export const starFace = '#352743';
+
+function blendLight(first, second, amount) {
+  const channel = (hex, i) => parseInt(hex.slice(i, i + 2), 16);
+  const channels = [1, 3, 5].map(i => Math.round(channel(first, i) * (1 - amount) + channel(second, i) * amount));
+  return `rgb(${channels.join(', ')})`;
+}
+
+export function starLight(color, rarity) {
+  const rare = rarity === 'legend';
+  return [
+    [0, blendLight(color, rare ? '#fff1db' : '#fff4e7', .78)],
+    [.47, blendLight(color, '#ffffff', rare ? .42 : .30)],
+    [.76, blendLight(color, rare ? '#a6e7fb' : '#c9b3ff', .61)],
+    [1, blendLight(color, rare ? '#e9b5f2' : '#e7c9f8', .74)],
+  ];
+}

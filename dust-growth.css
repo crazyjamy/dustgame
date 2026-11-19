@@ -37,18 +37,21 @@ html.reduce-motion .rg-prop{animation:none}
     max(12px, env(safe-area-inset-left, 0px));
 }
 #modal .modal-card {
-  display: flex;
-  flex-direction: column;
   max-height: 100%;
   min-height: 0;
   padding: 0;
-  overflow: hidden;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scroll-padding-block-start: 100px;
 }
 body.modal-open .app-shell > .navigation {
   visibility: hidden;
   pointer-events: none;
 }
 .modal-heading {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 2;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 44px;
   gap: 10px;
@@ -73,10 +76,7 @@ body.modal-open .app-shell > .navigation {
 }
 .modal-body {
   min-height: 0;
-  overflow: auto;
-  overscroll-behavior: contain;
   padding: 16px 18px 22px;
-  scroll-padding-block: 12px 20px;
 }
 .modal-body > .dust-art { margin-top: 0; }
 @media (min-width: 701px) {
@@ -98,7 +98,7 @@ body.modal-open .app-shell > .navigation {
   padding: env(safe-area-inset-top, 0px) 0 0;
 }
 .room-open .app-shell > .topbar {
-  width: min(1180px, calc(100% - var(--shell-gutter) * 2));
+  width: calc(min(100%, 1280px) - var(--shell-gutter) * 2);
   justify-self: center;
 }
 .room-open .app-shell > .navigation {
@@ -226,16 +226,8 @@ body.modal-open .app-shell > .navigation {
   .quest-guide svg { width: 36px; height: 31px; }
 }
 .brand-dust {
-  background: url('./favicon.svg?v=1.11.0-dbbdbd2f') center / contain no-repeat;
+  background: url('./favicon.svg?v=1.13.12-8b3c460c') center / contain no-repeat;
   font-size: 0 !important;
-}
-.room-open body {
-  background:
-    linear-gradient(to bottom, transparent 76%, var(--color-surface-page)),
-    url('./assets/galaxy-stars.svg?v=1.11.0-dbbdbd2f') center / auto 100% repeat-x,
-    radial-gradient(ellipse at 72% 28%, #7650aa77, transparent 65%),
-    radial-gradient(ellipse at 19% 74%, #365d976f, transparent 65%),
-    linear-gradient(148deg, #101126 4%, #252044 60%, #10152c);
 }
 .room-open #main > .dust-room {
   border: 0;
@@ -256,7 +248,7 @@ body.modal-open .app-shell > .navigation {
   top: 63%;
   width: min(76vw, 960px);
   height: 28%;
-  border: 1px solid #c1aeff26;
+  border: 1px solid #adb9c526;
   border-radius: 50%;
   transform: translate(-50%, -50%) rotate(-13deg);
 }
@@ -278,14 +270,14 @@ body.modal-open .app-shell > .navigation {
   opacity: .7;
 }
 .galaxy-portal svg {
-  fill: #a98ae629;
+  fill: #aab5c029;
   stroke: currentColor;
   stroke-width: 1.1;
 }
 .dust-room .galaxy-portal span { color: var(--color-text-secondary); }
-.dust-room .room-dust .dust-name { color: var(--color-text-secondary); text-shadow: 0 1px 4px #080415; }
-.dust-room .room-dust .dust-body > path:first-child { filter: drop-shadow(0 0 5px #e0caff77); }
-.dust-room .room-speck { color: #d4c4f5; }
+.dust-room .room-dust .dust-name { color: var(--color-text-secondary); text-shadow: 0 1px 4px #0a0c10; }
+.dust-room .room-dust .dust-body > path:first-child { filter: drop-shadow(0 0 5px #d2dbe466); }
+.dust-room .room-speck { color: #c9d1d9; }
 .dust-room .empty-room-message { color: var(--color-text-secondary); }
 .dust-room :is(.room-plaque, .adventure-keeper, .room-memory-entry) {
   background: var(--color-surface-inset);

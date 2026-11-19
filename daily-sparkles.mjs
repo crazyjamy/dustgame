@@ -1,6 +1,6 @@
-import{activeLevel,dailySparkleBonus,jarInterval}from'./furniture.mjs?v=1.7.1-da305733';
-import{DUSTS}from'./dust-data.mjs?v=1.7.1-da305733';
-import{isAway}from'./adventures.mjs?v=1.7.1-da305733';
+import{activeLevel,dailySparkleBonus,jarInterval}from'./furniture.mjs?v=1.11.0-dbbdbd2f';
+import{DUSTS}from'./dust-data.mjs?v=1.11.0-dbbdbd2f';
+import{isAway}from'./adventures.mjs?v=1.11.0-dbbdbd2f';
 export const sparkleDay=now=>Math.floor((now+9*60*60*1000)/86400000);
 export function startDailySparkle(d,now=Date.now()){d.sparkleDropDay=sparkleDay(now);}
 export function initDailySparkles(s,now=Date.now()){

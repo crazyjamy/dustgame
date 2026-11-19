@@ -1,8 +1,8 @@
-import{DUSTS,RARITIES}from'./dust-data.mjs?v=1.7.1-da305733';
+import{DUSTS,RARITIES}from'./dust-data.mjs?v=1.11.0-dbbdbd2f';
 export const THEMES=[
  {id:'neighbors',name:'작은 이웃들',description:'서로 다른 버릇을 가진 첫 다섯 친구가 한집에 모여요.',members:['crumb','soot','pink','puff','violet'],reward:'다섯 친구 액자',color:'#e6c58c'},
  {id:'forest',name:'풀잎 산책',description:'풀잎 정수에서 태어난 친구들과 작은 숲을 완성해요.',members:DUSTS.filter(d=>d.essence==='leaf').map(d=>d.id),reward:'풀잎 가랜드',color:'#b8ce9c'},
- {id:'moon',name:'달빛 친구들',description:'달빛 정수의 친구들이 모이면 방에도 작은 달이 떠요.',members:DUSTS.filter(d=>d.essence==='moon').map(d=>d.id),reward:'달조각 벽등',color:'#c5b8dc'}
+ {id:'moon',name:'달빛 친구들',description:'달빛 정수의 친구들이 모이면 은하계에도 작은 달이 떠요.',members:DUSTS.filter(d=>d.essence==='moon').map(d=>d.id),reward:'달조각 벽등',color:'#c5b8dc'}
 ];
 export const knownDust=(s,id)=>s.collectionBook.discovered.includes(id);
 export const essenceRoute=id=>({leaf:'bookshelf',dew:'bookshelf',spark:'window',ember:'window',moon:'moonpath',stardust:'moonpath'}[id]);

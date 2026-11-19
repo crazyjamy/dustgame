@@ -1,33 +1,33 @@
-import{NEW_FURNITURE}from'./furniture-twenty.mjs?v=1.7.1-da305733';
-import{initDailySparkles,startDailySparkle}from'./daily-sparkles.mjs?v=1.7.1-da305733';
-import{initDesk}from'./desk-exploration.mjs?v=1.7.1-da305733';
-import{initCollection}from'./collection-book.mjs?v=1.7.1-da305733';
-import{initNicknames}from'./dust-character.mjs?v=1.7.1-da305733';
-import{initRoomMemory}from'./room-memory.mjs?v=1.7.1-da305733';
-import{goldInterval}from'./gold-rates.mjs?v=1.7.1-da305733';
-export{goldInterval,baseGoldInterval}from'./gold-rates.mjs?v=1.7.1-da305733';
-import{GOLD_CAP_MS,goldClock,pauseGoldClock,rescaleGoldClock}from'./gold-clock.mjs?v=1.7.1-da305733';
-export{GOLD_CAP_MS}from'./gold-clock.mjs?v=1.7.1-da305733';
-import{MORE_FURNITURE}from'./furniture-extra.mjs?v=1.7.1-da305733';
-import{ROOMS,currentRoom,initRoomGrowth}from'./rooms.mjs?v=1.7.1-da305733';
-export{ROOMS}from'./rooms.mjs?v=1.7.1-da305733';
-import{initFurniture,activeLevel,furnitureLevel,upgradeCost,lampFactor,cushionBonus,jarInterval}from'./furniture.mjs?v=1.7.1-da305733';
-import{isAway}from'./adventures.mjs?v=1.7.1-da305733';
-import{initRoomLayout}from'./room-layout.mjs?v=1.7.1-da305733';
-import {DUSTS,GROUPS,RARITIES,ESSENCES} from './dust-data.mjs?v=1.7.1-da305733';
+import{NEW_FURNITURE}from'./furniture-twenty.mjs?v=1.11.0-dbbdbd2f';
+import{initDailySparkles,startDailySparkle}from'./daily-sparkles.mjs?v=1.11.0-dbbdbd2f';
+import{initDesk}from'./desk-exploration.mjs?v=1.11.0-dbbdbd2f';
+import{initCollection}from'./collection-book.mjs?v=1.11.0-dbbdbd2f';
+import{initNicknames}from'./dust-character.mjs?v=1.11.0-dbbdbd2f';
+import{initRoomMemory}from'./room-memory.mjs?v=1.11.0-dbbdbd2f';
+import{goldInterval}from'./gold-rates.mjs?v=1.11.0-dbbdbd2f';
+export{goldInterval,baseGoldInterval}from'./gold-rates.mjs?v=1.11.0-dbbdbd2f';
+import{GOLD_CAP_MS,goldClock,pauseGoldClock,rescaleGoldClock}from'./gold-clock.mjs?v=1.11.0-dbbdbd2f';
+export{GOLD_CAP_MS}from'./gold-clock.mjs?v=1.11.0-dbbdbd2f';
+import{MORE_FURNITURE}from'./furniture-extra.mjs?v=1.11.0-dbbdbd2f';
+import{ROOMS,currentRoom,initRoomGrowth}from'./rooms.mjs?v=1.11.0-dbbdbd2f';
+export{ROOMS}from'./rooms.mjs?v=1.11.0-dbbdbd2f';
+import{initFurniture,activeLevel,furnitureLevel,upgradeCost,lampFactor,cushionBonus,jarInterval}from'./furniture.mjs?v=1.11.0-dbbdbd2f';
+import{isAway}from'./adventures.mjs?v=1.11.0-dbbdbd2f';
+import{initRoomLayout}from'./room-layout.mjs?v=1.11.0-dbbdbd2f';
+import {DUSTS,GROUPS,RARITIES,ESSENCES} from './dust-data.mjs?v=1.11.0-dbbdbd2f';
 
 export const FURNITURE=[
- {id:'rug',name:'폭신한 러그',price:60,description:'먼지를 합쳐 레벨업하면 반짝이를 1개 받아요.',effect:'합치기 반짝이 +1',color:'#dfb0aa'},
- {id:'plant',name:'작은 화분',price:80,description:'쓰다듬기로 얻는 반짝이가 1개에서 2개로 늘어요.',effect:'쓰다듬기 +1',color:'#aabd91'},
- {id:'lamp',name:'달빛 조명',price:100,description:'방에 있는 모든 먼지의 골드 대기 시간이 20% 줄어요.',effect:'골드 시간 −20%',color:'#ead591'},
- {id:'cushion',name:'구름 쿠션',price:120,description:'모든 먼지의 골드 보상이 25% 늘어요.',effect:'골드 보상 +25%',color:'#bfcfe0'}
+ {id:'rug',name:'행성 고리',price:60,description:'별을 합쳐 레벨업하면 반짝이를 1개 받아요.',effect:'합치기 반짝이 +1',color:'#dfb0aa'},
+ {id:'plant',name:'미세중력 온실',price:80,description:'쓰다듬기로 얻는 반짝이가 1개에서 2개로 늘어요.',effect:'쓰다듬기 +1',color:'#aabd91'},
+ {id:'lamp',name:'항법 비콘',price:100,description:'은하계에 있는 모든 별의 골드 대기 시간이 20% 줄어요.',effect:'골드 시간 −20%',color:'#ead591'},
+ {id:'cushion',name:'달 착륙 포드',price:120,description:'모든 별의 골드 보상이 25% 늘어요.',effect:'골드 보상 +25%',color:'#bfcfe0'}
 ];
 FURNITURE.push(...MORE_FURNITURE,...NEW_FURNITURE);
 const lists={group:GROUPS,rarity:RARITIES,essence:ESSENCES};
 export const materialPrice=(key,id,s=null)=>{const base=key==='group'?8:key==='essence'?3:({common:10,rare:18,legend:30}[id]||0);return base&&key==='rarity'?Math.max(1,base-(s?activeLevel(s,'workbench'):0)):base;};
 export const installed=(s,id)=>s.decorations.includes(id);
 export const FAIRY_PRICE=120;
-export function goldAmount(s,d){const data=DUSTS.find(x=>x.id===d.id),base={common:6,rare:10,legend:16}[data.rarity]+Math.floor(d.xp/2);return Math.floor(base*(1+currentRoom(s).bonus/100+cushionBonus(s)))+activeLevel(s,'hourglass')*2;}
+export function goldAmount(s,d){const data=DUSTS.find(x=>x.id===d.id),base={common:6,rare:10,legend:16}[data.rarity]+Math.floor(d.xp/2);const production=Math.floor(base*(1+currentRoom(s).bonus/100+cushionBonus(s)))+activeLevel(s,'hourglass')*2;return Math.ceil(production/3);}
 export function startClock(s,d,now=Date.now()){if(d.sparkleDropDay===undefined)startDailySparkle(d,now);d.goldAt=now+goldInterval(s,d);d.goldRemaining=goldInterval(s,d);d.goldBanked=0;}
 export function initEconomy(s,now=Date.now()){
  if(s.gold===undefined)s.gold=180;
@@ -65,7 +65,7 @@ export function collectAllGold(s,now=Date.now()){if(!s.fairyOwned)return {ok:fal
 export function buyFairy(s){if(s.fairyOwned)return {ok:false,message:'이미 요정과 함께하고 있어요.'};if(s.sparkles<FAIRY_PRICE)return {ok:false,message:'반짝이가 조금 더 필요해요.'};s.sparkles-=FAIRY_PRICE;s.fairyOwned=true;return {ok:true};}
 export function buyMaterial(s,key,id,quantity=1){
  if(!lists[key]?.some(x=>x.id===id)||!Number.isInteger(quantity)||quantity<1||quantity>99)return {ok:false,message:'구매할 재료를 확인해주세요.'};
- const price=materialPrice(key,id,s)*quantity;if(s.sparkles<price)return {ok:false,message:'반짝이가 조금 더 필요해요. 먼지를 쓰다듬어 모아주세요.'};
+ const price=materialPrice(key,id,s)*quantity;if(s.sparkles<price)return {ok:false,message:'반짝이가 조금 더 필요해요. 별을 쓰다듬어 모아주세요.'};
  s.sparkles-=price;s.materials[key][id]+=quantity;return {ok:true,price};
 }
 export function upgradeRoom(s){const next=ROOMS[s.roomLevel];if(!next)return {ok:false,message:'가장 포근한 방이에요.'};if(s.sparkles<next.cost)return {ok:false,message:'반짝이가 조금 더 필요해요.'};s.sparkles-=next.cost;s.roomLevel++;return {ok:true};}

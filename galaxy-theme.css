@@ -1,0 +1,764 @@
+html {
+  scrollbar-gutter: stable;
+  background: var(--color-surface-page);
+  --shell-gutter: clamp(18px, 4vw, 50px);
+  --header-height: 72px;
+}
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: radial-gradient(ellipse at 80% 0%, var(--color-page-glow) 0, transparent 48%), var(--color-surface-page);
+}
+html:not(.room-open, .desk-open) .app-shell {
+  padding-inline: var(--shell-gutter);
+  padding-top: env(safe-area-inset-top, 0px);
+}
+.app-shell > .topbar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  height: var(--header-height);
+  min-height: var(--header-height);
+  padding-block: 0;
+  margin-block: 0;
+  border-block-end: 0;
+}
+.app-shell > #main:has(.collection-clue, .collection-target-summary) { padding-top: 0; }
+.app-shell > #main:has(.collection-clue, .collection-target-summary) > :first-child { margin-top: 6px; }
+.collection-summary { border-block: 0; }
+.topbar .wallet b { font-variant-numeric: tabular-nums; }
+@media (max-width: 700px) {
+  html {
+    --header-height: 56px;
+    scrollbar-width: none;
+  }
+  .app-shell > .topbar { gap: 6px; }
+  .app-shell > .topbar .wallet :is(.resource-count, .gold-wallet, .sparkle-wallet, .header-life, #settings) {
+    min-height: 44px;
+  }
+  .app-shell > .topbar .wallet #settings { width: 28px; min-width: 28px; }
+  .room-open .app-shell > .navigation {
+    position: fixed;
+    inset: auto 12px var(--mobile-nav-bottom);
+    width: auto;
+    margin: 0;
+  }
+  .app-shell > .navigation { box-shadow: none; }
+}
+.topbar :is(.brand, .wallet b, .header-life, #settings) { color: var(--color-text-primary); }
+.topbar :is(.brand small, .wallet small, .wallet .resource-count b) { color: var(--color-text-secondary); }
+.topbar .header-life small { color: var(--color-brand-primary); }
+a:focus-visible, button:focus-visible, select:focus-visible { outline-color: var(--color-focus); }
+.app-shell > .navigation {
+  background: var(--color-surface-panel);
+  border-color: var(--color-border-subtle);
+}
+.navigation button { color: var(--color-text-primary); }
+.navigation button.active {
+  background: var(--color-link);
+  color: var(--color-action-on-primary);
+}
+.navigation button small { color: var(--color-action-on-primary); background: var(--color-action-primary); }
+
+:is(.modal-card, .care-panel, .dust-card, .furniture-card, .material-card, .storage-card,
+  .empty-storage, .collection-target-summary, .collection-clue, .postcard-summary,
+  .route-collection-card, .theme-card, .recipe-journal, .growth-journey, .quest-route,
+  .traveler, .desk-entry, .desk-history, .player-options, .save-transfer, .merge-option) {
+  background: var(--color-surface-panel);
+  border-color: var(--color-border-subtle);
+  color: var(--color-text-primary);
+}
+:is(.upgrade-card, .fairy-shop-card, .furniture-effects-guide,
+  .mix-box, .recipe-drawer, .return-reward, .goal-cost, .journey-reward, .postcard-paper,
+  .room-story-cover, .theme-progress, .furniture-info .next-furniture-effect,
+  .compact-extra, .compact-footer, .wish-note, .merge-preview, .departure-preview) {
+  background: var(--color-surface-raised);
+  border-color: var(--color-border-subtle);
+  color: var(--color-text-primary);
+}
+:is(.ingredient, .recipe, .life-entry, .record-help, .room-level-next,
+  .room-level-grid button,
+  .furniture-chapters button, .story-chapters button, .compact-dock .care-life) {
+  background: var(--color-surface-inset);
+  border-color: var(--color-border-subtle);
+  color: var(--color-text-primary);
+}
+:is(.collection-summary, .storage-note, .shop-balance, .room-decades, .journey-footer,
+  .compact-footer, .compact-extra, .furniture-info, .life-timeline) { border-color: var(--color-border-subtle); }
+:is(.modal-card, .care-panel, .furniture-card, .upgrade-card, .fairy-shop-card, .dust-card,
+  .material-card, .theme-card, .quest-route, .storage-card, .collection-clue,
+  .route-collection-card) :is(h2,h3,h4) {
+  color: var(--color-text-primary);
+}
+:is(.modal-card, .care-panel, .furniture-card, .upgrade-card, .fairy-shop-card, .dust-card,
+  .material-card, .theme-card, .quest-route, .storage-card, .collection-clue) :is(p,small,summary),
+:is(.collection-summary, .storage-note, .shop-note, .journey-footer, .compact-merge b, .compact-income,
+  .shop-eyebrow, .card-num, .card-count, .kicker, .compact-profile p, .compact-extra #careWishStatus) {
+  color: var(--color-text-secondary);
+}
+:is(.collection-summary b, .compact-income strong, .unread-dot) { color: var(--color-currency-gold); }
+:is(.upgrade-house, .fairy-shop-card h2, .journey-now, .journey-eyebrow, .text-button,
+  .collection-switch button, .collection-tabs button, .furniture-effects-guide summary) {
+  color: var(--color-link);
+}
+:is(.button.secondary, .collection-switch button, .collection-tabs button, .collection-filters button,
+  .furniture-filters button, .record-help, select, .nickname-input) {
+  background: var(--color-surface-inset);
+  border-color: var(--color-border-control);
+  color: var(--color-text-primary);
+}
+.collection-switch,
+.collection-tabs {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+}
+:is(.collection-switch, .collection-tabs) button:not(.active) {
+  background: transparent;
+  border: 1px solid var(--color-border-subtle);
+  color: var(--color-text-secondary);
+}
+@media (max-width: 700px) {
+  .collection-switch button { min-width: 0; min-height: 44px; }
+}
+:is(.collection-switch button.active, .collection-tabs button.active, .collection-filters button.active,
+  .furniture-filters button[aria-pressed=true]) {
+  background: var(--color-link);
+  border-color: var(--color-link);
+  color: var(--color-action-on-primary);
+}
+:is(.collection-switch button.active, .collection-tabs button.active) small { color: var(--color-action-on-primary); }
+.button.primary {
+  background: var(--color-action-primary);
+  border-color: var(--color-action-primary);
+  color: var(--color-action-on-primary);
+}
+.button.primary:not(:disabled):hover {
+  background: var(--color-action-primary-hover);
+  border-color: var(--color-action-primary-hover);
+}
+.button.primary:not(:disabled):active {
+  background: var(--color-action-primary-pressed);
+  border-color: var(--color-action-primary-pressed);
+}
+#fairyCollect.button:not(:disabled) {
+  background: var(--color-currency-gold);
+  border-color: var(--color-currency-gold);
+  color: var(--color-currency-on-gold);
+}
+#fairyCollect.button:not(:disabled):hover {
+  background: var(--color-currency-gold-hover);
+  border-color: var(--color-currency-gold-hover);
+}
+#fairyCollect.button:not(:disabled):active {
+  background: var(--color-currency-gold-pressed);
+  border-color: var(--color-currency-gold-pressed);
+}
+
+.modal { background: var(--color-scrim); }
+.modal-card .close { background: var(--color-surface-raised); color: var(--color-text-primary); }
+#dustPopup .dust-popup-close { color: var(--color-text-primary); }
+.compact-name > b { background: var(--color-surface-tag); color: var(--color-text-primary); }
+.dust-card.undiscovered .dust-art { opacity: .58; }
+.furniture-picture, .furniture-story-art {
+  background: radial-gradient(ellipse at 50% 60%, #7e61ae63, transparent 66%), #19162e;
+  border-color: var(--color-border-subtle);
+}
+:is(.furniture-picture, .furniture-story-art, .room-decor) .furniture-art {
+  filter: drop-shadow(0 2px 5px var(--color-art-glow));
+}
+#toast { color: var(--color-text-primary); background: var(--color-surface-raised); border-color: var(--color-border-subtle); }
+.fairy-shop-card .shop-eyebrow { color: var(--color-text-secondary); }
+.furniture-info .next-furniture-effect {
+  background: var(--color-surface-tag);
+  color: var(--color-text-primary);
+}
+
+:is(.modal-card, .care-panel, .furniture-card, .dust-card, .storage-card,
+    .postcard-summary, .collection-target-summary) {
+  box-shadow: 0 8px 22px var(--color-shadow);
+}
+:is(.furniture-card, .dust-card, .material-card) :is(h2, h3) {
+  font-weight: 650;
+}
+:is(.furniture-info, .dust-card, .material-card, .collection-clue, .compact-extra,
+    .compact-footer, .room-plaque, .room-memory-entry, .adventure-keeper) :is(p, small, summary, label),
+:is(.collection-summary, .shop-note, .storage-note,
+    .compact-merge small, .collection-switch button small),
+.compact-extra #careWishStatus {
+  color: var(--color-text-secondary);
+}
+.app-shell .button:disabled, #modal .modal-card .button:disabled {
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-subtle);
+  color: var(--color-text-disabled);
+  opacity: 1;
+}
+:is(.collection-switch, .collection-tabs, .collection-filters, .furniture-filters)
+  button[aria-pressed=true],
+.collection-switch [aria-selected=true] {
+  background: var(--color-action-primary);
+  border-color: var(--color-action-primary);
+  color: var(--color-action-on-primary);
+}
+.collection-switch button[aria-selected=true] small { color: var(--color-action-on-primary); }
+.collection-clue .collection-target {
+  background: var(--color-surface-raised);
+  border-color: var(--color-border-subtle);
+  color: var(--color-text-secondary);
+}
+.dust-card.undiscovered {
+  background: var(--color-surface-inset);
+  border-color: var(--color-border-subtle);
+}
+.dust-card.undiscovered p { color: var(--color-text-secondary); }
+.dust-card.undiscovered .silhouette, .collection-clue .silhouette {
+  filter: brightness(0) saturate(100%) invert(83%) drop-shadow(0 0 6px #d3bcff55);
+  opacity: .65;
+}
+.dust-room .quest-guide, .dust-room .rub-bubble, .dust-room .rub-bubble::after {
+  background: var(--color-surface-panel);
+  border-color: var(--color-border-subtle);
+  color: var(--color-text-primary);
+}
+.dust-room .quest-guide:is(:hover, :focus-visible) { background: var(--color-surface-raised); }
+.dust-room .rub-bubble.hint { opacity: 1; }
+.dust-room .rub-bubble .rub-value { color: var(--color-link); }
+.dust-room .gold-bubble {
+  background: var(--color-income-background);
+  border-color: var(--color-income-border);
+  border-radius: 999px;
+  color: var(--color-income-text);
+  box-shadow: none;
+}
+.dust-room .gold-bubble:is(:hover, :focus-visible) {
+  background: var(--color-surface-pressed);
+  scale: none;
+}
+.dust-room .gold-bubble b {
+  color: inherit;
+  font-size: var(--text-meta);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+.dust-room .gold-bubble > .material-icon {
+  width: 15px;
+  height: 15px;
+}
+.birth-glow:not(.needs-star) :is(.glow-aura, .glow-orbit) { display: none; }
+.birth-glow:not(.needs-star) .glow-glyph {
+  animation: none;
+  text-shadow: none;
+  color: var(--color-link);
+}
+.birth-glow.needs-star .glow-aura {
+  inset: -12px -13px 5px;
+  background: radial-gradient(circle, #fff6d4e8 0%, #e5c9ffc2 25%, #b89af55e 46%, transparent 71%);
+}
+.birth-glow.needs-star .glow-glyph {
+  color: var(--color-text-primary);
+  text-shadow: 0 0 9px #fff1badd, 0 0 22px #dec5ffad;
+}
+.dust-room .galaxy-portal { width: max-content; opacity: 1; }
+.dust-room .galaxy-portal.window-closed svg { opacity: .65; }
+.dust-room .galaxy-portal::after { background: radial-gradient(#af91ff4d, transparent 68%); }
+.dust-room .galaxy-portal span {
+  color: var(--color-text-primary);
+  background: var(--color-surface-panel);
+  border-radius: 12px;
+  padding: 3px 8px;
+  font-size: var(--text-meta);
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.furniture-picture, .furniture-story-art {
+  background: radial-gradient(ellipse at center, #614982 0%, #2c2346 50%, #19152b 85%);
+}
+.room-decor .furniture-art { filter: drop-shadow(0 1px 5px #c9b1f07a); }
+.dust-room .room-plaque small, .dust-room .room-memory-entry small { color: var(--color-text-primary); }
+.furniture-picture > span { color: var(--color-text-secondary); font-size: var(--text-label); }
+.furniture-info > p, .furniture-info .next-furniture-effect {
+  color: var(--color-text-secondary);
+  font-size: var(--text-body);
+  line-height: 1.6;
+}
+.furniture-card .furniture-level-track i { background: var(--color-border-subtle); }
+.furniture-card .furniture-level-track .lit { background: var(--color-brand-primary); }
+.furniture-card.placed { border-color: var(--color-border-subtle); }
+.route-collection-card .quest-rewards { justify-content: flex-start; }
+.economy-table-wrap { border-color: var(--color-border-subtle); }
+.economy-table :is(td, th) {
+  background: var(--color-surface-inset);
+  border-color: var(--color-border-subtle);
+  color: var(--color-text-primary);
+}
+.economy-table thead th {
+  background: var(--color-surface-tag);
+  color: var(--color-text-primary);
+}
+.economy-table tbody th { min-width: 5.75em; word-break: keep-all; }
+
+/* Use low-glare fills for labels in both pages and dialogs. */
+.effect-badge, .fairy-shop-card .effect-badge, .quest-rewards > span,
+#modal .modal-card :where(.birth-mode, .new-badge, .detail-tags > span) {
+  background: var(--color-surface-tag);
+  border-color: var(--color-border-subtle);
+  color: var(--color-text-primary);
+}
+.quest-rewards small, #modal .modal-card :where(.quest-rewards small) {
+  color: var(--color-text-secondary);
+}
+.quest-rewards .quest-sparkles, #modal .modal-card :where(.quest-rewards .quest-sparkles b) {
+  color: var(--color-currency-sparkle);
+}
+
+/* Dialog details: keep text roles and state colors consistent with the galaxy UI. */
+#modal .modal-card {
+  accent-color: var(--color-focus);
+  scrollbar-color: var(--color-border-control) var(--color-surface-inset);
+}
+#modal .modal-card :where(h2, h3, h4, b, strong, summary, .record-help) {
+  color: var(--color-text-primary);
+}
+#modal .modal-card :where(p, small, label, .hint-caption, .next-story-hint, .quest-footnote,
+  .journey-footer > span, .goal-cost > span, .route-title > small, .traveler-heading > span,
+  .story-cover > span, .postcard-paper footer, .merge-preview > span, .recipe-plus) {
+  color: var(--color-text-secondary);
+}
+#modal .modal-card :where(.kicker, .journey-eyebrow, .journey-now, .journey-reward > span,
+  .text-button, .recipe-drawer summary, .postcard-heading > span, .story-chapters button > i) {
+  color: var(--color-link);
+}
+#modal .modal-card :where(.journey-action, .journey-footer, .adventure-intro, .recipe-drawer,
+  .life-entry > div, .save-transfer, .record-help > span) {
+  border-color: var(--color-border-subtle);
+}
+#modal .modal-card :where(.ingredient, .preference-detail, .memory-progress, .memory-chapters button,
+  .room-level-grid > span, .merge-result-preview, .quest-dust-select, .no-traveler,
+  .story-chapters .read, .story-chapters button:disabled, .life-entry > span,
+  .furniture-chapters .read, .postcard-heading i) {
+  background: var(--color-surface-inset);
+  border-color: var(--color-border-subtle);
+  color: var(--color-text-primary);
+}
+#modal .modal-card :where(.ingredient.filled, .quest-route.chosen, .traveler.returned,
+  .room-level-grid .current, .memory-reward) {
+  background: var(--color-surface-raised);
+  border-color: var(--color-border-control);
+  color: var(--color-text-primary);
+}
+#modal .modal-card :where(.journey-steps li) { color: var(--color-text-secondary); }
+#modal .modal-card :where(.journey-steps li > span, .route-number, .chapter-number) {
+  background: var(--color-surface-pressed);
+  color: var(--color-text-primary);
+}
+#modal .modal-card :where(.journey-steps li.current, .quest-route.chosen .route-title h4) {
+  color: var(--color-brand-primary);
+}
+#modal .modal-card :where(.journey-steps li.current > span) {
+  background: var(--color-action-primary);
+  color: var(--color-action-on-primary);
+}
+#modal .modal-card :where(.journey-steps li.complete > span) {
+  background: var(--color-success-surface);
+  color: var(--color-success-text);
+}
+#modal .modal-card :where(.traveler.returned .traveler-heading > small) {
+  color: var(--color-success-text);
+}
+#modal .modal-card :where(.ingredient select) {
+  border-color: var(--color-border-subtle);
+  background: var(--color-surface-inset);
+  color: var(--color-text-primary);
+}
+#modal .modal-card :where(.save-error) {
+  background: var(--color-error-surface);
+  color: var(--color-error-text);
+}
+#modal .modal-card :where(.recipe:hover, .memory-chapters button:hover, .record-help:hover) {
+  background: var(--color-surface-hover);
+}
+#modal .modal-card :where(.desk-entry-art, .travel-scene, .mix-preview, .postcard-paper) {
+  background-color: var(--color-surface-raised);
+  border-color: var(--color-border-subtle);
+}
+.room-quests > summary :is(span, i) { color: var(--color-text-secondary); }
+.room-quests > summary b { color: var(--color-text-primary); }
+.compact-extra > summary,
+#dustPopup .care-dock :is(.favorite-note > b, .wish-note > b, .care-life h3) { color: var(--color-text-primary); }
+#dustPopup .care-life :is(p, small, .life-section-label, .wish-thanks) { color: var(--color-text-secondary); }
+#modal .modal-card .desk-resume-note {
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+}
+
+/* Nested cards use the same surfaces in the catalog, material bag, and star detail. */
+:is(.recorded-recipe, .material-set) > div > span,
+.recipe-journal > article,
+.postcard-thumb {
+  background: var(--color-surface-raised);
+  border-color: var(--color-border-subtle);
+  color: var(--color-text-primary);
+}
+.postcard-thumb > span {
+  background: color-mix(in srgb, var(--postcard-color) 15%, var(--color-surface-inset));
+  border-color: var(--color-border-subtle);
+}
+:is(.postcard-thumb > b, .postcard-summary > b, .route-postcards > h2,
+  .recipe-journal h2, .compact-name h2) { color: var(--color-text-primary); }
+:is(.postcard-thumb :is(small, i), .postcard-summary :is(p, small),
+  .collection-intro, .compact-income small, .compact-extra > summary > small,
+  .preference-detail > span, .material-set b) { color: var(--color-text-secondary); }
+#modal .modal-card :where(.copies button) {
+  background: var(--color-surface-inset);
+  border-color: var(--color-border-subtle);
+  color: var(--color-text-primary);
+}
+.growth-pair.trio { border-color: var(--color-border-subtle); }
+.growth-pair > div > span { color: var(--color-text-primary); }
+.growth-pair > div > small { color: var(--color-text-secondary); }
+.growth-pair .unseen { opacity: 1; filter: none; }
+.growth-pair .unseen > .dust-art { opacity: .46; filter: grayscale(1); }
+.growth-pair .unseen > span { color: var(--color-text-secondary); }
+.growth-pair .unseen > small { color: var(--color-link); }
+.dust-room .room-placement :is(label, button), .dust-room .life-bubble {
+  color: var(--color-text-primary);
+  border-color: var(--color-border-subtle);
+}
+.dust-room .life-bubble { background: var(--color-surface-panel); }
+
+@media (hover: hover) {
+  :is(.dust-card, .dust-card.undiscovered, .postcard-thumb):hover,
+  .button.secondary:not(:disabled):not([aria-pressed="true"]):hover,
+  :is(.collection-switch, .collection-tabs, .furniture-filters, .navigation)
+    button:not(.active):not([aria-pressed="true"]):hover,
+  .dust-room :is(.room-plaque, .room-memory-entry):hover,
+  #modal .modal-card :where(.copies button, .recipe, .story-chapters button,
+    .furniture-chapters button):not(:disabled):hover {
+    background: var(--color-surface-hover);
+  }
+}
+:is(.dust-card, .postcard-thumb, .button.secondary):active,
+#modal .modal-card :where(.copies button, .recipe):not(:disabled):active {
+  background: var(--color-surface-pressed);
+  color: var(--color-text-primary);
+}
+:is(button, a, select, summary, [role="button"]):focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.modal-heading {
+  background: var(--color-surface-panel);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+.modal-heading .close:focus-visible { outline-offset: -3px; }
+.collection-clue > summary > b { font-size: var(--text-body); }
+.collection-clue > summary > i::after { content: '＋'; font-size: var(--text-title-small); }
+.collection-clue[open] > summary > i::after { content: '−'; font-size: var(--text-title-small); }
+.collection-clue .collection-target { gap: 12px; }
+.collection-target .target-actions .text-button { min-height: 38px; }
+.topbar .wallet .resource-count em { color: var(--color-text-secondary); }
+.pull-refresh-feedback {
+  background: var(--color-surface-panel);
+  border-color: var(--color-border-subtle);
+  color: var(--color-text-primary);
+}
+
+/* Currency sits above its star while the petting response appears below it. */
+.dust-room .gold-slot { margin-left: 0; margin-top: -35px; }
+.dust-room .rub-bubble {
+  bottom: auto;
+  top: calc(50% + 23px);
+  pointer-events: none;
+}
+.dust-room .rub-bubble::after {
+  top: -5px;
+  bottom: auto;
+  rotate: 225deg;
+}
+.room-dust:has(.rub-bubble.show) :is(.life-bubble, .dust-name) { visibility: hidden; }
+
+#modal .modal-card :where(.offline-policy, .rooms-intro, .room-decades > details,
+  .character-gallery article, .desk-return-loot, .desk-entry select) {
+  background: var(--color-surface-inset);
+  border-color: var(--color-border-subtle);
+  color: var(--color-text-primary);
+}
+#modal .modal-card :where(.life-book-intro, .desk-history article, .economy-table-wrap) {
+  border-color: var(--color-border-subtle);
+}
+#modal .modal-card :where(.life-book-intro > span, .character-gallery article > span,
+  .character-gallery blockquote, .room-decades summary > span) {
+  color: var(--color-link);
+}
+#modal .modal-card :where(.offline-policy h3) { color: var(--color-currency-gold); }
+.rooms-dialog .rooms-intro { margin: 0 0 12px; text-align: left; }
+.room-level-next progress {
+  appearance: none;
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-surface-raised);
+}
+.room-level-next progress::-webkit-progress-bar { background: var(--color-surface-raised); }
+.room-level-next progress::-webkit-progress-value { background: var(--color-link); }
+.room-level-next progress::-moz-progress-bar { background: var(--color-link); }
+.life-book-intro { margin: 0 0 16px; padding-bottom: 12px; }
+.life-timeline .life-entry {
+  padding: 12px;
+  gap: 10px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 12px;
+}
+#modal .modal-card .life-entry > div { min-width: 0; border: 0; padding: 0; }
+.life-entry h3 { margin: 3px 0 6px; }
+.character-gallery .character-stage {
+  background: radial-gradient(ellipse, #493862 0%, transparent 68%);
+}
+.character-gallery blockquote { margin-top: 8px; }
+.desk-entry .desk-entry-art { background: radial-gradient(ellipse at 55% 45%, #655190, #241b3a 72%); }
+:is(.desk-select-label, .desk-old-routes) { color: var(--color-text-secondary); }
+html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
+.desk-heading h1 { color: var(--color-text-primary); }
+.desk-heading h1 small, .desk-objectives > small, .desk-message, .desk-input-note { color: var(--color-text-secondary); }
+.desk-heading .button { flex-shrink: 0; }
+.desk-objectives > span, .desk-frame, .desk-pouch {
+  background: var(--color-surface-inset);
+  color: var(--color-text-primary);
+  border-color: var(--color-border-subtle);
+}
+.desk-objectives > span.complete {
+  background: var(--color-surface-raised);
+  color: var(--color-link);
+}
+.desk-frame { border-width: 1px; box-shadow: none; }
+.desk-frame canvas { outline-color: var(--color-link); }
+.desk-pouch small { color: var(--color-text-secondary); }
+.desk-return-seal { color: var(--color-currency-gold); }
+@media (max-width: 700px) {
+  .desk-open .app-shell { padding-bottom: max(12px, env(safe-area-inset-bottom, 0px)); }
+  .desk-frame canvas { height: clamp(200px, 42svh, 440px); min-height: 0; }
+  .desk-message { min-height: 2.6em; display: grid; align-content: center; margin-block: 5px; }
+  .character-gallery { margin-top: 14px; }
+  .character-gallery :is(p, blockquote) { font-size: var(--text-label); word-break: keep-all; }
+}
+
+@media (max-width: 700px) {
+  .collection-clue .collection-target {
+    display: grid;
+    grid-template-columns: minmax(38px, 48px) minmax(0, 1fr);
+    align-items: start;
+  }
+  .collection-clue .collection-target > .dust-art { width: 100%; }
+  .collection-clue .collection-target:not(:has(> .dust-art)) > *,
+  .collection-clue .target-actions { grid-column: 1 / -1; }
+  .collection-clue .target-actions { gap: 3px; }
+  .collection-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    padding-inline: 0;
+    text-align: center;
+  }
+}
+
+.story-source {
+  display: block;
+  width: fit-content;
+  margin: 0 0 16px auto;
+  color: var(--color-link);
+  font-size: var(--text-label);
+  text-underline-offset: 3px;
+}
+
+/* Currency uses the same hue in the header, shop and help. */
+.currency-gold { --currency-color: var(--color-currency-gold); }
+.currency-sparkle { --currency-color: var(--color-currency-sparkle); }
+.topbar .wallet .gold-wallet :is(span, b) { color: var(--color-currency-gold); }
+.topbar .wallet .sparkle-wallet :is(span, b) { color: var(--color-currency-sparkle); }
+
+.shop-balance {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-block: 0 18px;
+}
+.shop-currency {
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 12px;
+  background: var(--color-surface-panel);
+}
+.shop-currency dt {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--currency-color);
+  font-size: var(--text-label);
+}
+.shop-currency dt :is(.material-icon, span) {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  font-size: var(--text-title-small);
+}
+.shop-currency dd { margin: 6px 0 0; }
+.shop-currency b {
+  color: var(--currency-color);
+  font-size: clamp(var(--text-title), 5vw, var(--text-heading));
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.shop-currency small { display: block; margin-top: 5px; color: var(--color-text-secondary); }
+.upgrade-card, .fairy-shop-card { background: var(--color-surface-panel); }
+
+.quick-steps { margin: 0 0 16px; gap: 16px; }
+.quick-steps li > span {
+  background: var(--color-surface-tag);
+  color: var(--color-brand-primary);
+}
+.quick-steps p { margin-top: 4px; }
+.quick-note {
+  margin: 0;
+  display: grid;
+  gap: 10px;
+  padding: 13px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 10px;
+  background: var(--color-surface-inset);
+  text-align: start;
+}
+.quick-note > div {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 10px;
+  align-items: baseline;
+  font-size: var(--text-label);
+  line-height: 1.6;
+}
+.quick-note dt { color: var(--currency-color); font-weight: 650; }
+.quick-note dd { margin: 0; color: var(--color-text-secondary); }
+#modal .modal-body > .quick-save {
+  margin: 10px 0 0;
+  text-align: start;
+  line-height: 1.6;
+  font-size: var(--text-meta);
+}
+
+/* Localized glass surfaces keep the background visible and the text readable. */
+:is(.app-shell > .navigation, .collection-clue) {
+  border-color: var(--color-glass-edge);
+  box-shadow: inset 0 1px var(--color-glass-highlight);
+}
+.navigation button.active,
+.collection-switch button[aria-selected="true"] {
+  background: linear-gradient(145deg, var(--color-glass-selected), var(--color-action-primary));
+  border-color: var(--color-glass-edge);
+  box-shadow: inset 0 1px var(--color-glass-highlight);
+}
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :is(.app-shell > .navigation, .collection-clue) {
+    background: var(--color-glass-surface);
+    -webkit-backdrop-filter: var(--glass-backdrop);
+    backdrop-filter: var(--glass-backdrop);
+  }
+}
+
+/* These reading dialogs use their outer panel as the shared background. */
+#modal .modal-card:has(:is(.memory-book, .story-cover, .recorded-recipe)) .modal-heading {
+  border-bottom: 0;
+}
+#modal .modal-card .memory-progress { border-radius: 12px; }
+#modal .modal-card .memory-chapter {
+  border: 0;
+  padding: 20px 0 0;
+}
+#modal .memory-chapter + .memory-chapters { margin-top: 24px; }
+#modal .modal-body > .story-cover { margin-top: 0; }
+#modal .modal-body > p.story-body {
+  border: 0;
+  padding: 0 8px;
+  margin: 22px 0 18px;
+}
+#modal .recorded-recipe {
+  margin-top: 20px;
+  padding: 0;
+}
+#modal .recorded-recipe > div { margin: 12px 0 0; }
+#modal .recorded-recipe + .growth-pair.trio {
+  border: 0;
+  margin-top: 24px;
+  padding-block: 0;
+}
+
+.field-page { margin: 0 0 20px; }
+.field-page h3 { margin: 0 0 8px; color: var(--color-text-primary); }
+.field-page > p, .observation-note > p { margin: 0; line-height: 1.8; }
+.observation-note {
+  margin: 16px 0 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--color-surface-inset);
+  color: var(--color-text-secondary);
+  font-size: var(--text-label);
+}
+.observation-note > b { display: block; margin-bottom: 4px; color: var(--color-link); }
+.observation-note a { display: inline-block; margin-top: 6px; color: var(--color-link); font-size: var(--text-meta); }
+#modal .field-cover { gap: 4px; }
+.quest-guide-dialog .field-page { padding: 0 0 4px; }
+@media (max-width: 700px) {
+  .dust-room .gold-bubble { justify-content: center; width: 30px; height: 30px; padding: 0; }
+  .dust-room .gold-bubble b, .topbar .gold-wallet b { display: none; }
+  .dust-room .gold-bubble > .material-icon { display: block; }
+}
+
+/* The observatory and Lumi each have their own entry point in the galaxy. */
+.dust-room .survey-entrance {
+  position: absolute;
+  z-index: 24;
+  inset-inline-start: 18px;
+  inset-block-end: 66px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-block-size: 40px;
+  padding: 6px 10px;
+  border-radius: 13px;
+  font-size: var(--text-caption);
+}
+.survey-entrance svg { inline-size: 18px; block-size: 18px; flex: none; }
+.expedition-rack {
+  position: absolute;
+  z-index: 25;
+  inset-inline-start: 50%;
+  inset-block-end: 14px;
+  translate: -50% 0;
+  display: flex;
+  gap: 6px;
+}
+.expedition-rack > button { white-space: nowrap; min-block-size: 40px; }
+.expedition-pick {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin-block-end: 12px;
+}
+.expedition-pick [aria-pressed="true"] {
+  background: var(--color-action-primary);
+  color: var(--color-action-on-primary);
+}
+.room-dust.expedition-selected .dust-lift { filter: drop-shadow(0 0 6px var(--color-focus)); }
+.dust-room .adventure-keeper.drop-ready { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+#dustPopup .care-life .wish-note {
+  background: transparent;
+  border: 0;
+}
+@media (max-width: 640px) {
+  .dust-room .survey-entrance { inset-inline-start: 10px; inset-block-end: 56px; }
+}

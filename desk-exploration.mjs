@@ -1,12 +1,12 @@
-import{DUSTS}from'./dust-data.mjs?v=1.7.1-da305733';
-import{goldInterval}from'./gold-rates.mjs?v=1.7.1-da305733';
-import{pauseGoldClock}from'./gold-clock.mjs?v=1.7.1-da305733';
-import{activeLevel}from'./furniture.mjs?v=1.7.1-da305733';
+import{DUSTS}from'./dust-data.mjs?v=1.11.0-dbbdbd2f';
+import{goldInterval}from'./gold-rates.mjs?v=1.11.0-dbbdbd2f';
+import{pauseGoldClock}from'./gold-clock.mjs?v=1.11.0-dbbdbd2f';
+import{activeLevel}from'./furniture.mjs?v=1.11.0-dbbdbd2f';
 export const DESK={width:20,height:14,tile:48,start:{x:3.5,y:11.5}};
 export const DESK_ITEMS=[
- {id:'cotton',x:5.5,y:11.5,key:'group',material:'daily',amount:1,name:'포근한 솜뭉치',label:'포근 재료',color:'#e4d9ae'},
- {id:'leaf',x:14.5,y:10.5,key:'essence',material:'leaf',amount:2,name:'바싹 마른 풀잎',label:'풀잎 정수',color:'#acc780'},
- {id:'dew',x:10.5,y:3.5,key:'essence',material:'dew',amount:3,name:'숨은 이슬방울',label:'이슬 정수',color:'#91c9cf'}
+ {id:'cotton',x:5.5,y:11.5,key:'group',material:'daily',amount:1,name:'성운 섬유',label:'포근 재료',color:'#e6d1ff'},
+ {id:'leaf',x:14.5,y:10.5,key:'essence',material:'leaf',amount:2,name:'위성 온실의 잎',label:'풀잎 정수',color:'#9fd0bd'},
+ {id:'dew',x:10.5,y:3.5,key:'essence',material:'dew',amount:3,name:'응결된 혜성 얼음',label:'이슬 정수',color:'#95dafa'}
 ];
 export function deskWall(x,y){return x<1||y<1||x>=19||y>=13||x>=3&&x<=5&&y>=2&&y<=5||y===8&&x>=2&&x<=7||x>=8&&x<=17&&y===1||x===8&&y>=2&&y<=6||x===17&&y>=2&&y<=6||y===6&&x>=8&&x<=17&&x!==10||x>=12&&x<=15&&y>=2&&y<=4;}
 export const crateTile=r=>({x:r.pushed?11:10,y:7});
@@ -23,7 +23,7 @@ export function initDesk(s){
  if(r.picked.includes('dew')&&!r.secret)throw Error('locked exploration reward');return s;
 }
 export function startDesk(s,uid,now=Date.now()){
- initDesk(s);if(s.deskRun)return {ok:false,message:'진행 중인 책상 아래 탐험을 먼저 이어가 주세요.'};const d=s.dusts.find(d=>d.uid===uid&&!d.stored&&!s.adventures.some(q=>q.uid===uid));if(!d)return {ok:false,message:'방에서 함께하는 먼지를 골라주세요.'};
+ initDesk(s);if(s.deskRun)return {ok:false,message:'진행 중인 외곽 관측소 탐사을 먼저 이어가 주세요.'};const d=s.dusts.find(d=>d.uid===uid&&!d.stored&&!s.adventures.some(q=>q.uid===uid));if(!d)return {ok:false,message:'은하계에서 함께하는 별을 골라주세요.'};
  pauseGoldClock(d,goldInterval(s,d),now);s.deskRun={version:1,uid,x:3.5,y:11.5,seen:[],picked:[],pushed:false,secret:false,startedAt:now};revealDesk(s.deskRun);s.selectedUid=s.dusts.find(x=>x.uid!==uid&&!x.stored&&!s.adventures.some(q=>q.uid===x.uid))?.uid??null;return {ok:true};
 }
 export function deskPath(r,tx,ty){

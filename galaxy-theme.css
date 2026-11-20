@@ -33,10 +33,20 @@ html:not(.room-open, .desk-open) .app-shell {
     scrollbar-width: none;
   }
   .app-shell > .topbar { gap: 6px; }
-  .app-shell > .topbar .wallet :is(.resource-count, .gold-wallet, .sparkle-wallet, .header-life, #settings) {
-    min-height: 44px;
+  .app-shell > .topbar .header-utilities .wallet {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(44px, 1.15fr)) repeat(2, minmax(44px, 1fr)) repeat(2, 44px);
+    gap: 2px;
   }
-  .app-shell > .topbar .wallet #settings { width: 28px; min-width: 28px; }
+  .app-shell > .topbar .wallet :is(.resource-count, .gold-wallet, .sparkle-wallet, .header-life, #settings) {
+    width: 100%;
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
+    align-content: center;
+  }
+  .app-shell > .topbar .wallet :is(.gold-wallet, .sparkle-wallet) b { min-width: 0; }
+  .app-shell > .topbar .wallet .header-life > small { right: 8px; }
   .room-open .app-shell > .navigation {
     position: fixed;
     inset: auto 12px var(--mobile-nav-bottom);
@@ -44,6 +54,13 @@ html:not(.room-open, .desk-open) .app-shell {
     margin: 0;
   }
   .app-shell > .navigation { box-shadow: none; }
+}
+@media (max-width: 360px) {
+  .app-shell > .topbar .wallet :is(.resource-count, .gold-wallet, .sparkle-wallet) {
+    flex-direction: column;
+    gap: 1px;
+  }
+  .app-shell > .topbar .wallet :is(.gold-wallet, .sparkle-wallet) b { max-width: 100%; }
 }
 .topbar :is(.brand, .wallet b, .header-life), .topbar #settings { color: var(--color-text-primary); }
 .topbar :is(.brand small, .wallet small, .wallet .resource-count b) { color: var(--color-text-secondary); }
@@ -316,7 +333,7 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline-color: var
 /* Dialog details: keep text roles and state colors consistent with the galaxy UI. */
 #modal .modal-card {
   accent-color: var(--color-focus);
-  scrollbar-color: var(--color-border-control) transparent;
+  scrollbar-color: var(--color-scroll-thumb) var(--color-scroll-track);
 }
 #modal .modal-card :where(h2, h3, h4, b, strong, summary, .record-help) {
   color: var(--color-text-primary);
@@ -559,9 +576,11 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
 }
 
 .story-source {
-  display: block;
+  display: flex;
+  align-items: center;
+  min-height: var(--size-reading-target);
   width: fit-content;
-  margin: 0 0 16px auto;
+  margin: 0 0 8px auto;
   color: var(--color-link);
   font-size: var(--text-label);
   text-underline-offset: 3px;
@@ -648,12 +667,6 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
 #modal .modal-card:has(:is(.memory-book, .story-cover, .recorded-recipe)) .modal-heading {
   border-bottom: 0;
 }
-#modal .modal-card .memory-progress { border-radius: 12px; }
-#modal .modal-card .memory-chapter {
-  border: 0;
-  padding: 20px 0 0;
-}
-#modal .memory-chapter + .memory-chapters { margin-top: 24px; }
 #modal .modal-body > .story-cover { margin-top: 0; }
 #modal .modal-body > p.story-body {
   border: 0;
@@ -684,6 +697,158 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
 }
 .observation-note > b { display: block; margin-bottom: 4px; color: var(--color-link); }
 .observation-note a { display: inline-block; margin-top: 6px; color: var(--color-link); font-size: var(--text-meta); }
+.observation-disclosure {
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--color-border-subtle);
+}
+.observation-disclosure > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: var(--size-reading-target);
+  padding: 8px 14px;
+  border-radius: inherit;
+  cursor: pointer;
+  list-style: none;
+}
+.observation-disclosure > summary::-webkit-details-marker { display: none; }
+.observation-disclosure > summary::after {
+  content: '';
+  flex: 0 0 7px;
+  height: 7px;
+  margin-inline: 3px;
+  border-inline-end: 1.5px solid var(--color-text-secondary);
+  border-block-end: 1.5px solid var(--color-text-secondary);
+  rotate: 45deg;
+}
+.observation-disclosure[open] > summary::after { rotate: 225deg; }
+.observation-disclosure > summary:is(:hover, :focus-visible) {
+  background-color: var(--color-glass-control);
+}
+.observation-disclosure > div { padding: 0 14px 12px; }
+.observation-disclosure p { margin: 0; line-height: 1.8; }
+.observation-disclosure a { display: inline-flex; align-items: center; min-height: var(--size-reading-target); }
+
+#modal .story-page-nav {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: clamp(4px, 2vw, 12px);
+}
+#modal .story-page-nav :is(.button, .text-button) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 0;
+  min-height: var(--size-reading-target);
+  padding: 6px clamp(6px, 2vw, 14px);
+  border-radius: var(--radius-glass-control);
+  font-size: var(--text-label);
+}
+#modal .story-page-nav .text-button {
+  color: var(--color-text-primary);
+  text-underline-offset: 4px;
+}
+#modal .story-page-nav .text-button:is(:hover, :focus-visible) {
+  background: var(--color-glass-control);
+}
+#modal .story-page-nav .story-next:not(:disabled) {
+  background: var(--glass-selection);
+  color: var(--color-text-primary);
+}
+#modal .story-page-nav .story-next:not(:disabled):is(:hover, :focus-visible) {
+  background: var(--glass-command);
+}
+#modal .story-page-nav .button:disabled {
+  background: transparent;
+  color: var(--color-text-disabled);
+  opacity: 1;
+  box-shadow: none;
+}
+#modal :is(.memory-book .button, .room-story-cover ~ .button) {
+  min-height: var(--size-reading-target);
+}
+
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+    html:not(.reduce-motion, .simple-effects) .story-shimmer {
+      background-image: linear-gradient(105deg, var(--color-text-secondary) 42%,
+        var(--color-story-shimmer) 50%, var(--color-text-secondary) 58%);
+      background-size: 240% 100%;
+      background-position: 100% 0;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: story-shimmer var(--motion-story-shimmer) linear;
+    }
+    @keyframes story-shimmer {
+      from { background-position: 100% 0; color: transparent; }
+      to { background-position: 0 0; color: transparent; }
+    }
+  }
+}
+
+#modal .memory-book {
+  display: grid;
+  gap: 20px;
+  text-align: start;
+}
+#modal .memory-book > :is(.memory-intro, .memory-chapters, .memory-reward),
+#modal .memory-chapter > :is(h3, p) { margin: 0; }
+#modal .memory-intro {
+  text-align: start;
+  text-wrap: pretty;
+}
+#modal .memory-progress {
+  flex-flow: row wrap;
+  align-items: baseline;
+  gap: 4px 16px;
+  padding: 0;
+  background: transparent;
+}
+#modal .memory-progress > span,
+#modal .memory-chapter > small { color: var(--color-text-secondary); }
+#modal .memory-chapter {
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+}
+#modal .memory-chapter > p { font-size: var(--text-body-large); }
+#modal .memory-chapter .observation-note { margin: 4px 0 0; }
+#modal :is(.memory-chapters, .story-chapters) {
+  display: grid;
+  gap: 2px;
+  padding-inline-start: 10px;
+  border-inline-start: 1px solid var(--color-border-subtle);
+}
+#modal .memory-chapters li { margin: 0; min-width: 0; }
+#modal :is(.memory-chapters, .story-chapters) button {
+  min-height: 54px;
+  border: 1px solid transparent;
+  background: transparent;
+}
+#modal :is(.memory-chapters, .story-chapters) button > i { font-style: normal; }
+#modal :is(.memory-chapters, .story-chapters) button:disabled {
+  opacity: 1;
+}
+#modal :is(.memory-chapters, .story-chapters) button:disabled :is(b, small) {
+  color: var(--color-text-secondary);
+}
+#modal .story-chapters button b { font-size: var(--text-body); }
+#modal .story-chapters button small { font-size: var(--text-meta); }
+#modal :is(.memory-chapters, .story-chapters) button:not(:disabled):is(:hover, :focus-visible),
+#modal .memory-chapters button[aria-current='true'] {
+  border-color: var(--color-glass-edge);
+  background: var(--color-glass-control);
+}
+#modal .memory-reward {
+  padding: 16px;
+  border-radius: var(--radius-glass-control);
+  background: var(--color-glass-control);
+}
+#modal .memory-reward p { margin: 6px 0 10px; }
 #modal .field-cover { gap: 4px; }
 @media (max-width: 700px) {
   .dust-room .gold-bubble { justify-content: center; width: 30px; height: 30px; padding: 0; }
@@ -794,14 +959,40 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   #modal .modal-heading { background: var(--color-surface-panel); }
   .modal-heading::before { display: none; }
 }
-.collection-switch .collection-counts {
-  display: block;
-  font-variant-numeric: tabular-nums;
-  line-height: 1.4;
+#collectionPanel .dust-filters {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
 }
-.collection-counts > span { display: inline-block; white-space: nowrap; }
+.dust-filters .button {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  min-width: 0;
+  padding: 8px 3px;
+}
+.dust-filters .button span {
+  font-size: var(--text-meta);
+}
+.dust-filters .button b {
+  font-size: var(--text-label);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.dust-owned-summary {
+  margin: -4px 0 12px;
+  color: var(--color-text-secondary);
+  font-size: var(--text-meta);
+  font-variant-numeric: tabular-nums;
+}
+.dust-owned-summary b { color: var(--color-text-primary); }
+.dust-filter-empty {
+  padding-block: 24px;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
 :is(#modal .modal-card, #dustPopup .care-dock) :where(.compact-extra, .compact-footer, .care-life, .wish-note,
-  .ingredient, .preference-detail, .memory-progress, .memory-chapter, .memory-chapters button,
+  .ingredient, .preference-detail,
   .recipe-drawer, .mix-box, .return-reward, .postcard-paper, .life-entry, .room-story-cover) {
   background-color: var(--color-glass-control);
   border-color: var(--color-glass-edge);
@@ -898,6 +1089,58 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   min-height: 48px;
   color: var(--color-text-primary);
 }
+#modal .settings-dialog .setting-switch {
+  min-block-size: var(--size-reading-target);
+  cursor: pointer;
+}
+.switch-control {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 0 0 var(--size-reading-target);
+  min-block-size: var(--size-reading-target);
+}
+#modal .switch-control > input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+.switch-track {
+  display: flex;
+  align-items: center;
+  inline-size: var(--size-switch-track);
+  block-size: 1.375rem;
+  padding-inline: .125rem;
+  border: 1px solid var(--color-border-control);
+  border-radius: var(--radius-glass-pill);
+  background: var(--color-switch-off);
+  pointer-events: none;
+}
+.switch-track::before {
+  content: '';
+  inline-size: var(--size-switch-thumb);
+  block-size: var(--size-switch-thumb);
+  border-radius: 50%;
+  background: var(--color-glass-neutral-light);
+}
+.switch-control > input:checked + .switch-track {
+  justify-content: end;
+  border-color: var(--color-switch-on);
+  background: var(--color-switch-on);
+}
+.switch-control > input:checked + .switch-track::before { background: var(--color-action-on-primary); }
+.switch-control > input:focus-visible + .switch-track {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+@media (forced-colors: active) {
+  .switch-track { border-color: CanvasText; }
+  .switch-track::before { background: CanvasText; forced-color-adjust: none; }
+}
 #modal .settings-dialog .save-transfer {
   padding: 14px;
 }
@@ -956,7 +1199,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   overflow: hidden;
   pointer-events: none;
   background:
-    url('./assets/galaxy-stars.svg?v=1.13.12-8b3c460c') center top / auto 800px repeat,
+    url('./assets/galaxy-stars.svg?v=1.13.24-19494e89') center top / auto 800px repeat,
     radial-gradient(ellipse at 77% 27%, var(--color-glass-orbit-graphite), transparent 57%),
     radial-gradient(ellipse at 13% 54%, var(--color-glass-orbit-slate), transparent 64%),
     radial-gradient(ellipse at 94% 78%, var(--color-glass-orbit-silver), transparent 56%),
@@ -996,7 +1239,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: url('./assets/planet-horizon.svg?v=1.13.12-8b3c460c') center 46% / cover no-repeat;
+  background: url('./assets/planet-horizon.svg?v=1.13.24-19494e89') center 46% / cover no-repeat;
 }
 .planet-landscape + .room-playfield .galaxy-portal { top: 39%; left: 82%; }
 .dust-room .birth-glow {
@@ -1021,36 +1264,97 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   border-radius: 50%;
   background: var(--color-link);
 }
-#modal .mix-dialog .ingredient-picker {
+#modal .select-field {
   position: relative;
-  width: 100%;
+  inline-size: 100%;
+  min-inline-size: 0;
 }
-#modal .mix-dialog .ingredient-picker::after {
+#modal .select-field::after {
   content: '';
   position: absolute;
-  inset-inline-end: 6px;
-  top: calc(50% - 4px);
-  width: 5px;
-  height: 5px;
-  border: solid var(--color-text-secondary);
-  border-width: 0 1px 1px 0;
-  transform: rotate(45deg);
+  inset-inline-end: var(--select-icon-inset);
+  inset-block-start: calc(50% - 5px);
+  inline-size: .42rem;
+  block-size: .42rem;
+  border: solid currentColor;
+  border-width: 0 1.5px 1.5px 0;
+  rotate: 45deg;
+  color: var(--color-text-secondary);
   pointer-events: none;
 }
-#modal .mix-dialog .ingredient select {
+#modal .select-field > select {
   display: block;
   appearance: none;
-  min-height: 36px;
-  padding-inline: 4px 14px;
+  inline-size: 100%;
+  min-block-size: var(--size-reading-target);
+  margin: 0;
+  padding: 0 calc(var(--select-icon-inset) + 1rem) 0 .6rem;
+  overflow: hidden;
   text-overflow: ellipsis;
+  text-align: start;
+  font-size: var(--text-label);
   border: 1px solid var(--color-glass-edge);
-  border-radius: 9px;
+  border-radius: var(--radius-field);
   background: var(--glass-edge-light), var(--color-glass-control);
   color: var(--color-text-primary);
+  cursor: pointer;
 }
-#modal .mix-dialog .ingredient select option {
+#modal .select-field > select:disabled {
+  background: var(--color-surface-disabled);
+  color: var(--color-text-disabled);
+  cursor: default;
+  opacity: 1;
+}
+#modal .select-field > select:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+#modal .select-field option {
   background: var(--color-surface-panel);
   color: var(--color-text-primary);
+}
+#modal .desk-select { margin-block: 6px 13px; }
+@supports (appearance: base-select) and selector(::picker(select)) {
+  #modal .select-field::after { display: none; }
+  #modal .select-field > select {
+    display: inline-flex;
+    align-items: center;
+    gap: .25rem;
+    appearance: base-select;
+    padding-inline: .5rem;
+  }
+  #modal .select-field > select::picker-icon {
+    margin-inline-start: auto;
+    color: var(--color-text-secondary);
+  }
+  #modal .select-field > select:open::picker-icon { rotate: 180deg; }
+  #modal .select-field > select::picker(select) {
+    appearance: base-select;
+    max-block-size: min(18rem, 45dvh);
+    padding: .25rem;
+    margin-block: .25rem;
+    border: 1px solid var(--color-glass-edge);
+    border-radius: var(--radius-field);
+    background: var(--color-glass-reading);
+    color: var(--color-text-primary);
+    box-shadow: var(--glass-floating-shadow);
+  }
+  #modal .select-field option {
+    min-block-size: var(--size-reading-target);
+    padding-inline: .5rem;
+    border-radius: calc(var(--radius-field) - .25rem);
+    background: transparent;
+  }
+  #modal .select-field option:is(:focus, :hover) { background: var(--color-surface-hover); }
+  #modal .select-field option:checked { background: var(--color-glass-active); }
+  #modal .select-field option::checkmark {
+    order: 1;
+    margin-inline-start: auto;
+    color: var(--color-brand-primary);
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    #modal .select-field > select::picker(select) { background: var(--color-surface-panel); }
+  }
 }
 #modal .mix-dialog .ingredient small { white-space: normal; }
 #modal .mix-dialog .mix-preview { background: transparent; }
@@ -1080,3 +1384,253 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
 }
 #modal .mix-dialog .recipe-drawer[open] summary::before { transform: rotate(45deg); }
 #modal .mix-dialog .recipe-drawer summary small { margin-inline-start: auto; }
+
+/* Game controls shared by the expedition picker and transient feedback. */
+#modal .quest-planning {
+  min-inline-size: 0;
+  margin: 20px 0 0;
+  padding: 0;
+  border: 0;
+  text-align: start;
+}
+#modal .quest-planning legend {
+  margin-block-end: 10px;
+  padding: 0;
+  color: var(--color-text-primary);
+  font-size: var(--text-body);
+  font-weight: 650;
+}
+#modal .quest-choice { display: block; cursor: pointer; }
+#modal .quest-choice:has(input:disabled) { cursor: default; }
+#modal .quest-choice:has(input:enabled):hover { border-color: var(--color-border-control); }
+#modal .quest-choice.chosen {
+  background: var(--glass-selection);
+  border-color: var(--color-brand-primary);
+}
+#modal .quest-choice .route-title > input {
+  flex: 0 0 auto;
+  inline-size: var(--size-radio-indicator);
+  block-size: var(--size-radio-indicator);
+  margin: 0;
+  accent-color: var(--color-brand-primary);
+  cursor: inherit;
+}
+#modal .quest-choice .route-title > span { min-inline-size: 0; }
+#modal .quest-choice .route-description {
+  display: block;
+  margin-block-start: 3px;
+  color: var(--color-text-secondary);
+  font-size: var(--text-meta);
+  line-height: 1.65;
+}
+#modal .quest-choice .quest-rewards {
+  justify-content: start;
+  margin-block: 10px 0;
+}
+
+#toast {
+  inset: auto 16px max(16px, env(safe-area-inset-bottom, 0px)) auto;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  max-inline-size: min(26rem, calc(100% - 32px));
+  padding: 6px 8px 6px 14px;
+  translate: 0 8px;
+  z-index: 1001;
+  text-align: start;
+  border: 1px solid var(--color-glass-edge);
+  border-radius: var(--radius-glass-control);
+  background: var(--color-toast-surface);
+  color: var(--color-text-primary);
+  transition: opacity .18s ease, translate .18s ease;
+}
+#toast.show { translate: 0; pointer-events: auto; }
+.toast-mark { color: var(--color-brand-primary); }
+#toastDismiss {
+  display: grid;
+  place-items: center;
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-field);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: var(--text-title-small);
+  cursor: pointer;
+}
+#toastDismiss:is(:hover, :focus-visible) {
+  background: var(--color-glass-control);
+  color: var(--color-text-primary);
+}
+@media (max-width: 700px) {
+  #toast {
+    inset-inline: 12px;
+    inset-block-end: calc(72px + env(safe-area-inset-bottom, 0px));
+    inline-size: auto;
+    margin-inline: auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #toast { transition: none; }
+}
+.reduce-motion #toast { transition: none; }
+
+#uiTooltip {
+  position: fixed;
+  z-index: 1002;
+  max-inline-size: min(16rem, calc(100vw - 16px));
+  padding: 6px 10px;
+  border: 1px solid var(--color-glass-edge);
+  border-radius: var(--radius-field);
+  background: var(--color-tooltip-surface);
+  color: var(--color-text-primary);
+  box-shadow: var(--glass-card-shadow);
+  font-size: var(--text-meta);
+  line-height: 1.5;
+  pointer-events: auto;
+}
+@media (prefers-reduced-transparency: reduce) {
+  #toast, #uiTooltip { background: var(--color-surface-panel); }
+}
+
+#modal .daily-wishes {
+  display: grid;
+  gap: 8px;
+  min-inline-size: 0;
+}
+#modal .daily-wishes :is(h3, p) { margin: 0; }
+#modal .daily-wish {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  min-inline-size: 0;
+  padding-block: 8px;
+}
+#modal .daily-wish > div { flex: 1 1 13rem; min-inline-size: 0; overflow-wrap: anywhere; }
+#modal .daily-wish .button { min-height: var(--size-reading-target); margin: 0; }
+#modal .daily-wishes + .memory-chapters { margin-block-start: 0; }
+#modal .economy-table-wrap { overscroll-behavior-inline: contain; }
+#modal .economy-table :is(th, td) {
+  word-break: keep-all;
+  overflow-wrap: normal;
+}
+@media (max-width: 700px) {
+  #modal { overflow: hidden; }
+  #modal .modal-card { scrollbar-gutter: auto; }
+  #modal .modal-body { min-inline-size: 0; }
+  #modal .economy-table { min-inline-size: 100%; }
+  #modal .economy-table th { min-inline-size: auto; }
+  #modal .economy-table thead th { white-space: normal; }
+  #dustPopup .compact-name { flex-wrap: wrap; }
+  #dustPopup .compact-name h2 { min-inline-size: 0; }
+}
+
+#modal .mission-section {
+  min-inline-size: 0;
+  margin-block-start: 20px;
+  padding: 14px;
+  border: 1px solid var(--color-glass-edge);
+  border-radius: var(--radius-glass-control);
+  background: var(--color-glass-control);
+  text-align: start;
+  scroll-margin-block-start: 4px;
+}
+#modal .mission-section h3 { margin: 0 0 4px; }
+#modal .mission-section .collection-target { margin: 6px 0 0; padding: 0; }
+#modal .mission-section .target-actions { min-inline-size: 0; flex-wrap: wrap; }
+
+#modal .mission-progress {
+  display: grid;
+  gap: 4px;
+}
+.mission-entry {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 4px;
+  min-height: var(--size-reading-target);
+  border: 0;
+  border-radius: var(--radius-glass-control);
+  background: transparent;
+  color: var(--color-text-primary);
+  font-size: var(--text-label);
+  text-align: start;
+  cursor: pointer;
+}
+.mission-entry small {
+  color: var(--color-text-secondary);
+  font-size: var(--text-meta);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.mission-entry:is(:hover, :focus-visible) { background: var(--color-surface-hover); }
+#modal .mission-return {
+  justify-self: start;
+  min-height: var(--size-reading-target);
+  margin: 0 0 6px;
+}
+
+/* Shared line icons for interface controls. */
+:root {
+  --size-icon-small: 16px;
+  --size-icon-default: 20px;
+  --size-icon-nav: 24px;
+}
+.ui-icon {
+  display: inline-block;
+  inline-size: var(--icon-size, var(--size-icon-default));
+  block-size: var(--icon-size, var(--size-icon-default));
+  flex: none;
+  vertical-align: middle;
+}
+.app-shell > .navigation .nav-icon {
+  inline-size: var(--size-icon-nav);
+  block-size: var(--size-icon-nav);
+}
+.topbar .wallet :is(.resource-count, .gold-wallet, .sparkle-wallet),
+.record-help, .collection-switch, .copy-story, .preference-detail h3 {
+  --icon-size: var(--size-icon-small);
+}
+:is(#settings, .modal-heading .close, .dust-popup-close, #toastDismiss, .copy-story) {
+  display: inline-grid;
+  place-items: center;
+}
+.compact-dock .story-actions .text-button,
+.compact-merge .button,
+.room-placement .button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+.compact-income { color: var(--color-text-secondary); }
+.compact-income > .ui-icon, .gold-ready [data-icon="gold"] {
+  color: var(--color-currency-gold);
+}
+.compact-income .ui-icon {
+  --icon-size: var(--size-icon-small);
+}
+#selectedGoldTimer:not(.gold-ready) [data-icon="gold"],
+#selectedGoldTimer.gold-ready [data-icon="clock"] {
+  display: none;
+}
+.glow-glyph {
+  --icon-size: 28px;
+}
+@media (max-width: 700px) {
+  .compact-income > .ui-icon, #goldTimerDesktop { display: none; }
+  #selectedGoldTimer .mobile-glyph {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--text-label);
+    font-variant-numeric: tabular-nums;
+  }
+  .compact-dock .story-actions .text-button { gap: 2px; }
+  .compact-dock .story-actions .mobile-glyph { font-size: var(--text-caption); margin: 0; }
+}

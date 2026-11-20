@@ -39,11 +39,16 @@ html.reduce-motion .rg-prop{animation:none}
 #modal .modal-card {
   max-height: 100%;
   min-height: 0;
+  min-width: 0;
   padding: 0;
   overflow: auto;
   overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
   scroll-padding-block-start: 100px;
+  scroll-padding-block-end: 20px;
 }
+#modal .modal-card:focus-visible { outline: 2px solid var(--color-focus); }
 body.modal-open .app-shell > .navigation {
   visibility: hidden;
   pointer-events: none;
@@ -80,6 +85,9 @@ body.modal-open .app-shell > .navigation {
 }
 .modal-body > .dust-art { margin-top: 0; }
 @media (min-width: 701px) {
+  #modal .modal-card {
+    max-width: var(--dialog-desktop-width);
+  }
   .modal-heading, .modal-body { padding-inline: 24px; }
 }
 
@@ -138,6 +146,8 @@ body.modal-open .app-shell > .navigation {
   border-radius: 0;
 }
 .room-playfield {
+  --quest-guide-height: 64px;
+  --quest-guide-inset: 18px;
   position: absolute;
   inset: 0 0 calc(var(--room-nav-height) + var(--room-nav-bottom) + 3px);
 }
@@ -159,13 +169,12 @@ body.modal-open .app-shell > .navigation {
 .quest-guide {
   position: absolute;
   z-index: 25;
-  inset-inline-start: 50%;
-  top: 10px;
-  translate: -50% 0;
+  inset-inline-end: var(--quest-guide-inset);
+  inset-block-end: var(--quest-guide-inset);
   display: grid;
   justify-items: center;
-  width: 58px;
-  min-height: 58px;
+  width: 64px;
+  height: var(--quest-guide-height);
   padding: 2px;
   color: var(--color-text-secondary);
   background: var(--color-surface-inset);
@@ -173,6 +182,9 @@ body.modal-open .app-shell > .navigation {
   border-radius: 18px;
   font-size: var(--text-meta);
   line-height: 1.25;
+}
+.dust-room .room-fairy {
+  bottom: max(10%, calc(var(--quest-guide-height) + var(--quest-guide-inset) + 8px));
 }
 .quest-guide svg { width: 43px; height: 37px; }
 .quest-guide:hover { background: var(--color-surface-hover); }
@@ -207,13 +219,12 @@ body.modal-open .app-shell > .navigation {
 #dustPopup .dust-popup-close:focus-visible { outline-offset: -3px; }
 #dustPopup .compact-name h2 { overflow-wrap: anywhere; }
 @media (min-width: 701px) {
-  #dustPopup .care-dock { width: min(560px, calc(100% - 32px)); }
+  #dustPopup .care-dock { width: min(var(--dialog-desktop-width), calc(100% - 32px)); }
   #dustPopup .compact-top {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
     gap: 16px;
   }
   #dustPopup .compact-merge { gap: 8px; }
-  .modal-card.quest-guide-dialog { max-width: 680px; }
   .quest-guide-dialog .journey-content {
     grid-template-columns: minmax(0, 1fr) minmax(180px, .78fr);
   }
@@ -221,12 +232,16 @@ body.modal-open .app-shell > .navigation {
 @media (max-width: 700px) {
   .room-open .dust-room,
   .room-open .topbar { touch-action: pinch-zoom; }
-  .quest-guide { width: 48px; min-height: 44px; align-items: center; }
+  .room-playfield { --quest-guide-height: 48px; --quest-guide-inset: 10px; }
+  .quest-guide { width: 48px; align-items: center; }
+  .dust-room .room-fairy {
+    bottom: max(15%, calc(var(--quest-guide-height) + var(--quest-guide-inset) + 8px));
+  }
   .quest-guide > span { display: none; }
   .quest-guide svg { width: 36px; height: 31px; }
 }
 .brand-dust {
-  background: url('./favicon.svg?v=1.13.12-8b3c460c') center / contain no-repeat;
+  background: url('./favicon.svg?v=1.13.24-19494e89') center / contain no-repeat;
   font-size: 0 !important;
 }
 .room-open #main > .dust-room {

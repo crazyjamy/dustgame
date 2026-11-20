@@ -1,5 +1,5 @@
-import{NEW_FURNITURE,furnitureChapters}from'./furniture-twenty.mjs?v=1.13.12-8b3c460c';
-import{MORE_FURNITURE_STORIES}from'./furniture-extra.mjs?v=1.13.12-8b3c460c';
+import{NEW_FURNITURE,furnitureChapters}from'./furniture-twenty.mjs?v=1.13.24-19494e89';
+import{MORE_FURNITURE_STORIES}from'./furniture-extra.mjs?v=1.13.24-19494e89';
 export const FURNITURE_STORIES={
  rug:[
  ['첫 번째 자리','아무도 앉지 않던 러그 한가운데, 작은 별이 처음 몸을 눕혔어요. 주름 하나가 조용히 펴졌어요. 이제 이곳에는 돌아와 쉴 자리가 생겼어요.'],

@@ -75,7 +75,22 @@
   --radius-glass-panel: 26px;
   --radius-glass-control: 16px;
   --radius-glass-pill: 999px;
+  --radius-field: .625rem;
+  --select-icon-inset: .5rem;
+  --size-switch-track: 2.5rem;
+  --size-switch-thumb: 1rem;
+  --color-switch-off: var(--color-surface-pressed);
+  --color-switch-on: var(--color-brand-primary);
   --modal-scroll-fade: 16px;
+  --color-scroll-thumb: var(--color-border-control);
+  --color-scroll-track: transparent;
+  --color-tooltip-surface: var(--color-glass-reading);
+  --color-toast-surface: var(--color-glass-reading);
+  --size-radio-indicator: 1.125rem;
+  --dialog-desktop-width: 40rem;
+  --motion-story-shimmer: 1600ms;
+  --size-reading-target: 2.75rem;
+  --color-story-shimmer: var(--color-sparkle-fill);
   --glass-backdrop: blur(5px);
   --glass-panel-sheen: radial-gradient(ellipse at 20% 0%, #d5dde614, transparent 52%),
     radial-gradient(ellipse at 95% 105%, #b5c0cc0d, transparent 55%);

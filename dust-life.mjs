@@ -1,7 +1,7 @@
-import{wishReward}from'./furniture.mjs?v=1.13.12-8b3c460c';
-import{personalPostcard}from'./postcard-voices.mjs?v=1.13.12-8b3c460c';
-import{characterProfile}from'./dust-character.mjs?v=1.13.12-8b3c460c';
-import {DUSTS} from './dust-data.mjs?v=1.13.12-8b3c460c';
+import{wishReward}from'./furniture.mjs?v=1.13.24-19494e89';
+import{personalPostcard}from'./postcard-voices.mjs?v=1.13.24-19494e89';
+import{characterProfile}from'./dust-character.mjs?v=1.13.24-19494e89';
+import {DUSTS} from './dust-data.mjs?v=1.13.24-19494e89';
 
 export const FAVORITES=[
  {id:'rug',name:'행성 고리',action:'러그 위에서 몸을 동그랗게 말아요.',words:'폭신한 곳에 있으면 마음도 느긋해져.',memory:'처음에는 가장자리만 밟았어요. 오래된 러그의 자수가 늘어날수록 조금씩 가운데로 들어왔고, 이제는 옆자리를 친구에게 내어줘요.'},

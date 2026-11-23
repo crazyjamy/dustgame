@@ -1,10 +1,10 @@
-import{syncCollection}from'./collection-book.mjs?v=1.13.24-19494e89';
-import{initLife}from'./dust-life.mjs?v=1.13.24-19494e89';
-import{hasHomeSpace,hasStorageSpace,roomCapacity,storageCapacity}from'./rooms.mjs?v=1.13.24-19494e89';
-import{activeLevel}from'./furniture.mjs?v=1.13.24-19494e89';
-import{isAway,initAdventures}from'./adventures.mjs?v=1.13.24-19494e89';
-import{initEconomy,pauseGold,startClock,installed,collectGold}from'./economy.mjs?v=1.13.24-19494e89';
-import{DUSTS,GROUPS,RARITIES,ESSENCES,STORIES}from'./dust-data.mjs?v=1.13.24-19494e89';
+import{syncCollection}from'./collection-book.mjs?v=1.13.27-4e8b8575';
+import{initLife}from'./dust-life.mjs?v=1.13.27-4e8b8575';
+import{hasHomeSpace,hasStorageSpace,roomCapacity,storageCapacity}from'./rooms.mjs?v=1.13.27-4e8b8575';
+import{activeLevel}from'./furniture.mjs?v=1.13.27-4e8b8575';
+import{isAway,initAdventures}from'./adventures.mjs?v=1.13.27-4e8b8575';
+import{initEconomy,pauseGold,startClock,installed,collectGold}from'./economy.mjs?v=1.13.27-4e8b8575';
+import{DUSTS,GROUPS,RARITIES,ESSENCES,STORIES}from'./dust-data.mjs?v=1.13.27-4e8b8575';
 export const getDust=id=>DUSTS.find(d=>d.id===id);
 export const stage=xp=>xp>=6?2:xp>=2?1:0;
 export const level=xp=>1+Math.floor(xp/2);
@@ -18,14 +18,15 @@ export function checkMix(s,v={}){if(!hasHomeSpace(s)&&!hasStorageSpace(s))return
 export function mix(s,v={},now=Date.now(),random=Math.random){const r=checkMix(s,v);if(!r.ok)return r;const dust=r.mode==='random'?DUSTS[Math.min(DUSTS.length-1,Math.max(0,Math.floor(random()*DUSTS.length)))]:r.dust;if(r.mode==='recipe'){s.materials.group[v.group]--;s.materials.rarity[v.rarity]--;s.materials.essence[v.essence]-=r.cost;}s.pending={id:dust.id,end:now+1400,mode:r.mode};return{ok:true,mode:r.mode};}
 export function finishMix(s,now=Date.now()){if(!s.pending||now<s.pending.end)return null;const mode=s.pending.mode||'recipe',id=s.pending.id,isNew=!s.dusts.some(d=>d.id===id),dust={uid:s.nextUid++,id,nickname:'',xp:0,stored:!hasHomeSpace(s),readStories:[]};startClock(s,dust,now);s.dusts.push(dust);if(!dust.stored)s.selectedUid=dust.uid;s.pending=null;syncCollection(s);return{dust,isNew,mode};}
 // Retain the old API for callers of earlier builds; sparkles no longer grant XP.
-export function feed(){return {ok:false,message:'같은 종류·같은 레벨의 별 두 마리를 합쳐 키워주세요.'};}
-export function mergeCandidates(s,uid){const d=s.dusts.find(d=>d.uid===uid);if(!d||d.xp>=10||d.stored||isAway(s,uid))return [];return s.dusts.filter(x=>x.uid!==uid&&x.id===d.id&&level(x.xp)===level(d.xp)&&!x.stored&&!isAway(s,x.uid));}
+export function feed(){return {ok:false,message:'같은 종류의 별 두 마리를 합쳐 키워주세요.'};}
+export function mergeCandidates(s,uid){const d=s.dusts.find(d=>d.uid===uid);if(!d||d.xp>=10||d.stored||isAway(s,uid))return [];return s.dusts.filter(x=>x.uid!==uid&&x.id===d.id&&x.xp<10&&!x.stored&&!isAway(s,x.uid));}
+export function mergeResultLevel(first,second){return Math.max(level(first.xp),level(second.xp))+1;}
 export function mergeDust(s,uid,otherUid,now=Date.now()){
  const dust=s.dusts.find(d=>d.uid===uid),other=mergeCandidates(s,uid).find(d=>d.uid===otherUid);
- if(!other)return {ok:false,message:'은하계에 있는 같은 종류·같은 레벨의 다른 별을 골라주세요.'};
+ if(!other)return {ok:false,message:'은하계에 있는 같은 종류의 다른 별을 골라주세요.'};
  // Settle old-level production before the donor disappears or the recipient grows.
  const gold=[uid,otherUid].reduce((sum,id)=>sum+(collectGold(s,id,now).amount||0),0),prev=stage(dust.xp);
- dust.sparkleDropDay=Math.max(dust.sparkleDropDay,other.sparkleDropDay);dust.xp=level(dust.xp)*2;dust.readStories=[...new Set([...dust.readStories,...other.readStories])].sort();
+ dust.sparkleDropDay=Math.max(dust.sparkleDropDay,other.sparkleDropDay);dust.xp=(mergeResultLevel(dust,other)-1)*2;dust.readStories=[...new Set([...dust.readStories,...other.readStories])].sort();
  if(s.life.memories.includes(String(otherUid))&&!s.life.memories.includes(String(uid)))s.life.memories.push(String(uid));
  const claimed=s.life.requests[otherUid];if(claimed!==undefined)s.life.requests[uid]=Math.max(s.life.requests[uid]??0,claimed);
  delete s.roomPositions.dust[otherUid];delete s.life.requests[otherUid];

@@ -241,7 +241,7 @@ body.modal-open .app-shell > .navigation {
   .quest-guide svg { width: 36px; height: 31px; }
 }
 .brand-dust {
-  background: url('./favicon.svg?v=1.13.24-19494e89') center / contain no-repeat;
+  background: url('./favicon.svg?v=1.13.27-4e8b8575') center / contain no-repeat;
   font-size: 0 !important;
 }
 .room-open #main > .dust-room {

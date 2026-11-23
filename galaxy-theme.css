@@ -1199,7 +1199,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   overflow: hidden;
   pointer-events: none;
   background:
-    url('./assets/galaxy-stars.svg?v=1.13.24-19494e89') center top / auto 800px repeat,
+    url('./assets/galaxy-stars.svg?v=1.13.27-4e8b8575') center top / auto 800px repeat,
     radial-gradient(ellipse at 77% 27%, var(--color-glass-orbit-graphite), transparent 57%),
     radial-gradient(ellipse at 13% 54%, var(--color-glass-orbit-slate), transparent 64%),
     radial-gradient(ellipse at 94% 78%, var(--color-glass-orbit-silver), transparent 56%),
@@ -1239,7 +1239,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: url('./assets/planet-horizon.svg?v=1.13.24-19494e89') center 46% / cover no-repeat;
+  background: url('./assets/planet-horizon.svg?v=1.13.27-4e8b8575') center 46% / cover no-repeat;
 }
 .planet-landscape + .room-playfield .galaxy-portal { top: 39%; left: 82%; }
 .dust-room .birth-glow {
@@ -1633,4 +1633,23 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   }
   .compact-dock .story-actions .text-button { gap: 2px; }
   .compact-dock .story-actions .mobile-glyph { font-size: var(--text-caption); margin: 0; }
+}
+
+.furniture-missions {
+  margin-block-start: 8px;
+}
+#modal .furniture-missions .daily-wish {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+.furniture-missions .furniture-art {
+  width: 36px;
+  height: 36px;
+}
+#modal .furniture-missions .daily-wish p {
+  margin: 2px 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--text-meta);
 }

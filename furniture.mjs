@@ -1,5 +1,5 @@
-import{NEW_FURNITURE,furnitureChapters}from'./furniture-twenty.mjs?v=1.13.24-19494e89';
-import{MORE_FURNITURE_STORIES}from'./furniture-extra.mjs?v=1.13.24-19494e89';
+import{NEW_FURNITURE,furnitureChapters}from'./furniture-twenty.mjs?v=1.13.27-4e8b8575';
+import{MORE_FURNITURE_STORIES}from'./furniture-extra.mjs?v=1.13.27-4e8b8575';
 export const FURNITURE_STORIES={
  rug:[
  ['첫 번째 자리','아무도 앉지 않던 러그 한가운데, 작은 별이 처음 몸을 눕혔어요. 주름 하나가 조용히 펴졌어요. 이제 이곳에는 돌아와 쉴 자리가 생겼어요.'],
@@ -45,7 +45,7 @@ export const cushionBonus=s=>activeLevel(s,'cushion')?.25+.1*(activeLevel(s,'cus
 export const dailySparkleBonus=s=>activeLevel(s,'starlamp');
 export const jarInterval=s=>activeLevel(s,'glassjar')?(60-5*(activeLevel(s,'glassjar')-1))*1000:0;
 export const wishReward=s=>3+activeLevel(s,'wishboard');
-export function furnitureEffect(s,id){const l=furnitureLevel(s,id)||1;return {rug:`합치기 반짝이 +${l}`,plant:`쓰다듬기 반짝이 +${l}`,lamp:`골드 시간 −${20+(l-1)*5}%`,cushion:`골드 보상 +${25+(l-1)*10}%`,bookshelf:`별 이야기 첫 읽기 반짝이 +${l}`,teacup:`쓰다듬기 간격 −${l*50}ms`,basket:`모험 정수 +${l}`,windchime:`모험 시간 −${l*5}%`,hourglass:`골드 생산 보너스 +${l*2} · ⅓ 환산 전`,musicbox:`골드 받을 때 반짝이 +${l}`,starlamp:`하루 반짝이 생성량 +${l}`,glassjar:`은하계를 보는 동안 ${60-5*(l-1)}초마다 하루 반짝이 모두 줍기`,wishboard:`부탁 보상 반짝이 +${l}`,postbox:`새 엽서 첫 수령 반짝이 +${l}`,prism:`희귀 별 쓰다듬기 반짝이 +${Math.ceil(l/2)}`,starmobile:`Lv.3 이상 합치기 추가 반짝이 +${Math.ceil(l/2)}`,workbench:`희귀도 재료 가격 반짝이 −${l} (최소 1)`,candle:`오늘 첫 골드 수령 반짝이 +${l*2}`,blanket:`모험 귀환 반짝이 +${Math.ceil(l/2)}`,terrarium:`외곽 관측소 완주 반짝이 +${l}`}[id];}
+export function furnitureEffect(s,id){const l=furnitureLevel(s,id)||1;return {rug:`합치기 반짝이 +${l}`,plant:`쓰다듬기 반짝이 +${l}`,lamp:`골드 시간 −${20+(l-1)*5}%`,cushion:`골드 보상 +${25+(l-1)*10}%`,bookshelf:`별 이야기 첫 읽기 반짝이 +${l}`,teacup:`쓰다듬기 간격 −${l*50}ms`,basket:`모험 정수 +${l}`,windchime:`모험 시간 −${l*5}%`,hourglass:`골드 생산 보너스 +${l*2} · 환산 전`,musicbox:`골드 받을 때 반짝이 +${l}`,starlamp:`하루 반짝이 생성량 +${l}`,glassjar:`은하계를 보는 동안 ${60-5*(l-1)}초마다 하루 반짝이 모두 줍기`,wishboard:`부탁 보상 반짝이 +${l}`,postbox:`새 엽서 첫 수령 반짝이 +${l}`,prism:`희귀 별 쓰다듬기 반짝이 +${Math.ceil(l/2)}`,starmobile:`Lv.3 이상 합치기 추가 반짝이 +${Math.ceil(l/2)}`,workbench:`희귀도 재료 가격 반짝이 −${l} (최소 1)`,candle:`오늘 첫 골드 수령 반짝이 +${l*2}`,blanket:`모험 귀환 반짝이 +${Math.ceil(l/2)}`,terrarium:`외곽 관측소 완주 반짝이 +${l}`}[id];}
 export function initFurniture(s){
  if(s.furnitureDaily===undefined)s.furnitureDaily={candleDay:-1,jarAt:0};
  if(!s.furnitureDaily||!Number.isSafeInteger(s.furnitureDaily.candleDay)||s.furnitureDaily.candleDay< -1||!Number.isFinite(s.furnitureDaily.jarAt)||s.furnitureDaily.jarAt<0)throw Error('invalid furniture daily');

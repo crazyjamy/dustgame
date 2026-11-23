@@ -1,7 +1,7 @@
-import{DUSTS}from'./dust-data.mjs?v=1.13.24-19494e89';
-import{goldInterval}from'./gold-rates.mjs?v=1.13.24-19494e89';
-import{pauseGoldClock}from'./gold-clock.mjs?v=1.13.24-19494e89';
-import{activeLevel}from'./furniture.mjs?v=1.13.24-19494e89';
+import{DUSTS}from'./dust-data.mjs?v=1.13.27-4e8b8575';
+import{goldInterval}from'./gold-rates.mjs?v=1.13.27-4e8b8575';
+import{pauseGoldClock}from'./gold-clock.mjs?v=1.13.27-4e8b8575';
+import{activeLevel}from'./furniture.mjs?v=1.13.27-4e8b8575';
 export const DESK={width:20,height:14,tile:48,start:{x:3.5,y:11.5}};
 export const DESK_ITEMS=[
  {id:'cotton',x:5.5,y:11.5,key:'group',material:'daily',amount:1,name:'성운 섬유',label:'포근 재료',color:'#e6d1ff'},

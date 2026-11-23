@@ -1,20 +1,20 @@
-import{syncCollection}from'./collection-book.mjs?v=1.13.35-9a3a12ca';
-import{initLife}from'./dust-life.mjs?v=1.13.35-9a3a12ca';
-import{afterwordKey}from'./story-journey.mjs?v=1.13.35-9a3a12ca';
-import{mergeAfterwords}from'./story-aftermath.mjs?v=1.13.35-9a3a12ca';
-import{hasHomeSpace,hasStorageSpace,roomCapacity,storageCapacity}from'./rooms.mjs?v=1.13.35-9a3a12ca';
-import{activeLevel}from'./furniture.mjs?v=1.13.35-9a3a12ca';
-import{isAway,initAdventures}from'./adventures.mjs?v=1.13.35-9a3a12ca';
-import{initEconomy,pauseGold,startClock,installed,collectGold}from'./economy.mjs?v=1.13.35-9a3a12ca';
-import{DUSTS,GROUPS,RARITIES,ESSENCES,STORIES}from'./dust-data.mjs?v=1.13.35-9a3a12ca';
+import{syncCollection}from'./collection-book.mjs?v=1.13.63-0f23dbc5';
+import{initLife}from'./dust-life.mjs?v=1.13.63-0f23dbc5';
+import{afterwordKey}from'./story-journey.mjs?v=1.13.63-0f23dbc5';
+import{mergeAfterwords}from'./story-aftermath.mjs?v=1.13.63-0f23dbc5';
+import{hasHomeSpace,hasStorageSpace,roomCapacity,storageCapacity}from'./rooms.mjs?v=1.13.63-0f23dbc5';
+import{activeLevel}from'./furniture.mjs?v=1.13.63-0f23dbc5';
+import{isAway,initAdventures}from'./adventures.mjs?v=1.13.63-0f23dbc5';
+import{initEconomy,pauseGold,startClock,installed,collectGold}from'./economy.mjs?v=1.13.63-0f23dbc5';
+import{DUSTS,GROUPS,RARITIES,ESSENCES,STORIES}from'./dust-data.mjs?v=1.13.63-0f23dbc5';
 export const getDust=id=>DUSTS.find(d=>d.id===id);
 export const stage=xp=>xp>=6?2:xp>=2?1:0;
 export const level=xp=>1+Math.floor(xp/2);
 export const unlockedStories=dust=>Math.min(level(dust.xp)-1,STORIES[dust.id].length);
 export const inRoom=s=>s.dusts.filter(d=>!d.stored&&!isAway(s,d.uid));
-export function createState(now=Date.now()){return initLife(initEconomy({version:1,gold:60,dusts:[{uid:1,id:'crumb',xp:0,stored:false,readStories:[]}],nextUid:2,selectedUid:1,sparkles:6,materials:{group:{daily:5,pop:5,dream:5},rarity:{common:7,rare:4,legend:3},essence:Object.fromEntries(ESSENCES.map(e=>[e.id,24]))},pending:null,adventures:[],adventureCount:0,keeperRoute:'bookshelf',giftAt:0,gifts:0,petAt:0},now),now);}
+export function createState(now=Date.now()){return initLife(initEconomy({version:1,gold:60,dusts:[{uid:1,id:'crumb',xp:0,stored:false,readStories:[]}],nextUid:2,selectedUid:1,sparkles:6,materials:{group:{daily:3,pop:3,dream:3},rarity:{common:4,rare:2,legend:1},essence:Object.fromEntries(ESSENCES.map(e=>[e.id,e.id==='moon'?8:e.added?3:5]))},pending:null,adventures:[],adventureCount:0,keeperRoute:'bookshelf',giftAt:0,gifts:0,petAt:0},now),now);}
 export function migrateCats(raw){const c=JSON.parse(raw);if(c.version!==2||!c.cats?.length)throw Error();const s=createState(),ids={butter:'crumb',denim:'pink',momo:'puff'};s.dusts=c.cats.map((d,i)=>({uid:i+1,id:ids[d.id]||'crumb',xp:Math.max(0,Math.min(10,Math.floor(d.xp/10)||0)),stored:false,readStories:[]}));s.nextUid=s.dusts.length+1;s.selectedUid=1;s.sparkles=Math.max(0,c.food||24);return initEconomy(s);}
-export function restore(raw,now=Date.now()){const s=JSON.parse(raw);if(s.materials?.essence)for(const e of ESSENCES)if(e.added&&s.materials.essence[e.id]===undefined)s.materials.essence[e.id]=24;if(s.version!==1||!Array.isArray(s.dusts)||!s.dusts.length||s.dusts.length>10000||!s.dusts.every(d=>getDust(d.id)&&Number.isSafeInteger(d.uid)&&d.uid>0&&Number.isInteger(d.xp)&&d.xp>=0&&d.xp<=10)||new Set(s.dusts.map(d=>d.uid)).size!==s.dusts.length||!Number.isSafeInteger(s.nextUid)||s.nextUid<=Math.max(...s.dusts.map(d=>d.uid)))throw Error('invalid dusts');for(const k of ['sparkles','giftAt','gifts','petAt'])if(!Number.isFinite(s[k])||s[k]<0)throw Error('invalid value');for(const [key,items]of[['group',GROUPS],['rarity',RARITIES],['essence',ESSENCES]])for(const x of items)if(!Number.isInteger(s.materials?.[key]?.[x.id])||s.materials[key][x.id]<0)throw Error('invalid materials');if(s.pending&&(!getDust(s.pending.id)||!Number.isFinite(s.pending.end)))throw Error('invalid pending');if(s.pending?.mode!==undefined&&!['random','recipe'].includes(s.pending.mode))throw Error('invalid birth mode');for(const d of s.dusts){if(d.stored===undefined)d.stored=false;if(typeof d.stored!=='boolean')throw Error('invalid storage');if(d.readStories===undefined)d.readStories=[];if(!Array.isArray(d.readStories)||new Set(d.readStories).size!==d.readStories.length||!d.readStories.every(i=>Number.isInteger(i)&&i>=0&&i<unlockedStories(d)))throw Error('invalid stories');}initAdventures(s);if(!s.dusts.some(d=>d.uid===s.selectedUid&&!d.stored&&!isAway(s,d.uid)))s.selectedUid=inRoom(s)[0]?.uid??null;return initLife(initEconomy(s,now),now);}
+export function restore(raw,now=Date.now()){const s=JSON.parse(raw);if(s.materials?.essence)for(const e of ESSENCES)if(e.added&&s.materials.essence[e.id]===undefined)s.materials.essence[e.id]=3;if(s.version!==1||!Array.isArray(s.dusts)||!s.dusts.length||s.dusts.length>10000||!s.dusts.every(d=>getDust(d.id)&&Number.isSafeInteger(d.uid)&&d.uid>0&&Number.isInteger(d.xp)&&d.xp>=0&&d.xp<=10)||new Set(s.dusts.map(d=>d.uid)).size!==s.dusts.length||!Number.isSafeInteger(s.nextUid)||s.nextUid<=Math.max(...s.dusts.map(d=>d.uid)))throw Error('invalid dusts');for(const k of ['sparkles','giftAt','gifts','petAt'])if(!Number.isFinite(s[k])||s[k]<0)throw Error('invalid value');for(const [key,items]of[['group',GROUPS],['rarity',RARITIES],['essence',ESSENCES]])for(const x of items)if(!Number.isInteger(s.materials?.[key]?.[x.id])||s.materials[key][x.id]<0)throw Error('invalid materials');if(s.pending&&(!getDust(s.pending.id)||!Number.isFinite(s.pending.end)))throw Error('invalid pending');if(s.pending?.mode!==undefined&&!['random','recipe'].includes(s.pending.mode))throw Error('invalid birth mode');for(const d of s.dusts){if(d.stored===undefined)d.stored=false;if(typeof d.stored!=='boolean')throw Error('invalid storage');if(d.readStories===undefined)d.readStories=[];if(!Array.isArray(d.readStories)||new Set(d.readStories).size!==d.readStories.length||!d.readStories.every(i=>Number.isInteger(i)&&i>=0&&i<unlockedStories(d)))throw Error('invalid stories');}initAdventures(s);if(!s.dusts.some(d=>d.uid===s.selectedUid&&!d.stored&&!isAway(s,d.uid)))s.selectedUid=inRoom(s)[0]?.uid??null;return initLife(initEconomy(s,now),now);}
 export const recipe=selection=>DUSTS.find(d=>d.group===selection.group&&d.rarity===selection.rarity&&d.essence===selection.essence);
 export function checkMix(s,v={}){if(!hasHomeSpace(s)&&!hasStorageSpace(s))return {ok:false,message:'방과 보관함이 가득 찼어요. 은하계를 업그레이드해 주세요.'};if(s.pending)return{ok:false,message:'별이 모이고 있어요.'};const selected=['group','rarity','essence'].filter(k=>v?.[k]);if(!selected.length)return{ok:true,mode:'random',cost:0};if(selected.length<3)return{ok:false,message:'재료 세 가지를 모두 골라주세요. 모두 비우면 랜덤으로 만나요.'};const dust=recipe(v);if(!dust)return{ok:false,message:'아직 발견되지 않은 조합이에요.'};const cost=RARITIES.find(r=>r.id===v.rarity).cost;if(s.materials.group[v.group]<1||s.materials.rarity[v.rarity]<1||s.materials.essence[v.essence]<cost)return{ok:false,message:'재료가 모자라요. 모험을 떠나거나 상점에서 재료를 사보세요.'};return{ok:true,mode:'recipe',dust,cost};}
 export function mix(s,v={},now=Date.now(),random=Math.random){const r=checkMix(s,v);if(!r.ok)return r;const dust=r.mode==='random'?DUSTS[Math.min(DUSTS.length-1,Math.max(0,Math.floor(random()*DUSTS.length)))]:r.dust;if(r.mode==='recipe'){s.materials.group[v.group]--;s.materials.rarity[v.rarity]--;s.materials.essence[v.essence]-=r.cost;}s.pending={id:dust.id,end:now+1400,mode:r.mode};return{ok:true,mode:r.mode};}
@@ -43,4 +43,15 @@ export function pet(s,now=Date.now(),uid=s.selectedUid){const dust=s.dusts.find(
 
 export function storeDust(s,uid,now=Date.now()){const d=s.dusts.find(d=>d.uid===uid);if(!d||d.stored||isAway(s,uid))return{ok:false,message:'보관할 별을 골라주세요.'};if(!hasStorageSpace(s))return {ok:false,message:'보관함 '+storageCapacity(s)+'자리가 가득 찼어요. 은하계를 업그레이드해 주세요.'};pauseGold(s,d,now);d.stored=true;if(s.selectedUid===uid)s.selectedUid=inRoom(s)[0]?.uid??null;return{ok:true,dust:d};}
 export function takeOutDust(s,uid,now=Date.now()){const d=s.dusts.find(d=>d.uid===uid);if(!d||!d.stored)return{ok:false,message:'이미 은하계에 있는 별예요.'};if(!hasHomeSpace(s))return {ok:false,message:'방 '+roomCapacity(s)+'자리가 가득 찼어요. 모험 중인 친구 자리도 포함돼요.'};d.stored=false;d.goldAt=now+d.goldRemaining;s.selectedUid=uid;return{ok:true,dust:d};}
+export function swapStoredDust(s,incomingUid,outgoingUid,now=Date.now()){
+ const incoming=s.dusts.find(d=>d.uid===incomingUid&&d.stored);
+ const outgoing=inRoom(s).find(d=>d.uid===outgoingUid);
+ if(!incoming||!outgoing)return {ok:false,message:'은하계에 있는 별과 보관함의 별을 골라주세요.'};
+ pauseGold(s,outgoing,now);
+ outgoing.stored=true;
+ incoming.stored=false;
+ incoming.goldAt=now+incoming.goldRemaining;
+ s.selectedUid=incoming.uid;
+ return {ok:true,dust:incoming};
+}
 export function readStory(s,uid,index){const d=s.dusts.find(d=>d.uid===uid);if(!d||!Number.isInteger(index)||index<0||index>=unlockedStories(d))return{ok:false,message:'레벨이 오르면 이 이야기를 읽을 수 있어요.'};const bonus=d.readStories.includes(index)?0:activeLevel(s,'bookshelf');if(!d.readStories.includes(index))d.readStories.push(index);s.sparkles+=bonus;return{ok:true,story:STORIES[d.id][index],bonus};}

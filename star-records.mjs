@@ -1,10 +1,11 @@
-import {DUSTS,STORIES} from './dust-data.mjs?v=1.13.35-9a3a12ca';
-import {unlockedStories} from './dust-engine.mjs?v=1.13.35-9a3a12ca';
-import {personality} from './dust-life.mjs?v=1.13.35-9a3a12ca';
-import {isAway,roomResidents} from './adventures.mjs?v=1.13.35-9a3a12ca';
-import {routeUnlocked} from './rooms.mjs?v=1.13.35-9a3a12ca';
-import {journeyComplete,journeyFor} from './story-journey.mjs?v=1.13.35-9a3a12ca';
-import {aftermathFor,afterwordRecord,afterwordScene,STORY_ROUTES} from './story-aftermath.mjs?v=1.13.35-9a3a12ca';
+import {petReaction} from './dust-character.mjs?v=1.13.63-0f23dbc5';
+import {DUSTS,STORIES} from './dust-data.mjs?v=1.13.63-0f23dbc5';
+import {unlockedStories} from './dust-engine.mjs?v=1.13.63-0f23dbc5';
+import {personality} from './dust-life.mjs?v=1.13.63-0f23dbc5';
+import {isAway,roomResidents} from './adventures.mjs?v=1.13.63-0f23dbc5';
+import {routeUnlocked} from './rooms.mjs?v=1.13.63-0f23dbc5';
+import {journeyComplete,journeyFor} from './story-journey.mjs?v=1.13.63-0f23dbc5';
+import {aftermathFor,afterwordRecord,afterwordScene,STORY_ROUTES} from './story-aftermath.mjs?v=1.13.63-0f23dbc5';
 
 // A read-only view of existing records. Opening the book does not advance play.
 const moments={
@@ -31,7 +32,15 @@ export function sharedRecords(s,d){
   const name=other?starName(other):'함께 지낸 친구';
   entries.push({key:'friend:'+pair,section:'friends',kind:'friend',title:particle(name,'과','와')+' 함께한 첫 순간',body:particle(starName(d),'과','와')+' '+name+'의 이름이 같은 페이지에 남아 있어요. 처음 가까이 앉아 서로의 시간을 나누었어요. 지금 서로 다른 자리에 있어도 함께 지낸 첫 순간은 이곳에 남아요.',available:true,read:true,label:'처음 가까이 지낸 날의 기록',otherUid:other?.uid});
  }
- return RECORD_SECTIONS.map(([id,title])=>({id,title,entries:entries.filter(e=>e.section===id)}));
+ const sections=RECORD_SECTIONS.map(([id,title])=>({id,title,entries:entries.filter(e=>e.section===id)}));
+ const reaction=petReaction(d.id);
+ if(reaction && s.life.petReactions?.includes(d.id)){
+  sections.push({id:'care',title:'손길의 기록',entries:[{
+   key:'care:first-touch',section:'care',kind:'care',title:'처음 나눈 손길',body:reaction.record,
+   available:true,read:true,label:'같은 종류의 별이 함께 간직한 기록',
+  }]});
+ }
+ return sections;
 }
 export const readableRecords=(s,d)=>sharedRecords(s,d).flatMap(section=>section.entries).filter(e=>e.available);
 export function nextStoryClue(s,d){

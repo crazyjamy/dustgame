@@ -1,9 +1,9 @@
-import{wishReward}from'./furniture.mjs?v=1.13.35-9a3a12ca';
-import{personalPostcard}from'./postcard-voices.mjs?v=1.13.35-9a3a12ca';
-import{characterProfile}from'./dust-character.mjs?v=1.13.35-9a3a12ca';
-import{afterwordKey,journeyComplete}from'./story-journey.mjs?v=1.13.35-9a3a12ca';
-import{initAfterwords,addAfterword,afterwordScene,aftermathFor}from'./story-aftermath.mjs?v=1.13.35-9a3a12ca';
-import {DUSTS} from './dust-data.mjs?v=1.13.35-9a3a12ca';
+import{wishReward}from'./furniture.mjs?v=1.13.63-0f23dbc5';
+import{personalPostcard}from'./postcard-voices.mjs?v=1.13.63-0f23dbc5';
+import{characterProfile,petReaction}from'./dust-character.mjs?v=1.13.63-0f23dbc5';
+import{afterwordKey,journeyComplete}from'./story-journey.mjs?v=1.13.63-0f23dbc5';
+import{initAfterwords,addAfterword,afterwordScene,aftermathFor}from'./story-aftermath.mjs?v=1.13.63-0f23dbc5';
+import {DUSTS} from './dust-data.mjs?v=1.13.63-0f23dbc5';
 
 export const FAVORITES=[
  {id:'rug',name:'행성 고리',action:'러그 위에서 몸을 동그랗게 말아요.',words:'폭신한 곳에 있으면 마음도 느긋해져.',memory:'처음에는 가장자리만 밟았어요. 오래된 러그의 자수가 늘어날수록 조금씩 가운데로 들어왔고, 이제는 옆자리를 친구에게 내어줘요.'},
@@ -44,6 +44,8 @@ export function recipeHint(id){const d=lookup(id);const essence={leaf:'풀잎이
 export function initLife(s,now=Date.now()){
  if(s.life===undefined)s.life={version:1,lastSeen:now,nextId:1,journal:[],postcards:[],memories:[],pairs:[],requests:{},welcome:null};
  const l=s.life;
+ if(l.petReactions===undefined)l.petReactions=[];
+ if(!Array.isArray(l.petReactions)||new Set(l.petReactions).size!==l.petReactions.length||l.petReactions.some(id=>typeof id!=='string'||!petReaction(id)))throw Error('invalid pet reactions');
  if(l.storyMoments===undefined)l.storyMoments=[];
  if(!Array.isArray(l.storyMoments)||l.storyMoments.length>10000||new Set(l.storyMoments).size!==l.storyMoments.length||l.storyMoments.some(x=>typeof x!=='string'||!/^sola-ring:[1-9]\d*$/.test(x)||!Number.isSafeInteger(Number(x.slice(10)))))throw Error('invalid story moments');
  if(l.version!==1||!Number.isFinite(l.lastSeen)||l.lastSeen<0||!Number.isSafeInteger(l.nextId)||l.nextId<1)throw Error('invalid life');

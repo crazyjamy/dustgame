@@ -1,7 +1,7 @@
-import{createDeskMovement}from'./desk-movement.mjs?v=1.13.35-9a3a12ca';
-import{DESK,DESK_ITEMS,deskBlocked,crateTile,canPushDesk,pickDesk,deskProgress}from'./desk-exploration.mjs?v=1.13.35-9a3a12ca';
-import{DUSTS}from'./dust-data.mjs?v=1.13.35-9a3a12ca';
-import{starLight,starFace}from'./star-art.mjs?v=1.13.35-9a3a12ca';
+import{createDeskMovement}from'./desk-movement.mjs?v=1.13.63-0f23dbc5';
+import{DESK,DESK_ITEMS,deskBlocked,crateTile,canPushDesk,pickDesk,deskProgress}from'./desk-exploration.mjs?v=1.13.63-0f23dbc5';
+import{DUSTS}from'./dust-data.mjs?v=1.13.63-0f23dbc5';
+import{starLight,starFace}from'./star-art.mjs?v=1.13.63-0f23dbc5';
 const T=48,W=960,H=672;
 export function mountDeskScene({canvas,state,onUpdate,onSave,onExit,onPause,reduced,visuals,sound,bodyPath}){
  const ctx=canvas.getContext('2d'),fog=document.createElement('canvas');fog.width=W;fog.height=H;const fc=fog.getContext('2d');

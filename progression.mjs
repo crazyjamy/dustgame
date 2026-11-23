@@ -1,8 +1,8 @@
-import{mergeCandidates}from'./dust-engine.mjs?v=1.13.35-9a3a12ca';
-import{DUSTS}from'./dust-data.mjs?v=1.13.35-9a3a12ca';
-import{ROOMS,ROOM_CHAPTERS}from'./rooms.mjs?v=1.13.35-9a3a12ca';
-import{isAway}from'./adventures.mjs?v=1.13.35-9a3a12ca';
-import{goldProduction,FAIRY_PRICE}from'./economy.mjs?v=1.13.35-9a3a12ca';
+import{mergeCandidates}from'./dust-engine.mjs?v=1.13.63-0f23dbc5';
+import{DUSTS}from'./dust-data.mjs?v=1.13.63-0f23dbc5';
+import{ROOMS,ROOM_CHAPTERS}from'./rooms.mjs?v=1.13.63-0f23dbc5';
+import{isAway}from'./adventures.mjs?v=1.13.63-0f23dbc5';
+import{goldProduction,FAIRY_PRICE}from'./economy.mjs?v=1.13.63-0f23dbc5';
 
 export function firstSteps(s){return [
  {id:'birth',label:'새 별 관측',done:s.nextUid>2||s.dusts.some(d=>d.xp>0)||s.ownedFurniture.length>0||s.roomLevel>1},
@@ -27,7 +27,7 @@ export function nextGoal(s,now=Date.now()){
    const partner=s.dusts.filter(x=>x.uid!==d.uid&&x.id===d.id&&x.xp<10).find(x=>x.stored||isAway(s,x.uid));
    if(partner){
     const survey=s.deskRun?.uid===partner.uid;
-    return {id:'story',title:`${name}의 친구와 다시 만나기`,description:partner.stored?'보관함에서 같은 별을 꺼내면 합칠 수 있어요.':'같은 별이 돌아오면 합칠 수 있어요.',reward:'Lv.2 한 마리 · 첫 이야기 1편',action:partner.stored?'match-stored':survey?'match-survey':'adventure',cta:partner.stored?'보관함 열기':survey?'탐사 이어가기':'루미의 탐험 수첩 열기',currency:'free',cost:0,have:0,missing:0};
+    return {id:'story',title:`${name}의 친구와 다시 만나기`,description:partner.stored?'보관함에서 같은 별을 꺼내면 합칠 수 있어요.':'같은 별이 돌아오면 합칠 수 있어요.',reward:'Lv.2 한 마리 · 첫 이야기 1편',action:partner.stored?'match-stored':survey?'match-survey':'adventure',uid:d.uid,cta:partner.stored?'같은 별 데려오기':survey?'탐사 이어가기':'루미의 탐험 수첩 열기',currency:'free',cost:0,have:0,missing:0};
    }
   }
 

@@ -1,4 +1,4 @@
-import {spaceItemArt} from './space-items.mjs?v=1.13.35-9a3a12ca';
+import {spaceItemArt} from './space-items.mjs?v=1.13.63-0f23dbc5';
 const shapes={
  dew:'<path d="M26 6C21 16 12 23 12 32A14 14 0 0 0 40 32C40 23 31 16 26 6Z" fill="#b6d9dc"/><path d="M18 31Q17 38 24 40" stroke="#edf8f4"/>',
  ember:'<path d="M27 5Q42 21 39 34Q37 47 25 46Q12 44 13 32Q14 23 21 18Q20 28 25 27Q30 21 27 5Z" fill="#e9b086"/><path d="M26 29Q34 38 27 42Q19 42 23 34Z" fill="#f3d799"/>',

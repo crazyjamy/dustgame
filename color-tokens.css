@@ -107,6 +107,10 @@
     -5px 4px 24px -15px var(--color-glass-neutral-light);
   --glass-command: var(--glass-edge-light), var(--color-glass-action);
   --glass-command-hover: var(--glass-edge-light), var(--color-glass-action-hover);
+  --glass-command-lit-rim: inset 0 1px 0 #d4e7ff66, inset 0 -1px 0 #a8cfff38,
+    0 0 14px -4px #8dbdff66;
+  --glass-command-reflection: linear-gradient(114deg, transparent 40%, #dcecff29 50%, transparent 60%);
+  --motion-command-reflection: 480ms;
   --glass-selection: var(--glass-edge-light), var(--color-glass-active);
   --glass-rim: inset 0 1px 0 var(--color-glass-highlight);
   --glass-card-shadow: var(--glass-rim);

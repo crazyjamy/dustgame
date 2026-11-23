@@ -1,12 +1,12 @@
-import{DUSTS}from'./dust-data.mjs?v=1.13.35-9a3a12ca';
-import{goldInterval}from'./gold-rates.mjs?v=1.13.35-9a3a12ca';
-import{pauseGoldClock}from'./gold-clock.mjs?v=1.13.35-9a3a12ca';
-import{activeLevel}from'./furniture.mjs?v=1.13.35-9a3a12ca';
+import{DUSTS}from'./dust-data.mjs?v=1.13.63-0f23dbc5';
+import{goldInterval}from'./gold-rates.mjs?v=1.13.63-0f23dbc5';
+import{pauseGoldClock}from'./gold-clock.mjs?v=1.13.63-0f23dbc5';
+import{activeLevel,basketEssenceBonus}from'./furniture.mjs?v=1.13.63-0f23dbc5';
 export const DESK={width:20,height:14,tile:48,start:{x:3.5,y:11.5}};
 export const DESK_ITEMS=[
  {id:'cotton',x:5.5,y:11.5,key:'group',material:'daily',amount:1,name:'성운 섬유',label:'포근 재료',color:'#e6d1ff'},
- {id:'leaf',x:14.5,y:10.5,key:'essence',material:'leaf',amount:2,name:'위성 온실의 잎',label:'풀잎 정수',color:'#9fd0bd'},
- {id:'dew',x:10.5,y:3.5,key:'essence',material:'dew',amount:3,name:'응결된 혜성 얼음',label:'이슬 정수',color:'#95dafa'}
+ {id:'leaf',x:14.5,y:10.5,key:'essence',material:'leaf',amount:1,name:'위성 온실의 잎',label:'풀잎 정수',color:'#9fd0bd'},
+ {id:'dew',x:10.5,y:3.5,key:'essence',material:'dew',amount:2,name:'응결된 혜성 얼음',label:'이슬 정수',color:'#95dafa'}
 ];
 export function deskWall(x,y){return x<1||y<1||x>=19||y>=13||x>=3&&x<=5&&y>=2&&y<=5||y===8&&x>=2&&x<=7||x>=8&&x<=17&&y===1||x===8&&y>=2&&y<=6||x===17&&y>=2&&y<=6||y===6&&x>=8&&x<=17&&x!==10||x>=12&&x<=15&&y>=2&&y<=4;}
 export const crateTile=r=>({x:r.pushed?11:10,y:7});
@@ -40,6 +40,6 @@ export function canPushDesk(r){return !r.pushed&&dist(r,{x:9.5,y:7.5})<=1.15;}
 export function pushDesk(r){if(!canPushDesk(r))return {ok:false};r.pushed=true;const reveal=revealDesk(r);return {ok:true,...reveal};}
 export function finishDesk(s,now=Date.now()){
  const r=s.deskRun;if(!r||!deskProgress(r).atExit)return {ok:false,message:'집으로 이어지는 종이 표지판까지 돌아와 주세요.'};const d=s.dusts.find(d=>d.uid===r.uid),complete=deskProgress(r).complete,rewards=[];
- for(const id of r.picked){const item=DESK_ITEMS.find(i=>i.id===id),amount=item.amount+(item.key==='essence'?activeLevel(s,'basket'):0);s.materials[item.key][item.material]+=amount;rewards.push({...item,amount});}
+ for(const id of r.picked){const item=DESK_ITEMS.find(i=>i.id===id),amount=item.amount+(item.key==='essence'?basketEssenceBonus(activeLevel(s,'basket')):0);s.materials[item.key][item.material]+=amount;rewards.push({...item,amount});}
  const record={dustId:d.id,name:d.nickname||DUSTS.find(x=>x.id===d.id).name,at:now,complete,items:[...r.picked]};s.deskArchive.records.unshift(record);s.deskArchive.records=s.deskArchive.records.slice(0,12);const sparkles=complete?activeLevel(s,'terrarium'):0;s.sparkles+=sparkles;if(complete){s.deskArchive.clears++;s.adventureCount++;}d.goldAt=now+d.goldRemaining;s.selectedUid=d.uid;s.deskRun=null;return {ok:true,complete,rewards,record,sparkles};
 }

@@ -1,9 +1,9 @@
 // The narrator and dialogue are fictional. The observation in each chapter
 // is based on astronomy. IDs and chapter order are part of the saved game.
-import { SOLA_CHAPTERS } from './sola-chapters.mjs?v=1.13.35-9a3a12ca';
-import { STAR_JOURNEYS } from './star-journeys.mjs?v=1.13.35-9a3a12ca';
-import { OBSERVATION_FACTS, OBSERVATION_SUMMARIES, DISCOVERY_MOMENTS } from './star-observations.mjs?v=1.13.35-9a3a12ca';
-import { storySentences } from './story-text.mjs?v=1.13.35-9a3a12ca';
+import { SOLA_CHAPTERS } from './sola-chapters.mjs?v=1.13.63-0f23dbc5';
+import { STAR_JOURNEYS } from './star-journeys.mjs?v=1.13.63-0f23dbc5';
+import { OBSERVATION_FACTS, OBSERVATION_SUMMARIES, DISCOVERY_MOMENTS } from './star-observations.mjs?v=1.13.63-0f23dbc5';
+import { storySentences } from './story-text.mjs?v=1.13.63-0f23dbc5';
 const arcs = {
   crumb: ['태양|sun', ...SOLA_CHAPTERS.map(c => c.title + '~' + c.body)],
   soot: ['달의 본그림자|sun', '그림자의 한가운데~움브라는 빛이 가려진 가장 어두운 부분에 섰어요. 그 자리를 본그림자라고 불러요.', '그림자의 가장자리~반그림자에서는 광원이 일부만 가려져요. 움브라가 반 걸음 물러나자 벽에 희미한 빛이 돌아왔어요.', '세 천체가 나란히~일식은 달이 태양과 지구 사이를 지날 때 일어나요. 움브라는 세 동그라미를 순서대로 늘어놓았어요.', '작은 그림자의 길~개기일식을 볼 수 있는 곳은 달의 본그림자가 지나는 좁은 경로 안이에요. 움브라는 지도에 가느다란 띠만 칠했어요.', '왕관이 보인 자리~태양 원반이 전부 가려진 짧은 동안 코로나를 볼 수 있어요. 움브라는 제 그림자 덕분에 처음 본 빛을 기록했어요.'],

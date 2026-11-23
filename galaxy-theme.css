@@ -160,17 +160,19 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline-color: var
   border-color: var(--color-action-primary-pressed);
 }
 #fairyCollect.button:not(:disabled) {
-  background: var(--color-currency-gold);
+  background: #c6974d36;
   border-color: var(--color-currency-gold);
-  color: var(--color-currency-on-gold);
+  color: var(--color-currency-gold);
 }
-#fairyCollect.button:not(:disabled):hover {
+#fairyCollect.button:not(:disabled):is(:hover, :focus-visible) {
   background: var(--color-currency-gold-hover);
   border-color: var(--color-currency-gold-hover);
+  color: var(--color-currency-on-gold);
 }
 #fairyCollect.button:not(:disabled):active {
   background: var(--color-currency-gold-pressed);
   border-color: var(--color-currency-gold-pressed);
+  color: var(--color-currency-on-gold);
 }
 
 .modal { background: var(--color-scrim); }
@@ -234,40 +236,145 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline-color: var
   filter: brightness(0) saturate(100%) invert(83%) drop-shadow(0 0 6px #c9d1d940);
   opacity: .65;
 }
-.dust-room .quest-guide, .dust-room .rub-bubble, .dust-room .rub-bubble::after {
+.dust-room .rub-bubble, .dust-room .rub-bubble::after {
   background: var(--color-surface-panel);
   border-color: var(--color-border-subtle);
   color: var(--color-text-primary);
 }
-.dust-room .quest-guide:is(:hover, :focus-visible) { background: var(--color-surface-raised); }
+.dust-room .quest-guide > svg {
+  filter: drop-shadow(0 3px 5px #110b2670);
+}
+.dust-room .quest-guide.has-reward > svg {
+  filter: drop-shadow(0 0 7px #ffe39bdd);
+}
+.dust-room .quest-guide:focus-visible {
+  outline-offset: 2px;
+  border-radius: 12px;
+}
+.quest-guide .mission-wing-left { transform-origin: 18px 27px; }
+.quest-guide .mission-wing-right { transform-origin: 38px 27px; --wing-tilt: 14deg; }
+.quest-guide .mission-wing-left { --wing-tilt: -14deg; }
+.quest-guide .mission-page { transform-origin: 28px 36px; opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.reduce-motion, .simple-effects) .quest-guide .mission-wing {
+    animation: mission-wing-flap 1.5s ease-in-out infinite;
+  }
+  html:not(.reduce-motion, .simple-effects) .quest-guide .mission-page {
+    animation: mission-page-turn 4.2s ease-in-out infinite;
+  }
+}
+@keyframes mission-wing-flap {
+  0%, 100% { transform: rotate(0); }
+  50% { transform: rotate(var(--wing-tilt)) scaleX(.8); }
+}
+@keyframes mission-page-turn {
+  0%, 58%, 85%, 100% { opacity: 0; }
+  60% { opacity: 1; transform: scaleX(1); }
+  82% { opacity: 1; transform: scaleX(-1) skewY(8deg); }
+  85%, 100% { transform: scaleX(-1); }
+}
+.quest-guide .quest-reward-count {
+  position: absolute;
+  inset-block-start: -5px;
+  inset-inline-end: -5px;
+  min-width: 19px;
+  padding: 1px 4px;
+  border-radius: 12px;
+  background: #ffe3a0;
+  color: #2b2517;
+  font-size: 11px;
+  line-height: 17px;
+  font-style: normal;
+  font-weight: 700;
+  text-align: center;
+}
+#modal .mission-ready-notice {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: 12px;
+  padding: 8px 14px;
+  border: 1px solid #e8cb7f44;
+  border-radius: 12px;
+  background: #e8cb7f12;
+  text-align: start;
+}
+#modal .mission-ready-notice {
+  --story-shimmer-base: #ffe3a0;
+  --story-shimmer-tint: #ffcc67;
+  --story-shimmer-glow: #ffc66066;
+}
+#modal .mission-ready-notice p { margin-block: 6px; color: #ffe3a0; }
+#modal .mission-ready-notice .text-button { min-height: 44px; margin: 0; }
+
 .dust-room .rub-bubble.hint { opacity: 1; }
 .dust-room .rub-bubble .rub-value { color: var(--color-link); }
+.dust-room .gold-slot { width: 44px; height: 44px; }
 .dust-room .gold-bubble {
-  background: var(--color-income-background);
-  border-color: var(--color-income-border);
-  border-radius: 999px;
-  color: var(--color-income-text);
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  background: transparent;
+  border: 0;
   box-shadow: none;
-}
-.dust-room .gold-bubble:is(:hover, :focus-visible) {
-  background: var(--color-surface-pressed);
-  scale: none;
-}
-.dust-room .gold-bubble b {
-  color: inherit;
-  font-size: var(--text-meta);
-  font-variant-numeric: tabular-nums;
-  font-weight: 600;
+  border-radius: 50%;
 }
 .dust-room .gold-bubble > .material-icon {
-  width: 15px;
-  height: 15px;
+  display: block;
+  width: 25px;
+  height: 25px;
+  filter: drop-shadow(0 0 5px #ffd67862);
+}
+.currency-gain,
+.currency-flight {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+}
+.currency-gain {
+  display: flex;
+  gap: 6px;
+  translate: -50% -50%;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 5px #101216, 0 1px 8px #101216;
+  white-space: nowrap;
+}
+.currency-gain > .currency-gold,
+.currency-flight-gold { color: var(--color-income-text); }
+.currency-gain > .currency-sparkle,
+.currency-flight-sparkle { color: var(--color-sparkle-edge); }
+.currency-flight {
+  display: grid;
+  place-items: center;
+  translate: -50% -50%;
+  opacity: 0;
+}
+.currency-flight > :is(svg, .material-icon) {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.reduce-motion, .simple-effects) .currency-gain {
+    animation: currency-gain-fade 1.35s ease-out both;
+  }
+}
+@keyframes currency-gain-fade {
+  0%, 72% { opacity: 1; }
+  100% { opacity: 0; }
 }
 .birth-glow:not(.needs-star) :is(.glow-aura, .glow-orbit) { display: none; }
 .birth-glow:not(.needs-star) .glow-glyph {
   animation: none;
   text-shadow: none;
   color: var(--color-link);
+}
+.dust-room .birth-glow.room-full .glow-glyph {
+  color: var(--color-text-secondary);
+  opacity: .6;
 }
 .birth-glow.needs-star .glow-aura {
   inset: -12px -13px 5px;
@@ -447,13 +554,16 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline-color: var
 
 @media (hover: hover) {
   :is(.dust-card, .dust-card.undiscovered, .postcard-thumb):hover,
-  .button.secondary:not(:disabled):not([aria-pressed="true"]):hover,
-  :is(.collection-switch, .collection-tabs, .furniture-filters, .navigation)
-    button:not(.active):not([aria-pressed="true"]):hover,
   .dust-room :is(.room-plaque, .room-memory-entry):hover,
   #modal .modal-card :where(.copies button, .recipe, .story-chapters button,
     .furniture-chapters button):not(:disabled):hover {
     background: var(--color-surface-hover);
+  }
+}
+@media (hover: hover) {
+  .button.secondary:not(:disabled, [aria-pressed="true"]):hover {
+    color: var(--color-text-primary);
+    background-color: var(--color-surface-hover);
   }
 }
 :is(.dust-card, .postcard-thumb, .button.secondary):active,
@@ -630,38 +740,46 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
 .shop-currency small { display: block; margin-top: 5px; color: var(--color-text-secondary); }
 .upgrade-card, .fairy-shop-card { background: var(--color-surface-panel); }
 
-.quick-steps { margin: 0 0 16px; gap: 16px; }
-.quick-steps li > span {
-  background: var(--color-surface-tag);
-  color: var(--color-brand-primary);
+#modal .modal-card:has(.first-day) { height: 490px; }
+#modal .modal-card:has(.first-day) .modal-body { overflow: hidden; }
+#modal .first-day {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 420px;
+  margin-inline: auto;
+  text-align: center;
+  touch-action: pan-y pinch-zoom;
 }
-.quick-steps p { margin-top: 4px; }
-.quick-note {
-  margin: 0;
-  display: grid;
-  gap: 10px;
-  padding: 13px;
-  border: 1px solid var(--color-border-subtle);
-  border-radius: 10px;
-  background: var(--color-surface-inset);
-  text-align: start;
+#modal .first-day [data-first-day-page] {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
-.quick-note > div {
-  display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
-  gap: 10px;
-  align-items: baseline;
-  font-size: var(--text-label);
-  line-height: 1.6;
-}
-.quick-note dt { color: var(--currency-color); font-weight: 650; }
-.quick-note dd { margin: 0; color: var(--color-text-secondary); }
-#modal .modal-body > .quick-save {
-  margin: 10px 0 0;
-  text-align: start;
-  line-height: 1.6;
-  font-size: var(--text-meta);
-}
+#modal .first-day .first-day-welcome { align-content: center; }
+.first-day-progress, .first-day-actions { flex-shrink: 0; }
+#modal .first-day [hidden] { display: none; }
+.first-day-progress { display: flex; justify-content: center; align-items: center; gap: 6px; margin-block: 2px 16px; }
+.first-day-progress i { width: 6px; height: 6px; border-radius: 8px; background: var(--color-border-control); }
+.first-day-progress .is-current { width: 18px; background: var(--color-link); }
+.first-day-welcome { padding-block: 2px 8px; }
+.first-day-art { display: grid; place-items: center; min-height: 124px; background: radial-gradient(ellipse at center, #eed49c28, transparent 68%); }
+#modal .first-day-art .dust-art { width: 94px; margin: 0; }
+#modal .first-day h3 { margin: 0 0 8px; font-size: var(--text-title-small); }
+#modal .first-day h3:focus { outline: 0; }
+#modal .first-day-welcome p { margin: 0; line-height: 1.6; }
+.first-day-guide { text-align: start; }
+.first-day-list { display: grid; gap: 14px; margin: 16px 0; padding: 0; list-style: none; }
+.first-day-list li { display: grid; grid-template-columns: 44px minmax(0, 1fr); align-items: center; gap: 10px; }
+.first-day-list li > span { display: grid; place-items: center; font-size: 22px; color: var(--color-link); }
+.first-day-list svg { display: block; width: 40px; height: 36px; }
+#modal .first-day-list p, #modal .first-day-details p { margin: 3px 0 0; font-size: var(--text-label); line-height: 1.6; }
+.first-day-details { padding-block: 10px 0; border-top: 1px solid var(--color-border-subtle); text-align: start; }
+.first-day-details summary { padding-block: 6px; cursor: pointer; }
+.first-day-actions { display: grid; gap: 4px; margin-top: 18px; }
+#modal .first-day-actions button { min-height: 44px; margin: 0; }
+#modal .first-day-actions .primary { width: 100%; }
 
 /* These reading dialogs use their outer panel as the shared background. */
 #modal .modal-card:has(:is(.memory-book, .story-cover, .recorded-recipe)) .modal-heading {
@@ -773,19 +891,19 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
 
 @supports ((background-clip: text) or (-webkit-background-clip: text)) {
   @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
-    html:not(.reduce-motion, .simple-effects) .story-shimmer > .story-sentence {
-      background-image: linear-gradient(105deg, var(--color-text-secondary) 42%,
-        var(--color-story-shimmer) 50%, var(--color-text-secondary) 58%);
+    html:not(.reduce-motion, .simple-effects) .story-sentence.shimmer-active {
+      background-image: linear-gradient(105deg, var(--story-shimmer-base, var(--color-text-secondary)) 34%,
+        var(--story-shimmer-tint, var(--color-story-shimmer)) 45%, #fff 50%, var(--story-shimmer-tint, var(--color-story-shimmer)) 55%, var(--story-shimmer-base, var(--color-text-secondary)) 66%);
       background-size: 240% 100%;
       background-position: 100% 0;
       -webkit-background-clip: text;
       background-clip: text;
       animation: story-shimmer var(--motion-story-shimmer) linear;
-      animation-delay: calc(var(--sentence-index) * var(--motion-story-shimmer));
     }
     @keyframes story-shimmer {
-      from { background-position: 100% 0; color: transparent; }
-      to { background-position: 0 0; color: transparent; }
+      0% { background-position: 100% 0; color: transparent; filter: none; }
+      50% { filter: drop-shadow(0 0 3px var(--story-shimmer-glow, #9acbff66)); }
+      100% { background-position: 0 0; color: transparent; filter: none; }
     }
   }
 }
@@ -851,12 +969,6 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
 }
 #modal .memory-reward p { margin: 6px 0 10px; }
 #modal .field-cover { gap: 4px; }
-@media (max-width: 700px) {
-  .dust-room .gold-bubble { justify-content: center; width: 30px; height: 30px; padding: 0; }
-  .dust-room .gold-bubble b { display: none; }
-  .dust-room .gold-bubble > .material-icon { display: block; }
-}
-
 /* The observatory and Lumi each have their own entry point in the galaxy. */
 .dust-room .survey-entrance {
   position: absolute;
@@ -950,26 +1062,6 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
 }
 /* A separate header keeps blur and the scrollbar inside the rounded panel. */
 .modal-heading::before { display: none; }
-#collectionPanel .dust-filters {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 6px;
-}
-.dust-filters .button {
-  display: grid;
-  justify-items: center;
-  gap: 2px;
-  min-width: 0;
-  padding: 8px 3px;
-}
-.dust-filters .button span {
-  font-size: var(--text-meta);
-}
-.dust-filters .button b {
-  font-size: var(--text-label);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
 .dust-owned-summary {
   margin: -4px 0 12px;
   color: var(--color-text-secondary);
@@ -992,14 +1084,14 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
 
 :is(.button:not(.text-button), .navigation button, .collection-switch button, .collection-tabs button,
     .collection-filters button, .furniture-filters button, .modal-card .close,
-    .dust-room .room-plaque, .dust-room .quest-guide, .dust-room .room-memory-entry) {
+    .dust-room .room-plaque, .dust-room .room-memory-entry) {
   border-radius: var(--radius-glass-control);
 }
 :is(.navigation button, .button.primary, .button.secondary, .collection-filters button, .furniture-filters button) {
   border-radius: var(--radius-glass-pill);
 }
 :is(.button.secondary, .modal-card .close, .dust-room .room-plaque,
-    .dust-room .quest-guide, .dust-room .room-memory-entry, .dust-room .life-bubble,
+    .dust-room .room-memory-entry, .dust-room .life-bubble,
     .collection-switch button, .collection-tabs button, .collection-filters button,
     .furniture-filters button):not(:disabled) {
   background: var(--glass-edge-light), var(--color-glass-control);
@@ -1007,8 +1099,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   box-shadow: var(--glass-rim);
 }
 @media (hover: hover) {
-  :is(.button.secondary, .modal-card .close, .collection-switch button, .collection-tabs button,
-      .collection-filters button, .furniture-filters button, .navigation button):not(:disabled):hover {
+  :is(.button.secondary, .modal-card .close):not(:disabled):hover {
     background-color: var(--color-glass-control);
     box-shadow: var(--glass-rim), var(--glass-edge-shadow);
   }
@@ -1021,7 +1112,47 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
 }
 .button.primary:not(:disabled):hover { background: var(--glass-command-hover); }
 .button.primary:not(:disabled):active { background: var(--glass-selection); }
-#fairyCollect.button:not(:disabled) { background: #c6974d36; color: var(--color-currency-gold); }
+
+/* A reflected highlight for available primary actions and the story's next page. */
+:is(.button.primary, .story-page-nav .story-next):where(:not(:disabled, [aria-disabled="true"], #fairyCollect)):focus-visible {
+  box-shadow: var(--glass-command-lit-rim);
+}
+@media (hover: hover) {
+  :is(.button.primary, .story-page-nav .story-next):where(:not(:disabled, [aria-disabled="true"], #fairyCollect)):hover {
+    box-shadow: var(--glass-command-lit-rim);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  :is(.button.primary, .story-page-nav .story-next):where(:not(:disabled, [aria-disabled="true"], #fairyCollect)) {
+    position: relative;
+  }
+  html:not(.reduce-motion, .simple-effects)
+    :is(.button.primary, .story-page-nav .story-next):where(:not(:disabled, [aria-disabled="true"], #fairyCollect))::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: var(--glass-command-reflection) 100% 50% / 250% 100% no-repeat;
+  }
+  html:not(.reduce-motion, .simple-effects)
+    :is(.button.primary, .story-page-nav .story-next):where(:not(:disabled, [aria-disabled="true"], #fairyCollect)):focus-visible::after {
+    animation: command-reflection var(--motion-command-reflection) ease-out;
+  }
+  @media (hover: hover) {
+    html:not(.reduce-motion, .simple-effects)
+      :is(.button.primary, .story-page-nav .story-next):where(:not(:disabled, [aria-disabled="true"], #fairyCollect)):hover::after {
+      animation: command-reflection var(--motion-command-reflection) ease-out;
+    }
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  html:not(.reduce-motion, .simple-effects)
+    :is(.button.primary, .story-page-nav .story-next)::after { content: none; }
+}
+@keyframes command-reflection {
+  to { background-position: 0% 50%; }
+}
 
 :is(.navigation button.active, .collection-switch button.active, .collection-switch button[aria-selected="true"],
     .collection-tabs button.active, .collection-filters button.active, .collection-filters [aria-pressed="true"],
@@ -1162,9 +1293,20 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
 .dust-art.pastel-star svg { filter: none; }
 .room-open .dust-room .room-dust .pastel-star .dust-body > path:first-child { filter: none; }
 .simple-effects .dust-art.pastel-star::before { display: none; }
+/* Press feedback uses scale separately from the transforms that position room controls. */
 @media (prefers-reduced-motion: no-preference) {
-  :is(.button.primary, .button.secondary, .navigation button, .collection-switch button) {
-    transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease;
+  html:not(.reduce-motion, .simple-effects) :is(
+    button:not(:disabled, [aria-disabled="true"], .room-dust, [data-room-item], .navigation button),
+    a.button:not([aria-disabled="true"])
+  ) {
+    transition: scale .16s ease-out, background-color .18s ease, border-color .18s ease, box-shadow .18s ease;
+  }
+  html:not(.reduce-motion, .simple-effects) :is(
+    button:not(:disabled, [aria-disabled="true"], .room-dust, [data-room-item], .navigation button),
+    a.button:not([aria-disabled="true"])
+  ):active {
+    scale: .95;
+    transition-duration: .08s;
   }
 }
 .reduce-motion :is(.button.primary, .button.secondary, .navigation button, .collection-switch button) {
@@ -1190,7 +1332,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   overflow: hidden;
   pointer-events: none;
   background:
-    url('./assets/galaxy-stars.svg?v=1.13.35-9a3a12ca') center top / auto 800px repeat,
+    url('./assets/galaxy-stars.svg?v=1.13.63-0f23dbc5') center 12% / auto 800px repeat,
     radial-gradient(ellipse at 77% 27%, var(--color-glass-orbit-graphite), transparent 57%),
     radial-gradient(ellipse at 13% 54%, var(--color-glass-orbit-slate), transparent 64%),
     radial-gradient(ellipse at 94% 78%, var(--color-glass-orbit-silver), transparent 56%),
@@ -1200,26 +1342,28 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
 .galaxy-sky::after {
   content: '';
   position: absolute;
-  inset: -240px 0 0;
-  background-size: 240px 240px;
-  animation: galaxy-star-drift 64s linear infinite;
+  inset: -240px -24px 0;
+  background-size: 340px 240px;
+  animation: galaxy-star-drift 120s linear infinite;
 }
 .galaxy-sky::before {
   background-image:
-    radial-gradient(circle at 17% 16%, #fff3e5af 0 1px, transparent 1.6px),
-    radial-gradient(circle at 43% 74%, #dbe2e990 0 .8px, transparent 1.6px),
-    radial-gradient(circle at 82% 42%, #fff1df77 0 .7px, transparent 1.5px),
-    radial-gradient(circle at 71% 91%, #b4bcc57a 0 .6px, transparent 1.4px);
+    radial-gradient(circle at 17% 16%, #eff5fc9c 0 .65px, transparent 1.5px),
+    radial-gradient(circle at 43% 74%, #dbe9fa7a 0 .45px, transparent 1.2px),
+    radial-gradient(circle at 82% 42%, #f5ebd66d 0 .6px, transparent 1.3px);
 }
 .galaxy-sky::after {
+  background-size: 460px 240px;
   background-image:
-    radial-gradient(circle at 25% 52%, #e2e6ea99 0 1px, transparent 2px),
-    radial-gradient(circle at 75% 10%, #ffe4ba70 0 1px, transparent 2px);
-  animation-duration: 105s;
+    radial-gradient(circle at 25% 52%, #ddecffcc 0 .95px, #94b6e233 1.5px, transparent 3px),
+    radial-gradient(circle at 75% 10%, #f3e7d598 0 .75px, #d7bf8e21 1.4px, transparent 2.6px);
+  animation-duration: 84s;
+  animation-direction: reverse;
 }
 @keyframes galaxy-star-drift {
-  from { transform: translateY(240px); }
-  to { transform: translateY(0); }
+  0% { transform: translate(0, 240px); }
+  50% { transform: translate(10px, 120px); }
+  100% { transform: translate(0, 0); }
 }
 @media (prefers-reduced-motion: reduce) {
   .galaxy-sky::before, .galaxy-sky::after { animation: none; }
@@ -1230,7 +1374,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: url('./assets/planet-horizon.svg?v=1.13.35-9a3a12ca') center 46% / cover no-repeat;
+  background: url('./assets/planet-horizon.svg?v=1.13.63-0f23dbc5') center 46% / cover no-repeat;
 }
 .planet-landscape + .room-playfield .galaxy-portal { top: 39%; left: 82%; }
 .dust-room .birth-glow {
@@ -1375,6 +1519,29 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
 }
 #modal .mix-dialog .recipe-drawer[open] summary::before { transform: rotate(45deg); }
 #modal .mix-dialog .recipe-drawer summary small { margin-inline-start: auto; }
+#modal .mix-dialog .recipe-drawer .recipes {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+#modal .mix-dialog .recipe-drawer .recipe {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 10px;
+}
+#modal .mix-dialog .recipe-drawer .recipe > .dust-art { width: 100%; }
+#modal .mix-dialog .recipe-drawer .recipe > span:not(.dust-art) { min-width: 0; }
+#modal .mix-dialog .recipe-drawer .recipe :is(b, small) {
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+#modal .mix-dialog .recipe-drawer .recipe small { margin-top: 4px; line-height: 1.5; }
+@media (max-width: 600px) {
+  #modal .mix-dialog .recipe-drawer .recipes { grid-template-columns: minmax(0, 1fr); }
+}
+
 
 /* Game controls shared by the expedition picker and transient feedback. */
 #modal .quest-planning {
@@ -1437,7 +1604,11 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   transition: opacity .18s ease, translate .18s ease;
 }
 #toast.show { translate: 0; pointer-events: auto; }
-.toast-mark { color: var(--color-brand-primary); }
+.toast-mark { color: var(--color-accent-highlight); }
+#toast[data-kind="gold"] .toast-mark { color: var(--color-currency-gold); }
+#toast[data-kind="sparkle"] .toast-mark { color: var(--color-currency-sparkle); }
+#toast[data-kind="recipe"] .toast-mark { color: #d8bafa; }
+#toast[data-kind="check"] .toast-mark { color: #a8dfbc; }
 #toastDismiss {
   display: grid;
   place-items: center;
@@ -1668,14 +1839,80 @@ html {
   max-width: 650px;
   height: var(--floating-nav-height);
   margin: 0;
-  padding: 6px;
+  --nav-padding: 6px;
+  --nav-gap: 4px;
+  padding: var(--nav-padding);
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 4px;
+  gap: var(--nav-gap);
   border-radius: 999px;
   z-index: 80;
 }
-.app-shell > .navigation button { min-width: 0; border-radius: 999px; }
+.app-shell > .navigation button {
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  border-radius: 999px;
+}
+.app-shell > .navigation button.active {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+.app-shell > .navigation {
+  --nav-index: 0;
+}
+.navigation:has(> [data-page="collection"].active) { --nav-index: 1; }
+.navigation:has(> [data-page="storage"].active) { --nav-index: 2; }
+.navigation:has(> [data-page="shop"].active) { --nav-index: 3; }
+.navigation > .nav-selection {
+  position: absolute;
+  inset: var(--nav-padding) auto var(--nav-padding) var(--nav-padding);
+  width: calc((100% - 2 * var(--nav-padding) - 3 * var(--nav-gap)) / 4);
+  transform: translateX(calc(var(--nav-index) * (100% + var(--nav-gap))));
+  border-radius: inherit;
+  pointer-events: none;
+  background: var(--glass-selection);
+  box-shadow: var(--glass-rim);
+}
+.navigation:not(:has(> button.active)) > .nav-selection { visibility: hidden; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.reduce-motion, .simple-effects) .navigation > .nav-selection {
+    transition: transform .34s cubic-bezier(.22,.8,.32,1);
+  }
+  html:not(.reduce-motion, .simple-effects) .navigation .nav-icon {
+    transition: scale .15s ease-out;
+  }
+  html:not(.reduce-motion, .simple-effects) .navigation .nav-drops {
+    display: block;
+  }
+  html:not(.reduce-motion, .simple-effects) .navigation button:not(:disabled):active .nav-icon { scale: .9; }
+}
+.nav-drops {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.nav-drops > i {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  translate: -50% -50%;
+  width: var(--drop-size);
+  height: var(--drop-size);
+  border-radius: 50%;
+  background: var(--color-brand-primary);
+  opacity: 0;
+  animation: nav-drop-in 480ms cubic-bezier(.33,.12,.24,1) backwards;
+}
+.nav-drops > i:nth-child(3n) { background: var(--color-glass-active); }
+@keyframes nav-drop-in {
+  0% { transform: translate(var(--drop-x), var(--drop-y)) scale(.5); opacity: 0; }
+  22% { opacity: .62; }
+  70% { opacity: .42; }
+  100% { transform: translate(0, 0) scale(.15); opacity: 0; }
+}
 html:not(.room-open, .desk-open) .app-shell { padding-bottom: var(--floating-nav-clearance); }
 .room-open .app-shell {
   --room-nav-height: var(--floating-nav-height);
@@ -1689,7 +1926,7 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
     --floating-nav-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
   }
   .app-shell > .navigation,
-  .room-open .app-shell > .navigation { padding: 4px; }
+  .room-open .app-shell > .navigation { --nav-padding: 4px; }
 }
 
 /* Story text and its controls keep separate spacing at every dialog width. */
@@ -1762,8 +1999,7 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
   border-radius: 0;
   box-shadow: none;
 }
-.app-shell :is(.collection-switch, .collection-tabs.shop-tabs) button[role="tab"],
-.app-shell :is(.collection-switch, .collection-tabs.shop-tabs) button[role="tab"]:not(:disabled):hover {
+.app-shell :is(.collection-switch, .collection-tabs.shop-tabs) button[role="tab"] {
   position: relative;
   display: inline-flex;
   flex: 0 0 auto;
@@ -1791,7 +2027,6 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
   font-weight: 700;
   border-bottom-color: var(--color-accent-highlight);
 }
-.app-shell :is(.collection-switch, .collection-tabs.shop-tabs) button[role="tab"]:hover { color: var(--color-text-primary); }
 .app-shell :is(.collection-switch, .collection-tabs.shop-tabs) button[role="tab"] small {
   min-width: 0;
   padding: 0;
@@ -1801,9 +2036,19 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
   font-weight: 400;
   font-variant-numeric: tabular-nums;
 }
+@media (hover: hover) {
+  .app-shell :is(.collection-switch, .collection-tabs.shop-tabs) button[role="tab"]:hover {
+    color: var(--color-text-primary);
+  }
+  .app-shell :is(.collection-switch, .collection-tabs.shop-tabs) button[role="tab"][aria-selected="false"]:hover {
+    border-bottom-color: var(--color-border-control);
+  }
+}
+.app-shell .collection-switch button[role="tab"]:is(:hover, :focus-visible, [aria-selected="true"]) small {
+  color: var(--color-text-primary);
+}
 .collection-switch .ui-icon { width: 17px; height: 17px; }
 .app-shell .collection-switch button[role="tab"] .tab-label { font: inherit; }
-#collectionPanel .dust-filters,
 .app-shell :is(.furniture-filters, .collection-filters) {
   display: flex;
   flex-wrap: wrap;
@@ -1818,8 +2063,7 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
   background: none;
   box-shadow: none;
 }
-.app-shell :is(.collection-filters, .furniture-filters) button.filter-choice,
-.app-shell :is(.collection-filters, .furniture-filters) button.filter-choice:not(:disabled):hover {
+.app-shell :is(.collection-filters, .furniture-filters) button.filter-choice {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -1841,10 +2085,44 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
 }
 .app-shell :is(.collection-filters, .furniture-filters) button.filter-choice[aria-pressed="true"] {
   color: var(--color-text-primary);
-  background: #c1d8ff17;
   border-color: #c1d8ff20;
 }
-.app-shell :is(.collection-filters, .furniture-filters) button.filter-choice:hover { background-color: #c1d8ff0d; color: var(--color-text-primary); }
+@media (hover: hover) {
+  .app-shell :is(.collection-filters, .furniture-filters) button.filter-choice:not(:disabled, [aria-pressed="true"]):hover {
+    color: var(--color-text-primary);
+    border-color: var(--color-border-control);
+  }
+  .app-shell :is(.collection-filters, .furniture-filters) button.filter-choice:not(:disabled):hover small {
+    color: var(--color-text-primary);
+  }
+}
+/* Use transparent filter controls in the shop and catalogue. */
+.app-shell .selection-filters {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  width: min(100%, 420px);
+  gap: 6px;
+}
+.app-shell .selection-filters button.filter-choice {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 2px;
+  min-height: var(--size-reading-target);
+  padding: 6px 4px;
+  border: 1px solid var(--color-glass-edge);
+  border-radius: var(--radius-glass-control);
+  white-space: normal;
+  word-break: keep-all;
+}
+.app-shell .selection-filters button.filter-choice[aria-pressed="true"] {
+  color: var(--color-text-primary);
+  border-color: var(--color-brand-primary);
+  font-weight: 650;
+}
+.app-shell .selection-filters button[aria-pressed="true"] small {
+  color: var(--color-text-primary);
+}
 .app-shell .filter-choice small { color: var(--color-text-secondary); font-size: 12px; font-variant-numeric: tabular-nums; }
 .app-shell .filter-choice.filter-toggle { margin-inline-start: 12px; border-color: var(--color-glass-edge); }
 .app-shell :is([role="tab"], .filter-choice):focus-visible {
@@ -1859,7 +2137,6 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
   .app-shell .collection-switch button[role="tab"] { gap: 5px; font-size: 13px; }
   .app-shell .collection-switch button[role="tab"] small { font-size: 11px; }
   .collection-switch .ui-icon { display: none; }
-  .app-shell .dust-filters button.filter-choice { padding-inline: 8px; gap: 4px; }
   .app-shell .filter-choice.filter-toggle { margin-inline-start: 0; }
 }
 
@@ -1944,9 +2221,19 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
 /* One selected-star clue, and a single home for its existing records. */
 .compact-dock .compact-top { grid-template-columns: minmax(0, 1fr) auto; }
 .compact-dock .compact-merge { justify-content: end; }
-.journey-cue > span { display: grid; gap: 4px; }
-.journey-cue b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: 500; }
-.journey-cue small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--color-text-secondary); font-size: 12px; }
+#dustPopup .journey-cue + .compact-footer { border-top: 0; margin-top: 4px; }
+#dustPopup .journey-cue { width: calc(100% - 24px); margin: 12px 12px 0; padding: 14px 16px; border: 0; border-radius: 12px; background: #b7d1ff09; box-shadow: none; }
+.journey-cue > .journey-cue-copy { display: grid; gap: 8px; min-width: 0; }
+.journey-cue .journey-cue-heading { display: flex; align-items: center; gap: 6px; color: var(--color-text-secondary); font-size: 12px; font-weight: 500; }
+.journey-cue .journey-cue-heading svg { width: 14px; height: 14px; }
+.journey-cue b { display: block; white-space: normal; word-break: keep-all; overflow-wrap: anywhere; font-size: 14px; font-weight: 500; line-height: 1.65; }
+.journey-cue small { display: flex; align-items: baseline; gap: 8px; white-space: normal; color: var(--color-text-secondary); font-size: 12px; line-height: 1.6; }
+.journey-cue small > span { flex: 0 0 auto; color: #a7c9f5; font-size: 11px; }
+#dustPopup .journey-cue:is(:hover, :focus-visible) { background: #b7d1ff13; }
+@media (max-width: 700px) {
+  #dustPopup .journey-cue { width: calc(100% - 24px); padding: 12px; margin-top: 8px; }
+  .journey-cue > .journey-cue-copy { gap: 6px; }
+}
 .shared-story-entrance { display: grid; gap: 12px; margin: 22px 0; padding: 18px; text-align: start; border: 1px solid var(--color-glass-edge); border-radius: 14px; background: #bfd5ff08; }
 .shared-story-entrance > header { display: flex; align-items: start; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
 .shared-story-entrance h3 { margin: 0; font-size: 16px; }
@@ -1993,15 +2280,15 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
   .shared-record-reader .story-page-nav .button { font-size: 12px; padding-inline: 6px; }
 }
 
-/* A single Korean wordmark, with the same compact identity on mobile. */
+/* Korean wordmark on desktop; a compact resource row on mobile. */
 .app-shell > .topbar .brand { display: flex; align-items: center; gap: 9px; width: auto; min-width: 0; }
 .app-shell .brand-wordmark { display: block; white-space: nowrap; font-size: 18px; font-weight: 700; letter-spacing: -.5px; line-height: 1.4; }
 .app-shell .brand .brand-dust { flex: 0 0 30px; width: 30px; height: 30px; }
 @media (max-width: 700px) {
-  html { --header-height: 88px; }
-  .app-shell > .topbar { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: 28px 44px; gap: 4px; padding-block: 6px; }
-  .app-shell > .topbar .brand { grid-area: 1 / 1; justify-self: start; min-height: 28px; }
-  .app-shell > .topbar .header-utilities { grid-area: 2 / 1; width: 100%; margin: 0; }
+  html { --header-height: 56px; }
+  .app-shell > .topbar { display: flex; gap: 6px; padding-block: 0; }
+  .app-shell > .topbar .brand { display: none; }
+  .app-shell > .topbar .header-utilities { width: 100%; margin: 0; }
   .app-shell .brand-wordmark { font-size: 16px; }
   .app-shell .brand .brand-dust { flex-basis: 24px; width: 24px; height: 24px; }
 }
@@ -2049,4 +2336,71 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
 @media (max-width: 600px) {
   #modal #missionCollection { padding: 16px; }
   .target-portrait { flex-basis: 48px; width: 48px; height: 48px; }
+}
+
+/* Keep disclosure paint inside one rounded shell, including Safari. */
+#modal .observation-note.observation-disclosure {
+  display: block; width: 100%; min-width: 0; margin: 16px 0 0; padding: 0;
+  border: 1px solid var(--color-glass-edge); border-radius: 12px;
+  background: transparent; overflow: hidden; clip-path: inset(0 round 12px);
+  box-shadow: none; text-align: start;
+}
+#modal .observation-disclosure > summary {
+  display: flex; align-items: center; justify-content: space-between;
+  min-height: 48px; margin: 0; padding: 12px 14px;
+  border: 0; border-radius: 0; background: transparent; box-shadow: none;
+  color: var(--color-text-primary); font-size: 14px; line-height: 1.6; list-style: none;
+  -webkit-tap-highlight-color: transparent;
+}
+#modal .observation-disclosure > summary::marker { content: ''; }
+#modal .observation-disclosure > summary::-webkit-details-marker { display: none; }
+#modal .observation-disclosure > summary::after { transform: rotate(45deg); rotate: none; }
+#modal .observation-disclosure[open] > summary::after { transform: rotate(225deg); }
+#modal .observation-disclosure > summary:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -3px; }
+#modal .observation-disclosure > div { margin: 0; padding: 0 14px 12px; background: transparent; border: 0; }
+#modal .observation-disclosure > div > p { margin: 0; background: transparent; font-size: 14px; line-height: 1.8; word-break: keep-all; overflow-wrap: anywhere; }
+#modal .observation-disclosure > div > a { display: inline-flex; align-items: center; min-height: 44px; margin: 8px 0 0; padding: 0; background: transparent; font-size: 13px; }
+#modal .journey-reward { display: grid; gap: 6px; padding: 12px 14px; border-radius: 10px; background: #b7cfff08; }
+#modal .journey-reward > :is(span,b), #modal .journey-action .goal-cost { background: transparent; }
+
+/* Space the note away from the next mission action. */
+#goalPanel .field-page { margin-block-end: 24px; }
+#modal .observation-disclosure[open] > .observation-content {
+  margin: 0 14px;
+  padding: 10px 0 6px;
+  border-block-start: 1px solid var(--color-glass-edge);
+}
+
+
+/* Pet reactions move only the art, leaving the hit target in place. */
+.dust-lift[data-pet-motion] :is(.dust-eyes, .dust-mouth, .character-face) { visibility: hidden; }
+.dust-lift .pet-expression { position: absolute; inset: 0; width: 100%; height: 100%; }
+.pet-hands, .pet-drowsy { opacity: 0; }
+.pet-hands { fill: var(--pet-hand-color); }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.reduce-motion, .simple-effects) [data-pet-motion] > * { transform-origin: 50% 72%; }
+  html:not(.reduce-motion, .simple-effects) [data-pet-motion="peek"] > * { animation: pet-peek .9s ease-in-out; }
+  html:not(.reduce-motion, .simple-effects) [data-pet-motion="peek"] .pet-hands { animation: pet-cover .9s ease-in-out; }
+  html:not(.reduce-motion, .simple-effects) [data-pet-motion="curl"] > * { animation: pet-curl 1s ease-in-out; }
+  html:not(.reduce-motion, .simple-effects) [data-pet-motion="curl"] .pet-drowsy { animation: pet-open-eyes 1s step-end; }
+  html:not(.reduce-motion, .simple-effects) [data-pet-motion="curl"] .pet-sleepy { animation: pet-close-eyes 1s step-end; }
+  html:not(.reduce-motion, .simple-effects) [data-pet-motion="hop"] > * { animation: pet-hop .7s ease-out; }
+}
+@keyframes pet-peek { 28% { transform: translateY(3px) scale(.96); } 60% { transform: translateY(-3px) rotate(-7deg); } }
+@keyframes pet-cover { 18%, 35% { opacity: 1; } 62% { opacity: 0; } }
+@keyframes pet-curl { 45%, 65% { transform: translateY(4px) scale(1.06,.8); } }
+@keyframes pet-open-eyes { 0% { opacity: 1; } 30%, 100% { opacity: 0; } }
+@keyframes pet-close-eyes { 0% { opacity: 0; } 30%, 100% { opacity: 1; } }
+@keyframes pet-hop { 14% { transform: scale(1.12,.88); } 43% { transform: translateY(-13px) scale(.96,1.08); } 78% { transform: scale(1.08,.93); } }
+
+#modal .star-greeting { text-align: center; }
+#modal .star-greeting > p,
+#modal .first-day-welcome > p {
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+#modal .story-seat > small {
+  display: block;
+  margin-top: 14px;
+  color: var(--color-text-secondary);
 }

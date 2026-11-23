@@ -154,7 +154,8 @@ body.modal-open .app-shell > .navigation {
   border-radius: 0;
 }
 .room-playfield {
-  --quest-guide-height: 64px;
+  --room-guide-art-size: 71px;
+  --quest-guide-height: calc(var(--room-guide-art-size) + 18px);
   --quest-guide-inset: 18px;
   position: absolute;
   inset: 0 0 calc(var(--room-nav-height) + var(--room-nav-bottom) + 3px);
@@ -181,21 +182,23 @@ body.modal-open .app-shell > .navigation {
   inset-block-end: var(--quest-guide-inset);
   display: grid;
   justify-items: center;
-  width: 64px;
+  align-content: center;
+  width: calc(var(--room-guide-art-size) + 4px);
   height: var(--quest-guide-height);
   padding: 2px;
   color: var(--color-text-secondary);
-  background: var(--color-surface-inset);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: 18px;
+  background: transparent;
+  border: 0;
   font-size: var(--text-meta);
   line-height: 1.25;
 }
 .dust-room .room-fairy {
   bottom: max(10%, calc(var(--quest-guide-height) + var(--quest-guide-inset) + 8px));
 }
-.quest-guide svg { width: 43px; height: 37px; }
-.quest-guide:hover { background: var(--color-surface-hover); }
+.dust-room :is(.quest-guide > svg, .adventure-keeper .keeper-character > .material-icon) {
+  width: var(--room-guide-art-size);
+  height: var(--room-guide-art-size);
+}
 .quest-guide-dialog #goalPanel { margin: 14px 0 0; text-align: left; }
 #dustPopup .care-dock {
   position: absolute;
@@ -240,16 +243,18 @@ body.modal-open .app-shell > .navigation {
 @media (max-width: 700px) {
   .room-open .dust-room,
   .room-open .topbar { touch-action: pinch-zoom; }
-  .room-playfield { --quest-guide-height: 48px; --quest-guide-inset: 10px; }
-  .quest-guide { width: 48px; align-items: center; }
+  .room-playfield {
+    --room-guide-art-size: 52px;
+    --quest-guide-height: calc(var(--room-guide-art-size) + 4px);
+    --quest-guide-inset: 10px;
+  }
   .dust-room .room-fairy {
     bottom: max(15%, calc(var(--quest-guide-height) + var(--quest-guide-inset) + 8px));
   }
   .quest-guide > span { display: none; }
-  .quest-guide svg { width: 36px; height: 31px; }
 }
 .brand-dust {
-  background: url('./favicon.svg?v=1.13.35-9a3a12ca') center / contain no-repeat;
+  background: url('./favicon.svg?v=1.13.63-0f23dbc5') center / contain no-repeat;
   font-size: 0 !important;
 }
 .room-open #main > .dust-room {

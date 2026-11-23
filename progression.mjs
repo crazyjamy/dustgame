@@ -1,8 +1,8 @@
-import{mergeCandidates}from'./dust-engine.mjs?v=1.13.27-4e8b8575';
-import{DUSTS}from'./dust-data.mjs?v=1.13.27-4e8b8575';
-import{ROOMS,ROOM_CHAPTERS}from'./rooms.mjs?v=1.13.27-4e8b8575';
-import{isAway}from'./adventures.mjs?v=1.13.27-4e8b8575';
-import{goldProduction,FAIRY_PRICE}from'./economy.mjs?v=1.13.27-4e8b8575';
+import{mergeCandidates}from'./dust-engine.mjs?v=1.13.35-9a3a12ca';
+import{DUSTS}from'./dust-data.mjs?v=1.13.35-9a3a12ca';
+import{ROOMS,ROOM_CHAPTERS}from'./rooms.mjs?v=1.13.35-9a3a12ca';
+import{isAway}from'./adventures.mjs?v=1.13.35-9a3a12ca';
+import{goldProduction,FAIRY_PRICE}from'./economy.mjs?v=1.13.35-9a3a12ca';
 
 export function firstSteps(s){return [
  {id:'birth',label:'새 별 관측',done:s.nextUid>2||s.dusts.some(d=>d.xp>0)||s.ownedFurniture.length>0||s.roomLevel>1},

@@ -1,7 +1,11 @@
 // The narrator and dialogue are fictional. The observation in each chapter
 // is based on astronomy. IDs and chapter order are part of the saved game.
+import { SOLA_CHAPTERS } from './sola-chapters.mjs?v=1.13.35-9a3a12ca';
+import { STAR_JOURNEYS } from './star-journeys.mjs?v=1.13.35-9a3a12ca';
+import { OBSERVATION_FACTS, OBSERVATION_SUMMARIES, DISCOVERY_MOMENTS } from './star-observations.mjs?v=1.13.35-9a3a12ca';
+import { storySentences } from './story-text.mjs?v=1.13.35-9a3a12ca';
 const arcs = {
-  crumb: ['태양|sun', '여덟 분 늦은 인사~솔라가 창에 손을 대고 지구를 향해 인사했어요. 루미가 망원경 옆에 작은 시계를 놓았어요. “태양빛이 지구에 닿으려면 약 8분이 걸려. 그동안 네 편지에 별을 하나 그려볼까?” 솔라는 시곗바늘이 여덟 칸을 건너는 동안 종이에 작은 태양을 그렸어요.', '검은 점의 온도~흑점은 태양의 주변 표면보다 온도가 낮아 어둡게 보여요. 솔라는 점을 지우려다 관측 노트에 그대로 그렸어요.', '하얀 왕관~개기일식 때 달이 밝은 태양 원반을 가리면 바깥 대기인 코로나가 드러나요. 솔라는 빈 동그라미 둘레에 가는 선을 그렸어요.', '빛보다 느린 여행자~태양풍은 태양에서 우주로 흘러나가는 전하를 띤 입자예요. 솔라는 빛과 입자에 서로 다른 출발 표식을 달았어요.', '작은 별의 주소~태양도 은하수에 속한 항성이에요. 솔라는 지도 한가운데 있던 태양을 은하의 한쪽 팔 부근으로 옮겨 그렸어요.'],
+  crumb: ['태양|sun', ...SOLA_CHAPTERS.map(c => c.title + '~' + c.body)],
   soot: ['달의 본그림자|sun', '그림자의 한가운데~움브라는 빛이 가려진 가장 어두운 부분에 섰어요. 그 자리를 본그림자라고 불러요.', '그림자의 가장자리~반그림자에서는 광원이 일부만 가려져요. 움브라가 반 걸음 물러나자 벽에 희미한 빛이 돌아왔어요.', '세 천체가 나란히~일식은 달이 태양과 지구 사이를 지날 때 일어나요. 움브라는 세 동그라미를 순서대로 늘어놓았어요.', '작은 그림자의 길~개기일식을 볼 수 있는 곳은 달의 본그림자가 지나는 좁은 경로 안이에요. 움브라는 지도에 가느다란 띠만 칠했어요.', '왕관이 보인 자리~태양 원반이 전부 가려진 짧은 동안 코로나를 볼 수 있어요. 움브라는 제 그림자 덕분에 처음 본 빛을 기록했어요.'],
   pink: ['장미성운|rosette', '멀리 핀 장미~로제타가 책 사이에 장미 한 송이를 끼우려 하자 루미가 먼 하늘의 사진을 건넸어요. 장미성운의 꽃잎처럼 보이는 부분은 가스와 먼지예요. 로제타는 꽃을 그림으로 옮긴 뒤 화분으로 돌려보냈어요.', '장미 한가운데~장미성운 중심에는 젊은 별 무리가 있어요. 로제타는 꽃잎보다 먼저 가운데의 작은 점들을 세었어요.', '밀려나는 구름~젊은 별이 내보낸 복사와 항성풍이 주위 가스의 모양을 바꿔요. 로제타는 빛이 닿는 쪽에 화살표를 그렸어요.', '빛나는 수소~별의 빛을 받은 수소 가스는 붉은빛을 낼 수 있어요. 로제타는 사진을 보며 자기 색을 한 번 더 좋아하기로 했어요.', '한 장의 오래된 사진~멀리서 온 빛에는 출발했을 때의 모습이 담겨요. 로제타는 사진 밑에 ‘먼 곳의 옛날’이라고 적었어요.'],
   puff: ['오리온성운|webb', '허리띠 아래~네뷸라는 루미와 함께 오리온자리의 허리띠 아래를 바라봤어요. 그곳에는 별이 태어나는 오리온성운이 있어요. “아직 이름이 없는 빛도 있을까?” 네뷸라는 지도 아래쪽에 새 친구가 앉을 자리를 비워 두었어요.', '조금씩 모이는 구름~차가운 가스와 먼지의 일부가 중력으로 모여요. 네뷸라는 흩어진 솜을 한 줌으로 뭉치는 모습을 떠올렸어요.', '아직 자라는 별~중심으로 물질이 더 떨어지며 원시별이 자라요. 네뷸라는 그 별에 완성 표시 대신 작은 점선을 그렸어요.', '먼지를 지나온 빛~적외선 관측은 가시광선에 가려진 별의 탄생을 살피는 데 도움을 줘요. 네뷸라가 두 사진을 번갈아 보았어요.', '스스로 빛날 때~중심에서 수소 핵융합이 시작되면 항성이 스스로 빛나요. 네뷸라는 그 장면을 오래 기다린 첫인사라고 불렀어요.'],
@@ -81,3 +85,19 @@ export const SKY_STORIES = Object.fromEntries(Object.entries(arcs).map(([id, [he
     };
   })];
 }));
+
+SKY_STORIES.crumb = SOLA_CHAPTERS.map(chapter => ({...chapter, topic:'솔라의 빛과 편지', source:sources.sun}));
+for (const [id,journey] of Object.entries(STAR_JOURNEYS)) {
+  const observations = SKY_STORIES[id];
+  const facts = OBSERVATION_FACTS[id] || observations.slice(0,4).map(chapter=>chapter.body);
+  SKY_STORIES[id] = journey.chapters.map((chapter,index) => {
+    const [first,...rest] = storySentences(chapter.body);
+    return {
+      ...chapter,
+      body:index===3 ? first + DISCOVERY_MOMENTS[id] + ' ' + rest.join('') : chapter.body,
+      topic:observations[0].topic,
+      observation:index===4 ? OBSERVATION_SUMMARIES[id] : facts[index],
+      source:observations[index].source
+    };
+  });
+}

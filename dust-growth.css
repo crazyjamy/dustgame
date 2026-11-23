@@ -37,13 +37,15 @@ html.reduce-motion .rg-prop{animation:none}
     max(12px, env(safe-area-inset-left, 0px));
 }
 #modal .modal-card {
+  display: flex;
+  flex-direction: column;
   max-height: 100%;
   min-height: 0;
   min-width: 0;
   padding: 0;
-  overflow: auto;
+  overflow: hidden;
   overscroll-behavior: contain;
-  scrollbar-gutter: stable;
+  scrollbar-gutter: auto;
   scrollbar-width: thin;
   scroll-padding-block-start: 100px;
   scroll-padding-block-end: 20px;
@@ -54,7 +56,8 @@ body.modal-open .app-shell > .navigation {
   pointer-events: none;
 }
 .modal-heading {
-  position: sticky;
+  position: relative;
+  flex: 0 0 auto;
   inset-block-start: 0;
   z-index: 2;
   display: grid;
@@ -80,7 +83,12 @@ body.modal-open .app-shell > .navigation {
   line-height: 1;
 }
 .modal-body {
+  flex: 1 1 auto;
   min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
   padding: 16px 18px 22px;
 }
 .modal-body > .dust-art { margin-top: 0; }
@@ -241,7 +249,7 @@ body.modal-open .app-shell > .navigation {
   .quest-guide svg { width: 36px; height: 31px; }
 }
 .brand-dust {
-  background: url('./favicon.svg?v=1.13.27-4e8b8575') center / contain no-repeat;
+  background: url('./favicon.svg?v=1.13.35-9a3a12ca') center / contain no-repeat;
   font-size: 0 !important;
 }
 .room-open #main > .dust-room {

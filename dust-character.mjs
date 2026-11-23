@@ -1,4 +1,4 @@
-import{DUSTS}from'./dust-data.mjs?v=1.13.27-4e8b8575';
+import{DUSTS}from'./dust-data.mjs?v=1.13.35-9a3a12ca';
 export const CHARACTERS={
  crumb:{favorite:'rug',motion:'knead',face:'content',action:'앞발을 번갈아 꾹꾹 누르며 몸을 납작하게 만들어요.',words:'여기, 내 모양으로 폭신해졌어.',cue:'번갈아 꾹꾹 · 반달 눈'},
  soot:{favorite:'cushion',motion:'roll',face:'wink',action:'쿠션을 발견하면 한 바퀴 데굴 구르고 씩 웃어요.',words:'한 바퀴만 더! 진짜 마지막이야.',cue:'한 바퀴 데굴 · 윙크'},

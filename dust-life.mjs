@@ -1,7 +1,9 @@
-import{wishReward}from'./furniture.mjs?v=1.13.27-4e8b8575';
-import{personalPostcard}from'./postcard-voices.mjs?v=1.13.27-4e8b8575';
-import{characterProfile}from'./dust-character.mjs?v=1.13.27-4e8b8575';
-import {DUSTS} from './dust-data.mjs?v=1.13.27-4e8b8575';
+import{wishReward}from'./furniture.mjs?v=1.13.35-9a3a12ca';
+import{personalPostcard}from'./postcard-voices.mjs?v=1.13.35-9a3a12ca';
+import{characterProfile}from'./dust-character.mjs?v=1.13.35-9a3a12ca';
+import{afterwordKey,journeyComplete}from'./story-journey.mjs?v=1.13.35-9a3a12ca';
+import{initAfterwords,addAfterword,afterwordScene,aftermathFor}from'./story-aftermath.mjs?v=1.13.35-9a3a12ca';
+import {DUSTS} from './dust-data.mjs?v=1.13.35-9a3a12ca';
 
 export const FAVORITES=[
  {id:'rug',name:'행성 고리',action:'러그 위에서 몸을 동그랗게 말아요.',words:'폭신한 곳에 있으면 마음도 느긋해져.',memory:'처음에는 가장자리만 밟았어요. 오래된 러그의 자수가 늘어날수록 조금씩 가운데로 들어왔고, 이제는 옆자리를 친구에게 내어줘요.'},
@@ -37,24 +39,45 @@ export function roomSpot(s,d,index=residents(s).findIndex(x=>x.uid===d.uid)){
 }
 export function nearFavorite(s,d){if(!residents(s).some(x=>x.uid===d.uid))return false;const id=personality(d.id).favorite.id;return s.decorations.includes(id)&&dist(roomSpot(s,d),s.roomPositions.furniture[id]||FURNITURE_SPOTS[id])<=18;}
 export function companionship(s,d){if(!residents(s).some(x=>x.uid===d.uid))return null;const other=residents(s).find(x=>x.uid!==d.uid&&dist(roomSpot(s,d),roomSpot(s,x))<=14);if(!other)return null;const nap=personality(d.id).favorite.id===personality(other.id).favorite.id||[d,other].some(x=>personality(x.id).mood.name==='느긋한 꿈꾸미');return {other,kind:nap?'nap':'play',label:nap?'나란히 낮잠 중':'그림자 놀이 중'};}
+export function storyCompanion(s,d){const home=residents(s);if(!home.some(x=>x.uid===d.uid))return null;return home.find(x=>x.uid!==d.uid&&x.id!==d.id&&dist(roomSpot(s,d),roomSpot(s,x))<=14)||null;}
 export function recipeHint(id){const d=lookup(id);const essence={leaf:'풀잎이 흔들리는 틈',spark:'따뜻한 햇살 한 조각',moon:'조용한 달빛 아래',dew:'새벽 이슬이 맺힌 자리',ember:'꺼지지 않은 작은 온기',stardust:'밤하늘에서 떨어진 별가루'}[d.essence];return `${essence}에서 ${d.group==='daily'?'포근한':d.group==='pop'?'몽글한':'반짝이는'} 기운을 모아보세요. ${d.rarity==='common'?'평범한 순간':d.rarity==='rare'?'조금 특별한 순간':'아주 드문 순간'}을 기다리는 친구예요.`;}
 export function initLife(s,now=Date.now()){
  if(s.life===undefined)s.life={version:1,lastSeen:now,nextId:1,journal:[],postcards:[],memories:[],pairs:[],requests:{},welcome:null};
  const l=s.life;
+ if(l.storyMoments===undefined)l.storyMoments=[];
+ if(!Array.isArray(l.storyMoments)||l.storyMoments.length>10000||new Set(l.storyMoments).size!==l.storyMoments.length||l.storyMoments.some(x=>typeof x!=='string'||!/^sola-ring:[1-9]\d*$/.test(x)||!Number.isSafeInteger(Number(x.slice(10)))))throw Error('invalid story moments');
  if(l.version!==1||!Number.isFinite(l.lastSeen)||l.lastSeen<0||!Number.isSafeInteger(l.nextId)||l.nextId<1)throw Error('invalid life');
  for(const key of ['journal','postcards','memories','pairs'])if(!Array.isArray(l[key])||l[key].length>(key==='journal'?120:key==='postcards'?200:10000))throw Error('invalid life list');
- for(const e of l.journal)if(!Number.isSafeInteger(e.id)||e.id<1||e.id>=l.nextId||!Number.isFinite(e.at)||typeof e.seen!=='boolean'||!['offline','favorite','friend','wish','postcard'].includes(e.kind)||typeof e.title!=='string'||e.title.length>200||typeof e.text!=='string'||e.text.length>2000)throw Error('invalid life entry');
+ for(const e of l.journal)if(!Number.isSafeInteger(e.id)||e.id<1||e.id>=l.nextId||!Number.isFinite(e.at)||typeof e.seen!=='boolean'||!['offline','favorite','friend','wish','postcard','story'].includes(e.kind)||typeof e.title!=='string'||e.title.length>200||typeof e.text!=='string'||e.text.length>2000)throw Error('invalid life entry');
+ for(const e of l.journal)if(e.storyUid!==undefined&&(!Number.isSafeInteger(e.storyUid)||e.storyUid<1||!['favorite','route','friend','complete'].includes(e.afterwordKind)))throw Error('invalid story link');
  for(const p of l.postcards)if(!lookup(p.dustId)||!['bookshelf','window','moonpath'].includes(p.route)||p.id!==p.dustId+':'+p.route||typeof p.title!=='string'||p.title.length>200||typeof p.text!=='string'||p.text.length>2000||!Number.isFinite(p.at))throw Error('invalid postcard');
  for(const key of ['memories','pairs'])if(l[key].some(x=>typeof x!=='string'||x.length>100)||new Set(l[key]).size!==l[key].length)throw Error('invalid discoveries');
  if(new Set(l.postcards.map(x=>x.id)).size!==l.postcards.length||new Set(l.journal.map(x=>x.id)).size!==l.journal.length||!l.requests||typeof l.requests!=='object'||Array.isArray(l.requests)||Object.entries(l.requests).some(([k,v])=>!/^\d+$/.test(k)||!Number.isSafeInteger(v)||v<0))throw Error('invalid life claims');
  if(l.welcome!==null&&(!Number.isSafeInteger(l.welcome)||!l.journal.some(x=>x.id===l.welcome)))l.welcome=null;
- return s;
+ initAfterwords(s);return s;
 }
 function record(s,kind,title,text,now){const e={id:s.life.nextId++,kind,title,text,at:now,seen:false};s.life.journal.unshift(e);s.life.journal=s.life.journal.slice(0,120);return e;}
+function discoverAfterword(s,d,kind,now,other){
+ const entry=addAfterword(s,d,kind,now,other);if(!entry)return null;
+ if(d.id==='crumb'&&kind==='favorite'&&!s.life.storyMoments.includes(afterwordKey(d.uid)))s.life.storyMoments.push(afterwordKey(d.uid));
+ const scene=afterwordScene(d,entry,personality(d.id).favorite);
+ const event=record(s,kind==='favorite'?'favorite':kind==='friend'?'friend':kind==='route'?'postcard':'story',lookup(d.id).name+'의 후일담 · '+scene.title,scene.title+' 장면이 남았어요. '+scene.change,now);
+ Object.assign(event,{storyUid:d.uid,afterwordKind:kind});return event;
+}
+export function recordAfterwordReturn(s,d,route,now=Date.now()){
+ initLife(s,now);
+ if(!d.readStories.includes(0)||aftermathFor(d).route!==route)return null;
+ return discoverAfterword(s,d,'route',now);
+}
 export function observeLife(s,now=Date.now()){
  initLife(s,now);const events=[];
+ for(const d of s.dusts)if(journeyComplete(d)){const e=discoverAfterword(s,d,'complete',now);if(e)events.push(e);}
  for(const d of residents(s)){
   const p=personality(d.id),key=String(d.uid);
+  if(d.readStories.includes(0)){
+   if(nearFavorite(s,d)){const e=discoverAfterword(s,d,'favorite',now);if(e)events.push(e);}
+   const other=storyCompanion(s,d);if(other){const e=discoverAfterword(s,d,'friend',now,other);if(e)events.push(e);}
+  }
   if(nearFavorite(s,d)&&(s.furnitureLevels[p.favorite.id]||1)>=3&&!s.life.memories.includes(key)){s.life.memories.push(key);events.push(record(s,'favorite',lookup(d.id).name+'의 오래된 자리',p.favorite.memory,now));}
   const pair=companionship(s,d);if(pair){const key=[d.uid,pair.other.uid].sort((a,b)=>a-b).join(':');if(!s.life.pairs.includes(key)){s.life.pairs.push(key);events.push(record(s,'friend','둘이 함께한 첫 순간',`${lookup(d.id).name}와 ${lookup(pair.other.id).name}, ${pair.kind==='nap'?'서로의 온기에 기대어 나란히 잠들었어요.':'서로의 그림자를 따라 빙글빙글 놀았어요.'}`,now));}}
  }

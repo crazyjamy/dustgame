@@ -6,7 +6,7 @@
 1. ZIP을 압축 해제해요.
 2. 저장소의 **Add file → Upload files**를 눌러요. 압축을 푼 폴더 안의 파일을 모두 올려요. ZIP 자체나 바깥 폴더를 올리지 않아요.
 3. 저장소 첫 화면에 `index.html`, `dust.mjs`, `dust.css`, 나머지 `.mjs` 파일이 함께 보여야 해요. 같은 이름의 기존 파일은 교체돼요.
-4. 커밋 문구는 `방 성장 보상 연결 및 모바일 팝업·희귀 먼지 효과 개선`처럼 적고 main 브랜치에 커밋해요.
+4. 커밋 문구는 `feat: 별이 머무는 곳으로 이름 변경 및 이야기·기록 UI 개선`처럼 적고 main 브랜치에 커밋해요.
 5. Pages가 이미 main / (root)로 설정돼 있으면 추가 설정은 필요 없어요. 처음이라면 **Settings → Pages → Deploy from a branch → main → /(root) → Save**를 선택해요.
 6. Actions에서 배포 완료를 확인한 뒤 게임 주소를 열어요. 이전 화면이 보이면 Mac은 Cmd+Shift+R, Windows는 Ctrl+Shift+R로 새로고침해요.
 

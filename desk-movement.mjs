@@ -1,4 +1,4 @@
-import{crateTile,deskPath,stepDesk,canPushDesk,pushDesk}from'./desk-exploration.mjs?v=1.13.65-49db833c';
+import{crateTile,deskPath,stepDesk,canPushDesk,pushDesk}from'./desk-exploration.mjs?v=1.13.75-5c5e3f7f';
 
 // An interaction is a destination plus an action, rather than two separate taps.
 export function createDeskMovement(state,{say=()=>{},onPush=()=>{}}={}){

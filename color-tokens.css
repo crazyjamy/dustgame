@@ -88,7 +88,7 @@
   --color-toast-surface: var(--color-glass-reading);
   --size-radio-indicator: 1.125rem;
   --dialog-desktop-width: 40rem;
-  --motion-story-shimmer: 1600ms;
+  --motion-story-shimmer: 2000ms;
   --size-reading-target: 2.75rem;
   --color-story-shimmer: var(--color-sparkle-fill);
   --glass-backdrop: blur(5px);

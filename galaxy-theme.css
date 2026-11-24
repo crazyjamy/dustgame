@@ -88,7 +88,7 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline-color: var
 :is(.upgrade-card, .fairy-shop-card, .furniture-effects-guide,
   .mix-box, .recipe-drawer, .return-reward, .goal-cost, .journey-reward, .postcard-paper,
   .room-story-cover, .theme-progress, .furniture-info .next-furniture-effect,
-  .compact-extra, .compact-footer, .wish-note, .merge-preview, .departure-preview) {
+  .compact-extra, .compact-footer, .wish-note, .departure-preview) {
   background: var(--color-surface-raised);
   border-color: var(--color-border-subtle);
   color: var(--color-text-primary);
@@ -177,7 +177,6 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline-color: var
 
 .modal { background: var(--color-scrim); }
 .modal-card .close { background: var(--color-surface-raised); color: var(--color-text-primary); }
-#dustPopup .dust-popup-close { color: var(--color-text-primary); }
 .compact-name > b { background: var(--color-surface-tag); color: var(--color-text-primary); }
 .dust-card.undiscovered .dust-art { opacity: .58; }
 .furniture-picture, .furniture-story-art {
@@ -300,9 +299,7 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline-color: var
   text-align: start;
 }
 #modal .mission-ready-notice {
-  --story-shimmer-base: #ffe3a0;
   --story-shimmer-tint: #ffcc67;
-  --story-shimmer-glow: #ffc66066;
 }
 #modal .mission-ready-notice p { margin-block: 6px; color: #ffe3a0; }
 #modal .mission-ready-notice .text-button { min-height: 44px; margin: 0; }
@@ -326,6 +323,25 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline-color: var
   width: 25px;
   height: 25px;
   filter: drop-shadow(0 0 5px #ffd67862);
+}
+.dust-room .room-fairy:disabled { opacity: 1; }
+.dust-room .room-fairy .fairy-aura { opacity: 0; transition: opacity .2s ease-out; }
+.dust-room .room-fairy > .material-icon { filter: none; }
+.dust-room .room-fairy[data-badge="◉"] .fairy-aura {
+  opacity: 1;
+  background: radial-gradient(circle, #ffec9aab, #ffe19e45 48%, transparent 73%);
+}
+.dust-room .room-fairy[data-badge="◉"] > .material-icon {
+  filter: drop-shadow(0 0 9px #ffdf8eba);
+}
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.reduce-motion, .simple-effects) .gold-bubble > .material-icon {
+    animation: gold-coin-spin 3s ease-out infinite;
+  }
+}
+@keyframes gold-coin-spin {
+  0% { transform: perspective(100px) rotateY(0deg); }
+  22%, 100% { transform: perspective(100px) rotateY(360deg); }
 }
 .currency-gain,
 .currency-flight {
@@ -607,7 +623,7 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline-color: var
 }
 .room-dust:has(.rub-bubble.show) :is(.life-bubble, .dust-name) { visibility: hidden; }
 
-#modal .modal-card :where(.offline-policy, .rooms-intro, .room-decades > details,
+#modal .modal-card :where(.rooms-intro, .room-decades > details,
   .character-gallery article, .desk-return-loot, .desk-entry select) {
   background: var(--color-surface-inset);
   border-color: var(--color-border-subtle);
@@ -619,6 +635,14 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline-color: var
 #modal .modal-card :where(.life-book-intro > span, .character-gallery article > span,
   .character-gallery blockquote, .room-decades summary > span) {
   color: var(--color-link);
+}
+#modal :is(.economy-table, .offline-policy) {
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+}
+#modal .economy-table thead th {
+  background: var(--color-surface-tag);
+  color: var(--color-text-primary);
 }
 #modal .modal-card :where(.offline-policy h3) { color: var(--color-currency-gold); }
 .rooms-dialog .rooms-intro { margin: 0 0 12px; text-align: left; }
@@ -891,19 +915,27 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
 
 @supports ((background-clip: text) or (-webkit-background-clip: text)) {
   @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
-    html:not(.reduce-motion, .simple-effects) .story-sentence.shimmer-active {
-      background-image: linear-gradient(105deg, var(--story-shimmer-base, var(--color-text-secondary)) 34%,
-        var(--story-shimmer-tint, var(--color-story-shimmer)) 45%, #fff 50%, var(--story-shimmer-tint, var(--color-story-shimmer)) 55%, var(--story-shimmer-base, var(--color-text-secondary)) 66%);
-      background-size: 240% 100%;
-      background-position: 100% 0;
+    html:not(.reduce-motion, .simple-effects) :is(.story-sentence, .journey-cue-shimmer) {
+      background-image: linear-gradient(90deg, transparent 38%,
+        var(--story-shimmer-tint, var(--color-story-shimmer)) 47%, #fff 49% 51%,
+        var(--story-shimmer-tint, var(--color-story-shimmer)) 53%, transparent 62%);
+      background-repeat: no-repeat;
+      background-size: 300% 100%;
+      background-position: 0 0;
       -webkit-background-clip: text;
       background-clip: text;
-      animation: story-shimmer var(--motion-story-shimmer) linear;
+      -webkit-text-fill-color: transparent;
     }
+    html:not(.reduce-motion, .simple-effects) .story-sentence {
+      background-color: currentColor;
+    }
+    html:not(.reduce-motion, .simple-effects) :is(.story-sentence.shimmer-active, .journey-cue-shimmer) {
+      animation: story-shimmer var(--motion-story-shimmer) linear both;
+    }
+    html:not(.reduce-motion, .simple-effects) .journey-cue-shimmer { display: block; }
     @keyframes story-shimmer {
-      0% { background-position: 100% 0; color: transparent; filter: none; }
-      50% { filter: drop-shadow(0 0 3px var(--story-shimmer-glow, #9acbff66)); }
-      100% { background-position: 0 0; color: transparent; filter: none; }
+      from { background-position: 100% 0; }
+      to { background-position: 0 0; }
     }
   }
 }
@@ -1332,7 +1364,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   overflow: hidden;
   pointer-events: none;
   background:
-    url('./assets/galaxy-stars.svg?v=1.13.65-49db833c') center 12% / auto 800px repeat,
+    url('./assets/galaxy-stars.svg?v=1.13.75-5c5e3f7f') center 12% / auto 800px repeat,
     radial-gradient(ellipse at 77% 27%, var(--color-glass-orbit-graphite), transparent 57%),
     radial-gradient(ellipse at 13% 54%, var(--color-glass-orbit-slate), transparent 64%),
     radial-gradient(ellipse at 94% 78%, var(--color-glass-orbit-silver), transparent 56%),
@@ -1374,7 +1406,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: url('./assets/planet-horizon.svg?v=1.13.65-49db833c') center 46% / cover no-repeat;
+  background: url('./assets/planet-horizon.svg?v=1.13.75-5c5e3f7f') center 46% / cover no-repeat;
 }
 .planet-landscape + .room-playfield .galaxy-portal { top: 39%; left: 82%; }
 .dust-room .birth-glow {
@@ -1758,7 +1790,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
 .record-help, .collection-switch, .copy-story, .preference-detail h3 {
   --icon-size: var(--size-icon-small);
 }
-:is(#settings, .modal-heading .close, .dust-popup-close, #toastDismiss, .copy-story) {
+:is(#settings, .modal-heading .close, #toastDismiss, .copy-story) {
   display: inline-grid;
   place-items: center;
 }
@@ -1816,9 +1848,6 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   font-size: var(--text-meta);
 }
 /* Sola's story lives alongside the existing compact care controls. */
-.journey-cue{display:flex;align-items:center;gap:8px;width:100%;margin:8px 0 0;padding:9px 12px;border:1px solid var(--color-border-subtle,#766694);border-radius:12px;background:transparent;color:inherit;text-align:left;font:inherit;font-size:12px;line-height:1.5;cursor:pointer}
-.journey-cue span{flex:1;min-width:0}.journey-cue svg{width:16px;height:16px;flex-shrink:0}
-.journey-cue:focus-visible{outline:2px solid currentColor;outline-offset:3px}
 .journey-question{font-weight:600;line-height:1.7}.journey-afterword{margin:20px 0 4px;padding-top:14px;border-top:1px solid var(--color-border-subtle,#766694)}
 .journey-afterword>small{display:block;margin-bottom:10px}.journey-afterword p,.journey-next{font-size:14px;line-height:1.8}.journey-ending{font-weight:600}
 
@@ -2218,21 +2247,40 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
   .app-shell .room-dust.story-speaking.selected .life-bubble { font-size: 12px; min-width: 116px; max-width: 150px; }
 }
 
-/* One selected-star clue, and a single home for its existing records. */
-.compact-dock .compact-top { grid-template-columns: minmax(0, 1fr) auto; }
-.compact-dock .compact-merge { justify-content: end; }
+#dustPopup .compact-top { grid-template-columns: minmax(0, 1fr) auto; }
+#dustPopup .compact-merge { justify-self: end; }
+#dustPopup .compact-name .text-button { min-width: 40px; min-height: 44px; }
 #dustPopup .journey-cue + .compact-footer { border-top: 0; margin-top: 4px; }
-#dustPopup .journey-cue { width: calc(100% - 24px); margin: 12px 12px 0; padding: 14px 16px; border: 0; border-radius: 12px; background: #b7d1ff09; box-shadow: none; }
-.journey-cue > .journey-cue-copy { display: grid; gap: 8px; min-width: 0; }
-.journey-cue .journey-cue-heading { display: flex; align-items: center; gap: 6px; color: var(--color-text-secondary); font-size: 12px; font-weight: 500; }
-.journey-cue .journey-cue-heading svg { width: 14px; height: 14px; }
-.journey-cue b { display: block; white-space: normal; word-break: keep-all; overflow-wrap: anywhere; font-size: 14px; font-weight: 500; line-height: 1.65; }
-.journey-cue small { display: flex; align-items: baseline; gap: 8px; white-space: normal; color: var(--color-text-secondary); font-size: 12px; line-height: 1.6; }
-.journey-cue small > span { flex: 0 0 auto; color: #a7c9f5; font-size: 11px; }
-#dustPopup .journey-cue:is(:hover, :focus-visible) { background: #b7d1ff13; }
-@media (max-width: 700px) {
-  #dustPopup .journey-cue { width: calc(100% - 24px); padding: 12px; margin-top: 8px; }
-  .journey-cue > .journey-cue-copy { gap: 6px; }
+#dustPopup .journey-cue {
+  margin: 4px 12px 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #b7d1ff09;
+  text-align: start;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+}
+.journey-cue > span {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--color-link);
+  font-size: var(--text-caption);
+}
+.journey-cue-text {
+  position: relative;
+  display: block;
+  color: var(--color-text-primary);
+  font-size: var(--text-body);
+  font-weight: 500;
+  line-height: 1.6;
+}
+.journey-cue-shimmer {
+  display: none;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+  --story-shimmer-tint: #bbddff;
 }
 .shared-story-entrance { display: grid; gap: 12px; margin: 22px 0; padding: 18px; text-align: start; border: 1px solid var(--color-glass-edge); border-radius: 14px; background: #bfd5ff08; }
 .shared-story-entrance > header { display: flex; align-items: start; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
@@ -2375,19 +2423,16 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
 /* Pet reactions move only the art, leaving the hit target in place. */
 .dust-lift[data-pet-motion] :is(.dust-eyes, .dust-mouth, .character-face) { visibility: hidden; }
 .dust-lift .pet-expression { position: absolute; inset: 0; width: 100%; height: 100%; }
-.pet-hands, .pet-drowsy { opacity: 0; }
-.pet-hands { fill: var(--pet-hand-color); }
+.pet-drowsy { opacity: 0; }
 @media (prefers-reduced-motion: no-preference) {
   html:not(.reduce-motion, .simple-effects) [data-pet-motion] > * { transform-origin: 50% 72%; }
   html:not(.reduce-motion, .simple-effects) [data-pet-motion="peek"] > * { animation: pet-peek .9s ease-in-out; }
-  html:not(.reduce-motion, .simple-effects) [data-pet-motion="peek"] .pet-hands { animation: pet-cover .9s ease-in-out; }
   html:not(.reduce-motion, .simple-effects) [data-pet-motion="curl"] > * { animation: pet-curl 1s ease-in-out; }
   html:not(.reduce-motion, .simple-effects) [data-pet-motion="curl"] .pet-drowsy { animation: pet-open-eyes 1s step-end; }
   html:not(.reduce-motion, .simple-effects) [data-pet-motion="curl"] .pet-sleepy { animation: pet-close-eyes 1s step-end; }
   html:not(.reduce-motion, .simple-effects) [data-pet-motion="hop"] > * { animation: pet-hop .7s ease-out; }
 }
 @keyframes pet-peek { 28% { transform: translateY(3px) scale(.96); } 60% { transform: translateY(-3px) rotate(-7deg); } }
-@keyframes pet-cover { 18%, 35% { opacity: 1; } 62% { opacity: 0; } }
 @keyframes pet-curl { 45%, 65% { transform: translateY(4px) scale(1.06,.8); } }
 @keyframes pet-open-eyes { 0% { opacity: 1; } 30%, 100% { opacity: 0; } }
 @keyframes pet-close-eyes { 0% { opacity: 0; } 30%, 100% { opacity: 1; } }
@@ -2415,3 +2460,34 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
   margin-top: 14px;
   color: var(--color-text-secondary);
 }
+
+
+#modal .merge-confirm .merge-preview {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 8px;
+  margin: 4px 0 12px;
+}
+#modal .merge-preview > div {
+  width: auto;
+  min-width: 0;
+  gap: 3px;
+  overflow-wrap: anywhere;
+}
+#modal .merge-preview .dust-art { width: min(84px, 100%); }
+#modal .merge-preview > span { align-self: start; margin-top: 25px; }
+#modal .merge-result-preview { margin: 0 0 14px; padding: 12px 8px; }
+#modal .merge-result-preview p { margin: 6px 0 0; line-height: 1.65; }
+#modal .merge-complete {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  text-align: center;
+}
+#modal .merge-complete .merge-success { display: block; }
+#modal .merge-complete .merge-success .dust-art { width: 112px; }
+#modal .merge-complete :is(h3, p) { margin: 0; }
+#modal .merge-actions { display: grid; width: 100%; gap: 8px; }
+#modal .merge-complete .merge-actions { margin-top: 6px; }
+#modal .merge-actions .full { margin: 0; }
+#modal .merge-actions .text-button { justify-self: center; min-height: 44px; margin: 0; }

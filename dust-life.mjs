@@ -1,9 +1,9 @@
-import{wishReward}from'./furniture.mjs?v=1.13.65-49db833c';
-import{personalPostcard}from'./postcard-voices.mjs?v=1.13.65-49db833c';
-import{characterProfile,petReaction}from'./dust-character.mjs?v=1.13.65-49db833c';
-import{afterwordKey,journeyComplete}from'./story-journey.mjs?v=1.13.65-49db833c';
-import{initAfterwords,addAfterword,afterwordScene,aftermathFor}from'./story-aftermath.mjs?v=1.13.65-49db833c';
-import {DUSTS} from './dust-data.mjs?v=1.13.65-49db833c';
+import{wishReward}from'./furniture.mjs?v=1.13.75-5c5e3f7f';
+import{personalPostcard}from'./postcard-voices.mjs?v=1.13.75-5c5e3f7f';
+import{characterProfile,petReaction}from'./dust-character.mjs?v=1.13.75-5c5e3f7f';
+import{afterwordKey,journeyComplete}from'./story-journey.mjs?v=1.13.75-5c5e3f7f';
+import{initAfterwords,addAfterword,afterwordScene,aftermathFor}from'./story-aftermath.mjs?v=1.13.75-5c5e3f7f';
+import {DUSTS} from './dust-data.mjs?v=1.13.75-5c5e3f7f';
 
 export const FAVORITES=[
  {id:'rug',name:'행성 고리',action:'러그 위에서 몸을 동그랗게 말아요.',words:'폭신한 곳에 있으면 마음도 느긋해져.',memory:'처음에는 가장자리만 밟았어요. 오래된 러그의 자수가 늘어날수록 조금씩 가운데로 들어왔고, 이제는 옆자리를 친구에게 내어줘요.'},

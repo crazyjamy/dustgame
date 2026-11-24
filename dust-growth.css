@@ -213,21 +213,6 @@ body.modal-open .app-shell > .navigation {
   overscroll-behavior: contain;
   box-shadow: 0 5px 22px #53604826;
 }
-#dustPopup .compact-top { padding-right: 52px; }
-#dustPopup .dust-popup-close {
-  position: absolute;
-  top: 3px;
-  right: 5px;
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  font-size: var(--text-title);
-  border: 0;
-  background: none;
-  color: var(--color-text-secondary);
-}
-#dustPopup .dust-popup-close:focus-visible { outline-offset: -3px; }
 #dustPopup .compact-name h2 { overflow-wrap: anywhere; }
 @media (min-width: 701px) {
   #dustPopup .care-dock { width: min(var(--dialog-desktop-width), calc(100% - 32px)); }
@@ -254,7 +239,7 @@ body.modal-open .app-shell > .navigation {
   .quest-guide > span { display: none; }
 }
 .brand-dust {
-  background: url('./favicon.svg?v=1.13.65-49db833c') center / contain no-repeat;
+  background: url('./favicon.svg?v=1.13.75-5c5e3f7f') center / contain no-repeat;
   font-size: 0 !important;
 }
 .room-open #main > .dust-room {

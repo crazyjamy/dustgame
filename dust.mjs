@@ -1,38 +1,38 @@
-import{journeyFor,hasJourney,journeyComplete,journeyHint}from'./story-journey.mjs?v=1.13.65-49db833c';
-import{AFTERWORD_KINDS,AFTERWORD_LABELS,STORY_ROUTES,aftermathFor,afterwordRecord,afterwordScene,readAfterword,roomStoryReaction}from'./story-aftermath.mjs?v=1.13.65-49db833c';
-import{storyParagraph}from'./story-text.mjs?v=1.13.65-49db833c';
-import{connectStoryEffects}from'./story-effects.mjs?v=1.13.65-49db833c';
-import{sharedRecords,readableRecords,nextStoryClue}from'./star-records.mjs?v=1.13.65-49db833c';
-import{questPage,roomPage,memoryPage}from'./field-book.mjs?v=1.13.65-49db833c';
-import { starLight, starFace, starAppearance } from './star-art.mjs?v=1.13.65-49db833c';
-import{dropDailySparkles,collectDailySparkle,autoCollectDailySparkles}from'./daily-sparkles.mjs?v=1.13.65-49db833c';
-import{pickMergeDropTarget}from'./merge-drop.mjs?v=1.13.65-49db833c';
-import{startDesk,finishDesk,DESK_ITEMS,deskProgress}from'./desk-exploration.mjs?v=1.13.65-49db833c';
-import{mountDeskScene}from'./desk-scene.mjs?v=1.13.65-49db833c';
-import{APP_VERSION,PREFS_KEY,BACKUP_KEY,loadPreferences}from'./player-settings.mjs?v=1.13.65-49db833c';
-import{encodeSave,decodeSave,saveSummary,commitImport,MAX_SAVE_BYTES}from'./save-files.mjs?v=1.13.65-49db833c';
-import{createSound}from'./sound.mjs?v=1.13.65-49db833c';
-import{THEMES,knownDust,syncCollection,themeProgress,setCollectionTarget,targetDust,materialNeeds,essenceRoute,claimTheme,toggleThemeDecor,routeCollection}from'./collection-book.mjs?v=1.13.65-49db833c';
-import{CHARACTERS,characterProfile,dustName,firstGreeting,renameDust,petReaction,rememberPetReaction}from'./dust-character.mjs?v=1.13.65-49db833c';
-import{ROOM_MEMORY,syncRoomMemory,memoryProgress,readRoomMemory,toggleMemoryDecor}from'./room-memory.mjs?v=1.13.65-49db833c';
-import{firstSteps,nextGoal,goldOverview}from'./progression.mjs?v=1.13.65-49db833c';
-import{furnitureQuest,claimFurnitureQuest}from'./furniture-quests.mjs?v=1.13.65-49db833c';
-import{HOLD_MS,beginGesture,advanceGesture,armGesture,shouldPlace,insideAdventureGate}from'./room-gestures.mjs?v=1.13.65-49db833c';
-import{personality,roomSpot,nearFavorite,companionship,storyCompanion,recipeHint,observeLife,smallWish,claimWish,resumeLife,readLife}from'./dust-life.mjs?v=1.13.65-49db833c';
-import{roomCapacity,storageCapacity,homeCount,hasHomeSpace,hasStorageSpace,storedCount,currentRoom,ROOM_CHAPTERS,readRoomChapter,claimRoomChapter,equipRoomDecor,roomGuest,claimRoomGuest,routeUnlocked,routeUnlockLevel}from'./rooms.mjs?v=1.13.65-49db833c';
-import{FURNITURE_STORIES,MAX_FURNITURE_LEVEL,furnitureCategory,activeLevel,furnitureLevel,furnitureEffect,upgradeCost}from'./furniture.mjs?v=1.13.65-49db833c';
-import{DEFAULT_DECOR,moveRoomItem,insideKeeper,toPlanetScreen,fromPlanetScreen}from'./room-layout.mjs?v=1.13.65-49db833c';
-import{QUESTS,MAX_ADVENTURERS,isAway,startAdventureParty,adventureRewards,chooseKeeperRoute,claimAdventure,selectDust,roomResidents}from'./adventures.mjs?v=1.13.65-49db833c';
-import{icon,furnitureArt}from'./icons.mjs?v=1.13.65-49db833c';
-import{uiIcon}from'./ui-icons.mjs?v=1.13.65-49db833c';
+import{journeyFor,hasJourney,journeyComplete,journeyHint}from'./story-journey.mjs?v=1.13.75-5c5e3f7f';
+import{AFTERWORD_KINDS,AFTERWORD_LABELS,STORY_ROUTES,aftermathFor,afterwordRecord,afterwordScene,readAfterword,roomStoryReaction}from'./story-aftermath.mjs?v=1.13.75-5c5e3f7f';
+import{storyParagraph}from'./story-text.mjs?v=1.13.75-5c5e3f7f';
+import{connectStoryEffects}from'./story-effects.mjs?v=1.13.75-5c5e3f7f';
+import{sharedRecords,readableRecords,nextStoryClue}from'./star-records.mjs?v=1.13.75-5c5e3f7f';
+import{questPage,roomPage,memoryPage}from'./field-book.mjs?v=1.13.75-5c5e3f7f';
+import { starLight, starFace, starAppearance } from './star-art.mjs?v=1.13.75-5c5e3f7f';
+import{dropDailySparkles,collectDailySparkle,autoCollectDailySparkles}from'./daily-sparkles.mjs?v=1.13.75-5c5e3f7f';
+import{pickMergeDropTarget}from'./merge-drop.mjs?v=1.13.75-5c5e3f7f';
+import{startDesk,finishDesk,DESK_ITEMS,deskProgress}from'./desk-exploration.mjs?v=1.13.75-5c5e3f7f';
+import{mountDeskScene}from'./desk-scene.mjs?v=1.13.75-5c5e3f7f';
+import{APP_VERSION,PREFS_KEY,BACKUP_KEY,loadPreferences}from'./player-settings.mjs?v=1.13.75-5c5e3f7f';
+import{encodeSave,decodeSave,saveSummary,commitImport,MAX_SAVE_BYTES}from'./save-files.mjs?v=1.13.75-5c5e3f7f';
+import{createSound}from'./sound.mjs?v=1.13.75-5c5e3f7f';
+import{THEMES,knownDust,syncCollection,themeProgress,setCollectionTarget,targetDust,materialNeeds,essenceRoute,claimTheme,toggleThemeDecor,routeCollection}from'./collection-book.mjs?v=1.13.75-5c5e3f7f';
+import{CHARACTERS,characterProfile,dustName,firstGreeting,renameDust,petReaction,rememberPetReaction}from'./dust-character.mjs?v=1.13.75-5c5e3f7f';
+import{ROOM_MEMORY,syncRoomMemory,memoryProgress,readRoomMemory,toggleMemoryDecor}from'./room-memory.mjs?v=1.13.75-5c5e3f7f';
+import{firstSteps,nextGoal,goldOverview}from'./progression.mjs?v=1.13.75-5c5e3f7f';
+import{furnitureQuest,claimFurnitureQuest}from'./furniture-quests.mjs?v=1.13.75-5c5e3f7f';
+import{HOLD_MS,beginGesture,advanceGesture,armGesture,shouldPlace,insideAdventureGate}from'./room-gestures.mjs?v=1.13.75-5c5e3f7f';
+import{personality,roomSpot,nearFavorite,companionship,storyCompanion,recipeHint,observeLife,smallWish,claimWish,resumeLife,readLife}from'./dust-life.mjs?v=1.13.75-5c5e3f7f';
+import{roomCapacity,storageCapacity,homeCount,hasHomeSpace,hasStorageSpace,storedCount,currentRoom,ROOM_CHAPTERS,readRoomChapter,claimRoomChapter,equipRoomDecor,roomGuest,claimRoomGuest,routeUnlocked,routeUnlockLevel}from'./rooms.mjs?v=1.13.75-5c5e3f7f';
+import{FURNITURE_STORIES,MAX_FURNITURE_LEVEL,furnitureCategory,activeLevel,furnitureLevel,furnitureEffect,upgradeCost}from'./furniture.mjs?v=1.13.75-5c5e3f7f';
+import{DEFAULT_DECOR,moveRoomItem,insideKeeper,toPlanetScreen,fromPlanetScreen}from'./room-layout.mjs?v=1.13.75-5c5e3f7f';
+import{QUESTS,MAX_ADVENTURERS,isAway,startAdventureParty,adventureRewards,chooseKeeperRoute,claimAdventure,selectDust,roomResidents}from'./adventures.mjs?v=1.13.75-5c5e3f7f';
+import{icon,furnitureArt}from'./icons.mjs?v=1.13.75-5c5e3f7f';
+import{uiIcon}from'./ui-icons.mjs?v=1.13.75-5c5e3f7f';
 
 for (const placeholder of document.querySelectorAll('[data-ui-icon]')) {
  placeholder.outerHTML = uiIcon(placeholder.dataset.uiIcon, placeholder.className);
 }
-import{ROOMS,FURNITURE,FAIRY_PRICE,GOLD_PRODUCTION_DIVISOR,buyFairy,materialPrice,installed,GOLD_CAP_MS,baseGoldInterval,goldInterval,goldAmount,goldProduction,goldReady,collectGold,collectAllGold,buyMaterial,upgradeRoom,toggleFurniture,upgradeFurniture}from'./economy.mjs?v=1.13.65-49db833c';
-import{trackRub,withinPetArea}from'./petting.mjs?v=1.13.65-49db833c';
-import{DUSTS,GROUPS,RARITIES,ESSENCES,STAGES,STORIES}from'./dust-data.mjs?v=1.13.65-49db833c';
-import{createState,restore,migrateCats,getDust,stage,recipe,checkMix,mix,finishMix,mergeDust,mergeCandidates,mergeResultLevel,pet,level,unlockedStories,inRoom,storeDust,takeOutDust,swapStoredDust,readStory}from'./dust-engine.mjs?v=1.13.65-49db833c';
+import{ROOMS,FURNITURE,FAIRY_PRICE,GOLD_PRODUCTION_DIVISOR,buyFairy,materialPrice,installed,GOLD_CAP_MS,baseGoldInterval,goldInterval,goldAmount,goldProduction,collectGold,collectAllGold,buyMaterial,upgradeRoom,toggleFurniture,upgradeFurniture}from'./economy.mjs?v=1.13.75-5c5e3f7f';
+import{trackRub,withinPetArea}from'./petting.mjs?v=1.13.75-5c5e3f7f';
+import{DUSTS,GROUPS,RARITIES,ESSENCES,STAGES,STORIES}from'./dust-data.mjs?v=1.13.75-5c5e3f7f';
+import{createState,restore,migrateCats,getDust,stage,recipe,checkMix,mix,finishMix,mergeDust,mergeCandidates,mergeResultLevel,pet,level,unlockedStories,inRoom,storeDust,takeOutDust,swapStoredDust,readStory}from'./dust-engine.mjs?v=1.13.75-5c5e3f7f';
 const KEY='tiny-dust-club-v1',$=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));let state,saveBlocked=false,damagedRaw=null;try{const raw=localStorage.getItem(KEY);if(raw){try{state=restore(raw)}catch{saveBlocked=true;damagedRaw=raw;state=createState()}}else{try{state=migrateCats(localStorage.getItem('meow-mix-v2'))}catch{state=createState()}}}catch{state=createState()}
 let userPrefs=loadPreferences(readLocal(PREFS_KEY),!!readLocal(KEY)),introOpen=false;
 const sounds=createSound(()=>userPrefs,window.AudioContext||window.webkitAudioContext);
@@ -99,7 +99,7 @@ function resumeToast(){
   toastTimer=setTimeout(dismissToast,2500);
  }
 }
-function toast(message,kind='help'){
+function toast(message,kind='notice'){
  toastCard.dataset.kind=kind;
  toastCard.querySelector('.toast-mark').innerHTML=uiIcon(kind);
  if(!toastCard.contains(document.activeElement))toastReturnFocus=document.activeElement;
@@ -179,10 +179,10 @@ document.addEventListener('keydown',event=>{
 function counts(){return{types:state.collectionBook.discovered.length,total:state.dusts.length,grown:state.dusts.filter(d=>stage(d.xp)===2).length,active:inRoom(state).length,stored:state.dusts.filter(d=>d.stored).length,away:state.adventures.length+(state.deskRun?1:0)}}
 function heading(tag,title,sub){return `<section class="heading"><div><span class="kicker">${tag}</span><h1>${title}</h1><p>${sub}</p></div></section>`}
 let dustPopupUid=null;
-function renderRoom(){if(!selected())return renderEmptyRoom();const active=selected(),visible=roomResidents(state);return `<section class="dust-room ${placementMode?'placement-mode':'care-mode'} room-level-${state.roomLevel} room-theme-${currentRoom(state).theme}" style="--room-color:${currentRoom(state).color};--tier-accent:${currentRoom(state).accent};--room-growth:${currentRoom(state).detail};--room-floor:${2+currentRoom(state).detail}px" aria-label="별이 머무는 곳 · 나의 은하계"><div class="planet-landscape" aria-hidden="true"></div><div class="room-playfield">${roomDecor()}${roomOrnament()}${guestButton()}${memoryDecor()}${themeDecorations()}${questGuide()}${roomGestureTools()}${adventureDoor()}${surveyEntrance()}${roomFairy()}${windowSpot()}${glowButton()}<div id="dailySparkleDrops" class="daily-sparkle-drops" aria-label="별들이 흘린 반짝이">${dailySparkleButtons()}</div><div class="merge-drop-status" id="mergeDropStatus" role="status" aria-live="polite"></div><span class="room-speck s1">✦</span><span class="room-speck s2">·</span><span class="room-speck s3">✧</span><span class="room-speck s4">·</span>${visible.map((v,i)=>{const saved=state.roomPositions.dust[v.uid],spot=toPlanetScreen(roomSpot(state,v,i)),p=[spot.x,spot.y],growth=[.68,.84,1][stage(v.xp)];return `<button class="room-dust ${lifeClass(v)} ${saved?'positioned':''} ${v.uid===active.uid?'selected':''} ${expeditionParty.has(v.uid)?'expedition-selected':''} ${v.uid===happyUid?'happy':''}" data-dust="${v.uid}" data-room-item="dust" data-room-id="${v.uid}" aria-pressed="${v.uid===active.uid}" aria-expanded="${v.uid===dustPopupUid&&!placementMode}" aria-controls="dustPopup" aria-label="${esc(dustName(v))} ${STAGES[stage(v.xp)]} 선택" style="left:${p[0]}%;top:${p[1]}%;--growth:${growth};--delay:${-i*1.7}s;--duration:${10+i*1.3}s;--drift:${i%2?-22:22}px;--color:${getDust(v.id).color}"><span class="dust-hit-area" aria-hidden="true"></span><span class="selection-aura" aria-hidden="true"></span><span class="dust-lift">${characterArt(v.id,stage(v.xp),journeyComplete(v))}</span>${rubBubble(v.uid)}${storyKeepsake(v)}${lifeBubble(v)}<span class="dust-shadow"></span><span class="dust-name">${esc(dustName(v))}</span><span class="hearts" aria-hidden="true">♡</span></button><span class="gold-slot ${saved?'positioned':''}" data-gold-slot="${v.uid}" style="left:${p[0]}%;top:${p[1]}%;--delay:${-i*1.7}s;--duration:${10+i*1.3}s;--drift:${i%2?-22:22}px">${goldBubble(v)}</span>`}).join('')}<div id="dustPopup">${!placementMode&&dustPopupUid===active.uid?careDock(active):''}</div></div></section>`}
+function renderRoom(){if(!selected())return renderEmptyRoom();const active=selected(),visible=roomResidents(state);return `<section class="dust-room ${placementMode?'placement-mode':'care-mode'} room-level-${state.roomLevel} room-theme-${currentRoom(state).theme}" style="--room-color:${currentRoom(state).color};--tier-accent:${currentRoom(state).accent};--room-growth:${currentRoom(state).detail};--room-floor:${2+currentRoom(state).detail}px" aria-label="별이 머무는 곳 · 나의 은하계"><div class="planet-landscape" aria-hidden="true"></div><div class="room-playfield">${roomDecor()}${roomOrnament()}${guestButton()}${memoryDecor()}${themeDecorations()}${questGuide()}${roomGestureTools()}${adventureDoor()}${surveyEntrance()}${roomFairy()}${windowSpot()}${glowButton()}<div id="dailySparkleDrops" class="daily-sparkle-drops" aria-label="별들이 흘린 반짝이">${dailySparkleButtons()}</div><div class="merge-drop-status" id="mergeDropStatus" role="status" aria-live="polite"></div><span class="room-speck s1">✦</span><span class="room-speck s2">·</span><span class="room-speck s3">✧</span><span class="room-speck s4">·</span>${visible.map((v,i)=>{const saved=state.roomPositions.dust[v.uid],spot=toPlanetScreen(roomSpot(state,v,i)),p=[spot.x,spot.y],growth=[.68,.84,1][stage(v.xp)];return `<button class="room-dust ${lifeClass(v)} ${saved?'positioned':''} ${v.uid===active.uid?'selected':''} ${expeditionParty.has(v.uid)?'expedition-selected':''} ${v.uid===happyUid?'happy':''}" data-dust="${v.uid}" data-room-item="dust" data-room-id="${v.uid}" aria-pressed="${v.uid===active.uid}" aria-expanded="${v.uid===dustPopupUid&&!placementMode}" aria-controls="dustPopup" aria-label="${esc(dustName(v))} ${STAGES[stage(v.xp)]} 선택" style="left:${p[0]}%;top:${p[1]}%;--growth:${growth};--delay:${-i*1.7}s;--duration:${10+i*1.3}s;--drift:${i%2?-22:22}px;--color:${getDust(v.id).color}"><span class="dust-hit-area" aria-hidden="true"></span><span class="selection-aura" aria-hidden="true"></span><span class="dust-lift">${characterArt(v.id,stage(v.xp),journeyComplete(v))}</span>${rubBubble(v.uid)}${storyKeepsake(v)}${lifeBubble(v)}<span class="dust-shadow"></span><span class="dust-name">${esc(dustName(v))}</span><span class="hearts" aria-hidden="true">♡</span></button><span class="gold-slot ${saved?'positioned':''}" data-gold-slot="${v.uid}" style="left:${p[0]}%;top:${p[1]}%;--delay:${-i*1.7}s;--duration:${10+i*1.3}s;--drift:${i%2?-22:22}px"></span>`}).join('')}<div id="dustPopup">${!placementMode&&dustPopupUid===active.uid?careDock(active):''}</div></div></section>`}
 function glowButton(){
  const hasSpace=hasHomeSpace(state);
- const needsStar=hasSpace && homeCount(state)===0 && !state.pending;
+ const needsStar=hasSpace && !state.pending;
  const label=state.pending ? '몽글몽글 모이는 중' : '새 별 만나기';
  const hint=hasSpace ? label : label+' · 은하계 자리가 가득 찼어요. 모험 중인 별의 귀환 자리도 포함돼요.';
  return `<button class="birth-glow${needsStar?' needs-star':''}${hasSpace?'':' room-full'}${state.pending?' busy':''}" id="glowTrigger" aria-label="${hint}" title="${hint}"><span class="glow-aura"></span><span class="glow-orbit"></span><span class="glow-glyph">${uiIcon('sparkle')}</span><small>${label}</small></button>`;
@@ -202,10 +202,10 @@ function renderCollection(){
 function renderDustCollection(){
  const c=counts(), grownTypes=new Set(state.dusts.filter(d=>stage(d.xp)===2).map(d=>d.id));
  const filters=[
-  ['all','도감 전체',DUSTS.length+'종'],
-  ['found','발견',c.types+'/'+DUSTS.length+'종'],
-  ['missing','미발견',(DUSTS.length-c.types)+'종'],
-  ['grown','포근',grownTypes.size+'종'],
+  ['all','전체',DUSTS.length],
+  ['found','발견',c.types+'/'+DUSTS.length],
+  ['missing','미발견',DUSTS.length-c.types],
+  ['grown','포근',grownTypes.size],
  ];
  return `<div class="collection-filters dust-filters selection-filters" role="group" aria-label="별 도감 필터">${filters.map(([id,name,count])=>`<button type="button" class="filter-choice" aria-controls="dustFilterResults" data-dust-filter="${id}" aria-pressed="${dustFilter===id}"><span>${name}</span><small>${count}</small></button>`).join('')}</div><p class="dust-owned-summary">보유 <b>${c.total}마리</b> · 포근한 별 <b>${c.grown}마리</b></p><div id="dustFilterResults">${renderDustFilterResults(grownTypes)}</div>`;
 }
@@ -232,7 +232,14 @@ function bringBack(uid){const r=takeOutDust(state,uid);if(!r.ok)return toast(r.m
 function openStorage(){go('storage');}
 function storyList(uid){const d=state.dusts.find(x=>x.uid===uid);if(!d)return;const info=getDust(d.id),count=unlockedStories(d);modal(info.name+'의 우주 이야기',`${dustArt(d.id,stage(d.xp),journeyComplete(d)?'story-finished':'')}${hasJourney(d)?`<p class="journey-question">${esc(journeyFor(d).question)}</p>`:''}<p>Lv.${level(d.xp)} · 열린 이야기 ${count} / 5<br>관측 주제 · ${esc(STORIES[d.id][0].topic)}</p><div class="story-chapters">${STORIES[d.id].map((story,i)=>{const open=i<count,read=d.readStories.includes(i);return `<button data-chapter="${uid}:${i}" ${open?'':'disabled'} class="${read?'read':''}"><span class="chapter-number">${String(i+1).padStart(2,'0')}</span><span><b>${open?story.title:'아직 잠든 이야기'}</b><small>${open?read?'읽은 이야기':'새로운 이야기':'Lv.'+(i+2)+'에 열려요'}</small></span><i>${uiIcon(open?'arrow':'lock')}</i></button>`}).join('')}</div>${journeyExtra(d)}`);}
 function unreadAfterwords(d){return (state.life.afterwords||[]).filter(e=>e.uid===d.uid&&!e.read).length;}
-function journeyCue(d){const clue=nextStoryClue(state,d);return `<span class="journey-cue-heading">${uiIcon('story')}함께 쓴 이야기</span><b>${esc(clue.line)}</b><small><span>다음 단서</span>${esc(clue.action==='book'?'기록 펼쳐보기':clue.label)}</small>`;}
+function journeyCue(d){
+ const clue=nextStoryClue(state,d);
+ const text=clue.action==='book'
+  ? unlockedStories(d)?'책 버튼에서 열린 이야기를 읽어보세요.':'같은 종류의 별을 합쳐 첫 이야기를 열어보세요.'
+  : clue.label;
+ const label=esc(text);
+ return `<p class="journey-cue"><span>다음 단서</span><strong class="journey-cue-text">${label}<span class="journey-cue-shimmer" aria-hidden="true">${label}</span></strong></p>`;
+}
 function sharedRecordSummary(d){const sections=sharedRecords(state,d);return `성장 ${d.readStories.length}/5 · 엽서 ${sections[1].entries.filter(e=>e.kind==='postcard').length} · 자리 ${sections[2].entries.length} · 친구 ${sections[3].entries.length}`;}
 function sharedStoryEntrance(d,all){
  return `<section class="shared-story-entrance" aria-label="선택한 별의 기록"><header><h3>함께 쓴 이야기</h3>${all.length>1?`<label class="record-copy-label">기록을 볼 별<select id="recordCopy" data-record-copy="${d.id}" aria-label="기록을 볼 별">${all.map((v,i)=>`<option value="${v.uid}" ${v.uid===d.uid?'selected':''}>${esc(dustName(v))} #${i+1} · Lv.${level(v.xp)}</option>`).join('')}</select></label>`:`<small>${esc(dustName(d))}의 기록</small>`}</header><p>${esc(nextStoryClue(state,d).line)}</p><button class="button secondary full" data-shared-story="${d.uid}">함께 쓴 이야기 읽기</button><small>${sharedRecordSummary(d)}</small></section>`;
@@ -313,8 +320,7 @@ function playPetReaction(button,dust){
    sleep:'<path class="pet-drowsy" d="M37 48q4-3 8 0m10 0q4-3 8 0"/><path class="pet-sleepy" d="M37 47q4 4 8 0m10 0q4 4 8 0"/><path d="M48 56q2 2 4 0"/>',
    smile:'<path d="M37 48q4-5 8 0m10 0q4-5 8 0m-18 6h10q-5 10-10 0Z"/>',
   }[reaction.face];
-  const hands=reaction.motion==='peek'?'<g class="pet-hands"><ellipse cx="41" cy="48" rx="8" ry="7"/><ellipse cx="59" cy="48" rx="8" ry="7"/></g>':'';
-  art.insertAdjacentHTML('beforeend',`<svg class="pet-expression" viewBox="0 0 100 100" aria-hidden="true" style="color:${getDust(dust.id).face};--pet-hand-color:${getDust(dust.id).color}"><g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${face}${hands}</g></svg>`);
+  art.insertAdjacentHTML('beforeend',`<svg class="pet-expression" viewBox="0 0 100 100" aria-hidden="true" style="color:${getDust(dust.id).face}"><g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${face}</g></svg>`);
   art.dataset.petMotion=reaction.motion;
   setTimeout(()=>{
    art.querySelector('.pet-expression')?.remove();
@@ -447,8 +453,39 @@ function close(){storyEffects.reset();const wasOpen=!$('#modal').classList.conta
  }}
 function makeHappy(uid){happyUid=uid;clearTimeout(happyTimer);render();happyTimer=setTimeout(()=>{happyUid=null;$('.room-dust.happy')?.classList.remove('happy')},1800)}
 function openMerge(uid){const d=state.dusts.find(d=>d.uid===uid);if(!d||d.stored||isAway(state,uid))return toast('은하계에 있는 별을 골라주세요.');const matches=mergeCandidates(state,uid),info=getDust(d.id);modal('온기를 모아, 한 뼘 더.',`<div class="merge-intro">${dustArt(d.id,stage(d.xp),journeyComplete(d)?'story-finished':'')}<h3>${esc(dustName(d))} · Lv.${level(d.xp)}</h3><p>같은 종류 두 마리를 합치면 더 높은 쪽보다 한 레벨 올라요.<br>지금 고른 친구의 별명과 자리는 그대로 남아요.</p></div>${matches.length?`<h3 class="merge-list-title">함께 합칠 친구를 골라주세요</h3><div class="merge-options">${matches.map(x=>`<button class="merge-option" data-merge-preview="${uid}:${x.uid}">${dustArt(x.id,stage(x.xp))}<span><b>${esc(dustName(x))} · Lv.${level(x.xp)}</b><small>별 #${x.uid} · 이야기 ${x.readStories.length}편 읽음</small></span><i>선택 →</i></button>`).join('')}</div>`:`<p class="merge-empty">은하계에 같은 종류의 ${info.name} 친구가 한 마리 더 필요해요.<br>보관함에서 꺼내거나, 작은 빛에서 같은 친구를 만나보세요.<br>모험 중인 친구는 돌아온 뒤 합칠 수 있어요.</p><button class="button primary full" data-recipe="${d.id}">이 친구의 탄생 재료 고르기 →</button><button class="text-button" data-page="storage">보관함 살펴보기 →</button>`}<p class="merge-footnote">합치면 두 마리가 한 마리가 돼요. 골드·반짝이 비용은 없어요.</p>`);}
-function previewMerge(uid,otherUid){const d=state.dusts.find(d=>d.uid===uid),other=mergeCandidates(state,uid).find(x=>x.uid===otherUid);if(!other)return openMerge(uid);modal('이 두 친구를 합칠까요?',`<div class="merge-preview"><div>${dustArt(d.id,stage(d.xp),journeyComplete(d)?'story-finished':'')}<b>${esc(dustName(d))}</b><small>#${uid} · Lv.${level(d.xp)} · 남을 친구</small></div><span>+</span><div>${dustArt(other.id,stage(other.xp))}<b>${esc(dustName(other))}</b><small>#${otherUid} · Lv.${level(other.xp)} · 합쳐질 친구</small></div></div><div class="merge-result-preview"><b>→ ${esc(dustName(d))} Lv.${mergeResultLevel(d,other)} 한 마리</b><p>#${otherUid} 별은 사라지고 #${uid}가 자라요.<br>읽은 이야기는 합쳐서 보존하고, 쌓인 골드는 먼저 받아요.<br>별명과 위치는 남을 친구의 기록을 유지해요.</p></div><button class="button primary full" data-confirm-merge="${uid}:${otherUid}">두 마리를 한 마리로 합치기</button><button class="button secondary full" data-open-merge="${uid}">다시 고르기</button>`);}
-function confirmMerge(uid,otherUid){const r=mergeDust(state,uid,otherUid);if(!r.ok){toast(r.message);return openMerge(uid);}sounds.play('birth');save();render();makeHappy(uid);const chapter=STORIES[r.dust.id][r.chapter];modal('Lv.'+level(r.dust.xp)+' · 새 이야기가 열렸어요.',`<div class="merge-success">${dustArt(r.dust.id,stage(r.dust.xp),journeyComplete(r.dust)?'story-finished':'')}<span class="merge-spark">✦</span></div><span class="new-badge">합치기 완료 · 두 마리 → 한 마리</span><h3>${chapter.title}</h3><p>${esc(dustName(r.dust))} · 레벨이 올랐어요.<br>새 이야기 한 편이 열렸어요.${r.gold?'<br>쌓여 있던 '+r.gold+' 골드를 받았어요.':''}${r.bonus?'<br>러그의 선물 · 반짝이 +'+r.bonus:''}</p><button class="button primary full" data-chapter="${uid}:${r.chapter}">새 이야기 읽기 →</button><button class="text-button" id="readLater">나중에 읽을게요</button>`,()=>$('#readLater').onclick=close);}
+function previewMerge(uid,otherUid){
+ const d=state.dusts.find(d=>d.uid===uid),other=mergeCandidates(state,uid).find(x=>x.uid===otherUid);
+ if(!other)return openMerge(uid);
+ modal('이 두 친구를 합칠까요?',`<div class="merge-confirm">
+  <div class="merge-preview">
+   <div>${dustArt(d.id,stage(d.xp),journeyComplete(d)?'story-finished':'')}<b>${esc(dustName(d))}</b><small>#${uid} · Lv.${level(d.xp)}</small><small>남을 친구</small></div>
+   <span aria-hidden="true">+</span>
+   <div>${dustArt(other.id,stage(other.xp))}<b>${esc(dustName(other))}</b><small>#${otherUid} · Lv.${level(other.xp)}</small><small>합쳐질 친구</small></div>
+  </div>
+  <div class="merge-result-preview"><b>${esc(dustName(d))} Lv.${mergeResultLevel(d,other)} 한 마리</b>
+   <p>#${uid}가 자라고 #${otherUid}는 합쳐져요.<br>읽은 이야기는 모두 남고, 쌓인 골드는 받아요.<br>별명과 위치는 #${uid}의 기록을 사용해요.</p>
+  </div>
+  <div class="merge-actions">
+   <button class="button primary full" data-confirm-merge="${uid}:${otherUid}">합치기</button>
+   <button class="button secondary full" data-open-merge="${uid}">다시 고르기</button>
+  </div>
+ </div>`);
+}
+function confirmMerge(uid,otherUid){
+ const r=mergeDust(state,uid,otherUid);
+ if(!r.ok){toast(r.message);return openMerge(uid);}
+ sounds.play('birth');save();render();makeHappy(uid);
+ const chapter=STORIES[r.dust.id][r.chapter];
+ modal('Lv.'+level(r.dust.xp)+' · 새 이야기가 열렸어요.',`<div class="merge-complete">
+  <div class="merge-success">${dustArt(r.dust.id,stage(r.dust.xp),journeyComplete(r.dust)?'story-finished':'')}<span class="merge-spark" aria-hidden="true">✦</span></div>
+  <h3>${esc(chapter.title)}</h3>
+  ${r.gold||r.bonus?`<p>${r.gold?'쌓여 있던 '+r.gold+' 골드를 받았어요.':''}${r.gold&&r.bonus?'<br>':''}${r.bonus?'러그의 선물 · 반짝이 +'+r.bonus:''}</p>`:''}
+  <div class="merge-actions">
+   <button class="button primary full" data-chapter="${uid}:${r.chapter}">새 이야기 읽기 →</button>
+   <button class="text-button" id="readLater">나중에 읽을게요</button>
+  </div>
+ </div>`,()=>$('#readLater').onclick=close);
+}
 
 
 function showMaterials(){modal('작은 재료 가방',`<p>조합할 때 그룹 1개 + 희귀도 1개 + 정수를 써요.<br>별을 모험에 보내면 재료를 모아 돌아와요.</p>${[['group',GROUPS,'그룹'],['rarity',RARITIES,'희귀도'],['essence',ESSENCES,'정수']].map(([key,items,label])=>`<div class="material-set"><h3>${label}</h3><div>${items.map(x=>`<span>${icon(x.id)}${x.name}<b>${state.materials[key][x.id]}</b></span>`).join('')}</div></div>`).join('')}<button class="button secondary full" data-shop-materials>골드로 재료 사기 ↗</button><button class="button primary full" data-open-adventure>작은 모험으로 재료 모으기 ↗</button><button class="text-button return-mix" id="returnMix">조합 팝업으로 돌아가기 ↗</button>`,()=>{$('#returnMix').onclick=()=>openMix(selection)})}
@@ -481,7 +518,10 @@ function guide(){modal('별은 이렇게 자라요.',`<div class="guide-list"><p
 function settingsSwitch(id,label,description,checked){
  return `<label class="setting-switch"><span><span id="${id}Label">${label}</span><small id="${id}Description">${description}</small></span><span class="switch-control"><input id="${id}" type="checkbox" role="switch" aria-labelledby="${id}Label" aria-describedby="${id}Description" ${checked?'checked':''}><span class="switch-track" aria-hidden="true"></span></span></label>`;
 }
-function settings(){modal('작은 기록과 설정',`<p class="settings-note">${counts().types}종 · ${state.dusts.length}마리와 함께하고 있어요.<br>기록은 이 브라우저에 자동 저장돼요. 다른 기기·주소로 옮기기 전에는 내보내주세요.</p>${saveBlocked?'<p class="save-error">기존 기록을 읽지 못해 덮어쓰기를 멈췄어요. 원본을 먼저 내보내주세요.</p>':''}<button class="record-help" data-refresh-game><span>${uiIcon('reload')}</span><b>게임 새로고침</b></button><button class="record-help" data-quick-start><span>${uiIcon('heart')}</span><b>처음 안내 다시 보기</b><i>${uiIcon('arrow')}</i></button><details class="player-options"><summary>소리와 화면 효과</summary>${settingsSwitch('soundEnabled','효과음 켜기','음악 없이 작은 반응 소리만 나요.',userPrefs.sound)}<label for="soundVolume">효과음 음량 <b id="volumeValue">${userPrefs.volume}%</b></label><input id="soundVolume" type="range" min="0" max="100" step="1" value="${userPrefs.volume}"><button class="button secondary" id="testSound">소리 들어보기</button>${settingsSwitch('reduceMotion','움직임 줄이기','기기에서 줄이도록 설정한 경우에도 적용돼요.',userPrefs.motionReduced)}${settingsSwitch('visualEffects','반짝이 장식 효과','꺼도 획득량과 선택 표시는 유지돼요.',userPrefs.visualEffects)}<p id="optionsStatus" role="status">설정은 이 브라우저에 저장돼요.</p></details><button class="record-help" data-life-book><span>${uiIcon('journal')}</span><b>생활 수첩</b><i>${uiIcon('arrow')}</i></button><button class="record-help" data-economy><span>${uiIcon('gold')}</span><b>성장과 골드 안내</b><i>${uiIcon('arrow')}</i></button><button class="record-help" id="guide"><span>${uiIcon('help')}</span><b>자세한 게임 설명</b><i>${uiIcon('arrow')}</i></button><section class="save-transfer"><h3>나의 별 기록</h3><p>내보내기에는 성장·수집·설치물·엽서·별명과 설정이 포함돼요.<br>불러오기·초기화 전 기록은 최근 한 개만 복구용으로 보관해요.</p><div class="save-buttons"><button class="button secondary" id="export">기록 내보내기</button><label class="button secondary" tabindex="0" role="button" id="importLabel">기록 불러오기<input id="import" type="file" accept=".json,application/json"></label></div><button class="text-button" id="restoreBackup" ${readLocal(BACKUP_KEY)?'':'disabled'}>불러오기·초기화 전 기록 복구</button>${damagedRaw?'<button class="text-button" id="exportOriginal">읽지 못한 원본 내보내기</button>':''}</section><button class="text-button reset" id="reset">새로운 은하계에서 시작</button><small class="release-version">게임 버전 ${APP_VERSION}</small>`,()=>{
+function furnitureEffectsGuide(){
+ return `<details class="player-options furniture-effects-guide"><summary>설치물 효과와 중첩 규칙 보기</summary><p>같은 설치물은 한 개씩, 다른 설치물 효과는 함께 적용돼요. 골드는 설치물에만 사용해요. 하루 반짝이 수량은 생성할 때 정해져요. 유리병은 은하계를 보는 동안만 자동으로 주워요. 새 엽서와 오늘 첫 수확 보상은 한 번만 받아요.</p>${economyTable(['설치물','Lv.1','Lv.10'],FURNITURE.map(f=>[f.name,furnitureEffect({...state,ownedFurniture:[f.id],furnitureLevels:{[f.id]:1}},f.id),furnitureEffect({...state,ownedFurniture:[f.id],furnitureLevels:{[f.id]:10}},f.id)]))}</details>`;
+}
+function settings(){modal('작은 기록과 설정',`<p class="settings-note">${counts().types}종 · ${state.dusts.length}마리와 함께하고 있어요.<br>기록은 이 브라우저에 자동 저장돼요. 다른 기기·주소로 옮기기 전에는 내보내주세요.</p>${saveBlocked?'<p class="save-error">기존 기록을 읽지 못해 덮어쓰기를 멈췄어요. 원본을 먼저 내보내주세요.</p>':''}<button class="record-help" data-refresh-game><span>${uiIcon('reload')}</span><b>게임 새로고침</b></button><button class="record-help" data-quick-start><span>${uiIcon('heart')}</span><b>처음 안내 다시 보기</b><i>${uiIcon('arrow')}</i></button><details class="player-options"><summary>소리와 화면 효과</summary>${settingsSwitch('soundEnabled','효과음 켜기','음악 없이 작은 반응 소리만 나요.',userPrefs.sound)}<label for="soundVolume">효과음 음량 <b id="volumeValue">${userPrefs.volume}%</b></label><input id="soundVolume" type="range" min="0" max="100" step="1" value="${userPrefs.volume}"><button class="button secondary" id="testSound">소리 들어보기</button>${settingsSwitch('reduceMotion','움직임 줄이기','기기에서 줄이도록 설정한 경우에도 적용돼요.',userPrefs.motionReduced)}${settingsSwitch('visualEffects','반짝이 장식 효과','꺼도 획득량과 선택 표시는 유지돼요.',userPrefs.visualEffects)}<p id="optionsStatus" role="status">설정은 이 브라우저에 저장돼요.</p></details>${furnitureEffectsGuide()}<button class="record-help" data-economy><span>${uiIcon('gold')}</span><b>성장과 골드 안내</b><i>${uiIcon('arrow')}</i></button><button class="record-help" id="guide"><span>${uiIcon('help')}</span><b>자세한 게임 설명</b><i>${uiIcon('arrow')}</i></button><section class="save-transfer"><h3>나의 별 기록</h3><p>내보내기에는 성장·수집·설치물·엽서·별명과 설정이 포함돼요.<br>불러오기·초기화 전 기록은 최근 한 개만 복구용으로 보관해요.</p><div class="save-buttons"><button class="button secondary" id="export">기록 내보내기</button><label class="button secondary" tabindex="0" role="button" id="importLabel">기록 불러오기<input id="import" type="file" accept=".json,application/json"></label></div><button class="text-button" id="restoreBackup" ${readLocal(BACKUP_KEY)?'':'disabled'}>불러오기·초기화 전 기록 복구</button>${damagedRaw?'<button class="text-button" id="exportOriginal">읽지 못한 원본 내보내기</button>':''}</section><button class="text-button reset" id="reset">새로운 은하계에서 시작</button><small class="release-version">게임 버전 ${APP_VERSION}</small>`,()=>{
  $('.modal-card').classList.add('settings-dialog');
  $('#export').onclick=()=>{downloadText(encodeSave(state,userPrefs),'my-little-dusts.json');toast('기록 파일을 내보냈어요.','journal');};
  $('#import').onchange=e=>previewImportFile(e.target.files[0]);
@@ -527,12 +567,38 @@ document.addEventListener('change',e=>{
 
 
 function roomDecor(){return `<div class="room-decor" aria-label="놓아둔 설치물">${state.decorations.map(id=>{const p=toPlanetScreen(state.roomPositions.furniture[id]||DEFAULT_DECOR[id]);return `<span class="decor decor-${id} ${selected()&&personality(selected().id).favorite.id===id?'favorite-decor':''}" data-room-item="furniture" data-room-id="${id}" role="button" tabindex="0" aria-label="${FURNITURE.find(f=>f.id===id).name} · 길게 눌러 이동" style="left:${p.x}%;top:${p.y}%;right:auto;bottom:auto;translate:-50% -50%">${furnitureArt(id,furnitureLevel(state,id))}</span>`;}).join('')}</div>`;}
-function goldBubble(d,now=Date.now()){return goldReady(state,d,now)?`<button type="button" class="gold-bubble" data-collect-gold="${d.uid}" aria-label="${esc(dustName(d))} 골드 ${goldProduction(state,d,now).amount} 받기">${icon('coin')}</button>`:'';}
+function goldBubble(d,amount){
+ return `<button type="button" class="gold-bubble" data-collect-gold="${d.uid}" aria-label="${esc(dustName(d))} 골드 ${amount} 받기">${icon('coin')}</button>`;
+}
 function selectedIncome(d){return `<button class="compact-income" data-economy aria-label="골드 생산량과 가격 안내" title="골드 생산량과 가격 안내">${uiIcon('gold')}<span><span>매 ${goldInterval(state,d)/1000}초 · ${goldAmount(state,d)} 골드 <small>최대 30분</small></span></span><strong id="selectedGoldTimer"><span id="goldTimerDesktop"></span><span class="mobile-glyph" aria-hidden="true">${uiIcon('gold')}${uiIcon('clock')}<span id="goldTimerMobile"></span></span></strong></button>`;}
 function updateGoldUI(){
- const now=Date.now(),ready=state.dusts.filter(d=>goldReady(state,d,now)),sum=ready.reduce((a,d)=>a+goldProduction(state,d,now).amount,0);
- document.querySelectorAll('[data-gold-slot]').forEach(el=>{const d=state.dusts.find(x=>x.uid===Number(el.dataset.goldSlot));if(!d)return;const reward=goldReady(state,d,now)?String(goldProduction(state,d,now).amount):'';if(el.dataset.reward!==reward){el.querySelector('.gold-bubble')?.remove();el.insertAdjacentHTML('afterbegin',goldBubble(d,now));el.dataset.reward=reward;}});
- const fairy=$('#fairyCollect');if(fairy){fairy.dataset.badge=ready.length?'◉':'';fairy.title=ready.length?sum+' 골드 모두 받기':'골드가 모이는 중';fairy.disabled=!ready.length;fairy.setAttribute('aria-label',ready.length?`요정 모아 · ${sum} 골드 모두 받기`:'요정 모아 · 골드가 모이는 중');$('#fairyStatus').textContent=ready.length?`${sum} 골드 모두 받기`:'골드가 모이는 중';}
+ const now=Date.now(), ready=new Map();
+ for(const d of state.dusts){
+  const production=goldProduction(state,d,now);
+  if(!production.paused&&production.cycles>0)ready.set(d.uid,production.amount);
+ }
+ document.querySelectorAll('[data-gold-slot]').forEach(el=>{
+  const uid=Number(el.dataset.goldSlot);
+  const amount=ready.get(uid), bubble=el.querySelector('.gold-bubble');
+  if(amount===undefined){bubble?.remove();return;}
+  const d=state.dusts.find(x=>x.uid===uid);
+  if(!bubble){
+   el.insertAdjacentHTML('afterbegin',goldBubble(d,amount));
+  }else{
+   const label=`${dustName(d)} 골드 ${amount} 받기`;
+   if(bubble.getAttribute('aria-label')!==label)bubble.setAttribute('aria-label',label);
+  }
+ });
+ const fairy=$('#fairyCollect');
+ if(fairy){
+  const sum=[...ready.values()].reduce((total,amount)=>total+amount,0);
+  const label=ready.size?`${sum} 골드 모두 받기`:'골드가 모이는 중';
+  fairy.dataset.badge=ready.size?'◉':'';
+  fairy.title=label;
+  fairy.disabled=!ready.size;
+  fairy.setAttribute('aria-label','요정 모아 · '+label);
+  $('#fairyStatus').textContent=label;
+ }
  const d=selected(),timer=$('#selectedGoldTimer');if(d&&timer){const p=goldProduction(state,d,now);const seconds=Math.ceil(p.remaining/1000);timer.classList.toggle('gold-ready',Boolean(p.cycles));$('#goldTimerMobile').textContent=p.cycles?p.amount:seconds+'초';$('#goldTimerDesktop').textContent=p.cycles?`${p.amount} 골드 받기 가능${p.capped?' · 30분 한도 도달':''}`:Math.ceil(p.remaining/1000)+'초 뒤 첫 골드';}
 }
 function showCurrencyGain(source,rewards,event){
@@ -607,12 +673,12 @@ function renderFurnitureFilterResults(){
  return FURNITURE.filter(item=>furnitureFilter==='all'||furnitureCategory(item.id)===furnitureFilter)
   .map(furnitureCard).join('');
 }
-function renderShop(){const room=currentRoom(state),next=ROOMS[state.roomLevel];return `<dl class="shop-balance" aria-label="보유 재화"><div class="shop-currency currency-gold"><dt>${icon('coin')}골드</dt><dd><b>${state.gold.toLocaleString('ko-KR')}</b><small>설치물 강화</small></dd></div><div class="shop-currency currency-sparkle"><dt><span aria-hidden="true">✧</span>반짝이</dt><dd><b>${state.sparkles.toLocaleString('ko-KR')}</b><small>재료·은하계·요정</small></dd></div></dl><section class="upgrade-card" style="--room-color:${room.color}"><div class="upgrade-house"><span>◎</span><b>Lv.${state.roomLevel}</b></div><div><span class="shop-eyebrow">지금 우리 은하계</span><h2>${room.name}</h2><p>골드 +${room.bonus}% · 은하계 ${room.capacity}자리 · 보관함 ${room.storage}자리</p>${next?`<small>다음 은하계 · ${next.name} · 골드 보상 +${next.bonus}%</small>`:'<small>가장 포근한 은하계를 완성했어요.</small>'}</div><div class="room-upgrade-actions"><button class="button primary" data-upgrade-room ${!next||state.sparkles<next.cost?'disabled':''}>${next?state.sparkles<next.cost?`반짝이 ${(next.cost-state.sparkles).toLocaleString('ko-KR')}개 부족`:`반짝이 ${next.cost.toLocaleString('ko-KR')}개로 업그레이드`:'최고 레벨'}</button><button class="text-button open-room-list" data-quest-guide="progress">별빛 임무에서 성장 지도 보기</button></div></section>${fairyShopCard()}<div class="collection-tabs shop-tabs" role="tablist" aria-label="상점 분류">${[['furniture','은하계 꾸미기'],['materials','조합 재료']].map(([id,label])=>`<button id="shop-tab-${id}" role="tab" data-shop-tab="${id}" aria-selected="${shopTab===id}" aria-controls="shopPanel" tabindex="${shopTab===id?0:-1}" class="${shopTab===id?'active':''}">${label}</button>`).join('')}</div><section id="shopPanel" role="tabpanel" tabindex="0" aria-labelledby="shop-tab-${shopTab}">${shopTab==='furniture'?`<p class="shop-note">20종 · 최대 Lv.10 · 놓아둔 설치물만 효과가 적용돼요.</p><div class="furniture-filters selection-filters" role="group" aria-label="설치물 효과 필터">${[['all','모두'],['sparkles','반짝이'],['gold','골드'],['adventure','모험']].map(([id,name])=>`<button type="button" class="filter-choice" aria-controls="furnitureFilterResults" data-furniture-filter="${id}" aria-pressed="${furnitureFilter===id}">${name}</button>`).join('')}</div><details class="furniture-effects-guide"><summary>효과와 중첩 규칙 보기</summary><p>같은 설치물은 한 개씩, 다른 설치물 효과는 함께 적용돼요. 골드는 설치물에만 사용해요. 하루 반짝이 수량은 생성할 때 정해져요. 유리병은 은하계를 보는 동안만 자동으로 주워요. 새 엽서와 오늘 첫 수확 보상은 한 번만 받아요.</p>${economyTable(['설치물','Lv.1','Lv.10'],FURNITURE.map(f=>[f.name,furnitureEffect({...state,ownedFurniture:[f.id],furnitureLevels:{[f.id]:1}},f.id),furnitureEffect({...state,ownedFurniture:[f.id],furnitureLevels:{[f.id]:10}},f.id)]))}</details><div class="furniture-grid" id="furnitureFilterResults">${renderFurnitureFilterResults()}</div>`:`<p class="shop-note">쓰다듬어 모은 반짝이로 재료를 사요. 재료로 같은 친구를 만나고, 별을 합쳐 키워요.</p>${[['group',GROUPS,'그룹'],['rarity',RARITIES,'희귀도'],['essence',ESSENCES,'정수']].map(([key,items,title])=>`<section class="shop-materials"><h2>${title}</h2><div>${items.map(x=>{const price=materialPrice(key,x.id,state);return `<article class="material-card">${icon(x.id)}<h3>${x.name}</h3><p>보유 ${state.materials[key][x.id]}개</p><button class="button secondary" data-buy-material="${key}:${x.id}" ${state.sparkles<price?'disabled':''}>반짝이 ${price}개 · 재료 1개</button></article>`;}).join('')}</div></section>`).join('')}<button class="button primary full" data-page="mix">재료 조합하러 가기 →</button>`}</section>`;}
+function renderShop(){const room=currentRoom(state),next=ROOMS[state.roomLevel];return `<dl class="shop-balance" aria-label="보유 재화"><div class="shop-currency currency-gold"><dt>${icon('coin')}골드</dt><dd><b>${state.gold.toLocaleString('ko-KR')}</b><small>설치물 강화</small></dd></div><div class="shop-currency currency-sparkle"><dt><span aria-hidden="true">✧</span>반짝이</dt><dd><b>${state.sparkles.toLocaleString('ko-KR')}</b><small>재료·은하계·요정</small></dd></div></dl><section class="upgrade-card" style="--room-color:${room.color}"><div class="upgrade-house"><span>◎</span><b>Lv.${state.roomLevel}</b></div><div><span class="shop-eyebrow">지금 우리 은하계</span><h2>${room.name}</h2><p>골드 +${room.bonus}% · 은하계 ${room.capacity}자리 · 보관함 ${room.storage}자리</p>${next?`<small>다음 은하계 · ${next.name} · 골드 보상 +${next.bonus}%</small>`:'<small>가장 포근한 은하계를 완성했어요.</small>'}</div><div class="room-upgrade-actions"><button class="button primary" data-upgrade-room ${!next||state.sparkles<next.cost?'disabled':''}>${next?state.sparkles<next.cost?`반짝이 ${(next.cost-state.sparkles).toLocaleString('ko-KR')}개 부족`:`반짝이 ${next.cost.toLocaleString('ko-KR')}개로 업그레이드`:'최고 레벨'}</button><button class="text-button open-room-list" data-quest-guide="progress">별빛 임무에서 성장 지도 보기</button></div></section>${fairyShopCard()}<div class="collection-tabs shop-tabs" role="tablist" aria-label="상점 분류">${[['furniture','은하계 꾸미기'],['materials','조합 재료']].map(([id,label])=>`<button id="shop-tab-${id}" role="tab" data-shop-tab="${id}" aria-selected="${shopTab===id}" aria-controls="shopPanel" tabindex="${shopTab===id?0:-1}" class="${shopTab===id?'active':''}">${label}</button>`).join('')}</div><section id="shopPanel" role="tabpanel" tabindex="0" aria-labelledby="shop-tab-${shopTab}">${shopTab==='furniture'?`<p class="shop-note">20종 · 최대 Lv.10 · 놓아둔 설치물만 효과가 적용돼요.</p><div class="furniture-filters selection-filters" role="group" aria-label="설치물 효과 필터">${[['all','모두'],['sparkles','반짝이'],['gold','골드'],['adventure','모험']].map(([id,name])=>`<button type="button" class="filter-choice" aria-controls="furnitureFilterResults" data-furniture-filter="${id}" aria-pressed="${furnitureFilter===id}">${name}</button>`).join('')}</div><div class="furniture-grid" id="furnitureFilterResults">${renderFurnitureFilterResults()}</div>`:`<p class="shop-note">쓰다듬어 모은 반짝이로 재료를 사요. 재료로 같은 친구를 만나고, 별을 합쳐 키워요.</p>${[['group',GROUPS,'그룹'],['rarity',RARITIES,'희귀도'],['essence',ESSENCES,'정수']].map(([key,items,title])=>`<section class="shop-materials"><h2>${title}</h2><div>${items.map(x=>{const price=materialPrice(key,x.id,state);return `<article class="material-card">${icon(x.id)}<h3>${x.name}</h3><p>보유 ${state.materials[key][x.id]}개</p><button class="button secondary" data-buy-material="${key}:${x.id}" ${state.sparkles<price?'disabled':''}>반짝이 ${price}개 · 재료 1개</button></article>`;}).join('')}</div></section>`).join('')}<button class="button primary full" data-page="mix">재료 조합하러 가기 →</button>`}</section>`;}
 
 
 function renderHeader(){const c=counts(),used=homeCount(state),capacity=roomCapacity(state);const unread=state.life.journal.filter(e=>!e.seen).length;$('#lifeUnread').textContent=unread?'+'+unread:'';$('#headerCounts').innerHTML=`<button id="headerCollection" class="resource-count" data-page="collection" title="발견한 별 · 도감 열기" aria-label="발견한 별 ${c.types} / ${DUSTS.length}">${uiIcon('collection')}<b>${String(c.types).padStart(2,'0')}<em>/${DUSTS.length}</em></b><small data-short="발견">발견한 별</small></button><button id="headerRoomCapacity" class="resource-count" data-quest-guide="progress" title="은하계 자리 ${used} / ${capacity} · 탐험 중인 별의 귀환 자리 포함" aria-label="은하계 자리 ${used} / ${capacity} · 귀환 자리 포함">${uiIcon('home')}<b>${String(used).padStart(2,'0')}<em>/${String(capacity).padStart(2,'0')}</em></b><small data-short="은하계">은하계 자리</small></button>`;}
 
-function careDock(active){const d=getDust(active.id);return `<section class="care-dock care-panel compact-dock" aria-labelledby="dustPopupName"><button class="dust-popup-close" data-close-dust-popup aria-label="별 정보 닫기">${uiIcon('close')}</button><div class="compact-top"><div class="compact-profile">${dustArt(active.id,stage(active.xp),journeyComplete(active)?'story-finished':'')}<div><div class="compact-name"><h2 id="dustPopupName" title="${esc(dustName(active))}">${esc(dustName(active))}</h2><b>Lv.${level(active.xp)}</b><button class="text-button" data-rename="${active.uid}" aria-label="별명 짓기">${uiIcon('edit')}</button></div><p>${STAGES[stage(active.xp)]} · ${find(RARITIES,d.rarity).name}</p></div></div><div class="compact-merge"><button class="button primary" data-open-merge="${active.uid}" aria-label="별 합치기" ${active.xp>=10?'disabled':''}>${uiIcon(active.xp>=10?'check':'merge')}<span class="desktop-label">${active.xp>=10?'최고 레벨':'합치기'}</span></button></div></div>${hasJourney(active)?`<button class="journey-cue" data-shared-story="${active.uid}"><span class="journey-cue-copy">${journeyCue(active)}</span></button>`:''}<div class="compact-footer">${selectedIncome(active)}${storyActions(active)}</div></section>`;}
+function careDock(active){const d=getDust(active.id);return `<section class="care-dock care-panel compact-dock" aria-labelledby="dustPopupName"><div class="compact-top"><div class="compact-profile">${dustArt(active.id,stage(active.xp),journeyComplete(active)?'story-finished':'')}<div><div class="compact-name"><h2 id="dustPopupName" title="${esc(dustName(active))}">${esc(dustName(active))}</h2><b>Lv.${level(active.xp)}</b> ${level(active.xp)>=5?`<button class="text-button" data-rename="${active.uid}" aria-label="별명 짓기">${uiIcon('edit')}</button>`:''}</div><p>${STAGES[stage(active.xp)]} · ${find(RARITIES,d.rarity).name}</p></div></div><div class="compact-merge"><button class="button primary" data-open-merge="${active.uid}" aria-label="별 합치기" ${active.xp>=10?'disabled':''}>${uiIcon(active.xp>=10?'check':'merge')}<span class="desktop-label">${active.xp>=10?'최고 레벨':'합치기'}</span></button></div></div>${hasJourney(active)?journeyCue(active):''}<div class="compact-footer">${selectedIncome(active)}${storyActions(active)}</div></section>`;}
 function storyActions(active){return `<div class="under-room story-actions"><button class="text-button" data-detail="${active.id}" data-detail-uid="${active.uid}" aria-label="별 상세보기" title="별 상세보기">${uiIcon('detail')}<span class="desktop-label">별 상세보기</span></button><button class="text-button story-link" data-shared-story="${active.uid}" aria-label="함께 쓴 이야기" title="함께 쓴 이야기">${uiIcon('story')}<span class="desktop-label">함께 쓴 이야기</span><small class="mobile-glyph" aria-hidden="true">${unlockedStories(active)}</small>${unlockedStories(active)>active.readStories.length||unreadAfterwords(active)?'<i class="unread-dot"></i>':''}</button><button class="text-button" data-store="${active.uid}" aria-label="보관하기" title="보관하기">${uiIcon('storage')}<span class="desktop-label">보관하기</span></button></div>`;}
 
 function hideDustPopup(restoreFocus=false){
@@ -625,9 +691,10 @@ function hideDustPopup(restoreFocus=false){
  if(restoreFocus)dust?.focus({preventScroll:true});
 }
 document.addEventListener('click',event=>{
- if(event.target.closest('[data-close-dust-popup]'))hideDustPopup(true);
- else if(event.target.closest('.dust-room')&&!event.target.closest('#dustPopup, button, [data-room-item]'))hideDustPopup();
-});
+ if(dustPopupUid===null||Date.now()<suppressRoomClickUntil||
+    !$('#modal').classList.contains('hidden'))return;
+ if(!event.target.closest('#dustPopup, .room-dust'))hideDustPopup();
+},true);
 function focusRoomDust(uid,showPopup=false){
  if(!selectDust(state,uid))return;
  save();renderHeader();const active=selected();
@@ -1089,7 +1156,12 @@ function openRoomMemory(index=null){
  $('.modal-card').classList.add('memory-dialog');
 }
 
-function characterArt(id,s=0,settled=false){const c=characterProfile(id),extra=settled?'story-finished':'';return !c?dustArt(id,s,extra):`<span class="character-performance motion-${c.motion}" style="--character-color:${getDust(id).color};--character-face:${getDust(id).face}">${dustArt(id,s,extra)}${characterFace(id)}<span class="character-prop prop-${c.motion}" aria-hidden="true">${c.motion==='knead'?'<i></i><i></i>':c.motion==='peek'?'<i></i><i></i>':c.motion==='dance'?'♪ ♫':c.motion==='sleep'?'z Z':'✦'}</span></span>`;}
+function characterArt(id,s=0,settled=false){
+ const c=characterProfile(id), art=dustArt(id,s,settled?'story-finished':'');
+ if(!c)return art;
+ const prop={dance:'♪ ♫',sleep:'z Z',roll:'✦'}[c.motion];
+ return `<span class="character-performance motion-${c.motion}" style="--character-face:${getDust(id).face}">${art}${characterFace(id)}${prop?`<span class="character-prop prop-${c.motion}" aria-hidden="true">${prop}</span>`:''}</span>`;
+}
 function placeFavorite(uid){const d=roomResidents(state).find(x=>x.uid===uid);if(!d)return;const p=personality(d.id);if(!state.decorations.includes(p.favorite.id))return go('shop');const a=state.roomPositions.furniture[p.favorite.id]||DEFAULT_DECOR[p.favorite.id];const r=moveRoomItem(state,'dust',d.uid,Math.max(8,Math.min(92,a.x-8)),Math.min(90,a.y+7));if(r.ok){observeLife(state);save();go('room');document.querySelector(`[data-dust="${d.uid}"]`)?.scrollIntoView({block:'center',behavior:reduced.matches?'instant':'smooth'});}}
 function nicknameDialog(uid){const d=state.dusts.find(d=>d.uid===uid);if(!d)return;modal('너만의 작은 이름',`<p>${esc(getDust(d.id).name)}에게 불러줄 별명을 지어주세요.<br>같은 종류도 각각 다른 이름을 가질 수 있어요.</p><form id="nicknameForm"><label class="nickname-label" for="nicknameInput">별명 · 최대 12자</label><input id="nicknameInput" class="nickname-input" value="${esc(d.nickname||'')}" autocomplete="off" placeholder="예: 몽실이"><p id="nicknameError" role="status"></p><button class="button primary full" type="submit">이 이름으로 부르기</button></form><button class="text-button" id="clearNickname">원래 이름으로 돌아가기</button>`,()=>{const input=$('#nicknameInput');input.focus();input.select();$('#nicknameForm').onsubmit=e=>{e.preventDefault();const r=renameDust(state,uid,input.value);if(!r.ok){$('#nicknameError').textContent=r.message;return;}save();close();render();toast(r.name+'! 반가워.');};$('#clearNickname').onclick=()=>{renameDust(state,uid,'');save();close();render();};});}
 

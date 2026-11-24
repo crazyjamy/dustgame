@@ -1,6 +1,6 @@
-import { SKY_STORIES } from './sky-stories.mjs?v=1.13.75-5c5e3f7f';
-import{makeMoreDusts}from'./dust-fifty.mjs?v=1.13.75-5c5e3f7f';
-import{EXTRA_DUSTS}from'./dust-expansion.mjs?v=1.13.75-5c5e3f7f';
+import { SKY_STORIES } from './sky-stories.mjs?v=1.13.81-4728e3b5';
+import{makeMoreDusts}from'./dust-fifty.mjs?v=1.13.81-4728e3b5';
+import{EXTRA_DUSTS}from'./dust-expansion.mjs?v=1.13.81-4728e3b5';
 export const GROUPS=[{id:'daily',name:'포근',icon:'◌'},{id:'pop',name:'몽글',icon:'✿'},{id:'dream',name:'반짝',icon:'✧'}];
 export const RARITIES=[{id:'common',name:'보통',cost:3},{id:'rare',name:'특별',cost:5},{id:'legend',name:'희귀',cost:8}];
 export const ESSENCES=[{id:'leaf',name:'풀잎',icon:'❋'},{id:'spark',name:'햇살',icon:'☀'},{id:'moon',name:'달빛',icon:'☾'},{id:'dew',name:'이슬',icon:'◉',added:true},{id:'ember',name:'잔불',icon:'♧',added:true},{id:'stardust',name:'별가루',icon:'✦',added:true}];
@@ -14,7 +14,7 @@ export const DUSTS=[
 {id:'star',name:'시리온',color:'#efb66e',face:'#805020',shape:'star',group:'dream',rarity:'legend',essence:'spark',quote:'너도 반짝여.',story:'아주 작은 별 부스러기. 소원을 들어주지는 못하지만, 이야기를 끝까지 들어줄 수 있어요.'}
 ];
 DUSTS.push(...EXTRA_DUSTS);
-export const STAGES=['씨앗 별','몽글 별','포근 별'];
+export const STAGES=['우주먼지','빛방울','별싹','아기별','별'];
 
 DUSTS.push(...makeMoreDusts(DUSTS,GROUPS,RARITIES,ESSENCES));
 // Lv.2부터 Lv.6까지 순서대로 열립니다.

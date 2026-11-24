@@ -555,7 +555,15 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline-color: var
   border-color: var(--color-border-subtle);
   color: var(--color-text-primary);
 }
-.growth-pair.trio { border-color: var(--color-border-subtle); }
+.growth-pair.growth-preview {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 4px;
+  margin-block: 18px;
+  padding-block: 10px 12px;
+  border-block: 1px solid var(--color-border-subtle);
+}
+.growth-preview > div { min-width: 0; text-align: center; }
 .growth-pair > div > span { color: var(--color-text-primary); }
 .growth-pair > div > small { color: var(--color-text-secondary); }
 .growth-pair .unseen { opacity: 1; filter: none; }
@@ -820,7 +828,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   padding: 0;
 }
 #modal .recorded-recipe > div { margin: 12px 0 0; }
-#modal .recorded-recipe + .growth-pair.trio {
+#modal .recorded-recipe + .growth-pair.growth-preview {
   border: 0;
   margin-top: 24px;
   padding-block: 0;
@@ -1364,7 +1372,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   overflow: hidden;
   pointer-events: none;
   background:
-    url('./assets/galaxy-stars.svg?v=1.13.75-5c5e3f7f') center 12% / auto 800px repeat,
+    url('./assets/galaxy-stars.svg?v=1.13.81-4728e3b5') center 12% / auto 800px repeat,
     radial-gradient(ellipse at 77% 27%, var(--color-glass-orbit-graphite), transparent 57%),
     radial-gradient(ellipse at 13% 54%, var(--color-glass-orbit-slate), transparent 64%),
     radial-gradient(ellipse at 94% 78%, var(--color-glass-orbit-silver), transparent 56%),
@@ -1406,7 +1414,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: url('./assets/planet-horizon.svg?v=1.13.75-5c5e3f7f') center 46% / cover no-repeat;
+  background: url('./assets/planet-horizon.svg?v=1.13.81-4728e3b5') center 46% / cover no-repeat;
 }
 .planet-landscape + .room-playfield .galaxy-portal { top: 39%; left: 82%; }
 .dust-room .birth-glow {
@@ -2188,7 +2196,7 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
 .story-keepsake .ui-icon { width: 14px; height: 14px; }
 .story-settled .dust-art { filter: drop-shadow(0 0 8px #f1dfae30); }
 .story-settled.character-active .character-face { display: none; }
-.story-settled.character-active :is(.dust-eyes, .dust-mouth) { opacity: 1; }
+.story-settled.character-active .character-performance :is(.dust-eyes, .dust-mouth) { opacity: 1; }
 .story-settled .dust-eyes { animation: none; }
 .app-shell .room-dust.story-speaking.selected .life-bubble {
   display: block !important;
@@ -2247,22 +2255,52 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
   .app-shell .room-dust.story-speaking.selected .life-bubble { font-size: 12px; min-width: 116px; max-width: 150px; }
 }
 
-#dustPopup .compact-top { grid-template-columns: minmax(0, 1fr) auto; }
-#dustPopup .compact-merge { justify-self: end; }
-#dustPopup .compact-name .text-button { min-width: 40px; min-height: 44px; }
-#dustPopup .journey-cue + .compact-footer { border-top: 0; margin-top: 4px; }
+#dustPopup .compact-dock { padding: 10px 14px; }
+#dustPopup .compact-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 8px;
+  padding: 0;
+}
+#dustPopup .compact-profile { flex: 1 1 122px; }
+#dustPopup .compact-name .text-button { min-width: 32px; min-height: 44px; }
+#dustPopup .compact-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-inline-start: auto;
+}
+#dustPopup .compact-actions button {
+  display: inline-grid;
+  place-items: center;
+  min-width: 40px;
+  min-height: 44px;
+  margin: 0;
+  padding: 0 5px;
+}
+#dustPopup .compact-actions .primary { min-width: 44px; }
+#dustPopup .compact-actions .compact-income { width: auto; }
+#selectedGoldTimer {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--color-currency-gold);
+  font-variant-numeric: tabular-nums;
+}
 #dustPopup .journey-cue {
-  margin: 4px 12px 0;
-  padding: 10px 12px;
-  border-radius: 12px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 5px 0 0;
+  padding: 8px 10px;
+  border-radius: 10px;
   background: #b7d1ff09;
   text-align: start;
   overflow-wrap: anywhere;
   word-break: keep-all;
 }
 .journey-cue > span {
-  display: block;
-  margin-bottom: 3px;
+  flex: none;
   color: var(--color-link);
   font-size: var(--text-caption);
 }
@@ -2421,7 +2459,7 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
 
 
 /* Pet reactions move only the art, leaving the hit target in place. */
-.dust-lift[data-pet-motion] :is(.dust-eyes, .dust-mouth, .character-face) { visibility: hidden; }
+.dust-lift[data-pet-motion]:has(.pet-expression) :is(.dust-eyes, .dust-mouth, .character-face) { visibility: hidden; }
 .dust-lift .pet-expression { position: absolute; inset: 0; width: 100%; height: 100%; }
 .pet-drowsy { opacity: 0; }
 @media (prefers-reduced-motion: no-preference) {

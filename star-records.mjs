@@ -1,11 +1,11 @@
-import {petReaction} from './dust-character.mjs?v=1.13.75-5c5e3f7f';
-import {DUSTS,STORIES} from './dust-data.mjs?v=1.13.75-5c5e3f7f';
-import {unlockedStories} from './dust-engine.mjs?v=1.13.75-5c5e3f7f';
-import {personality} from './dust-life.mjs?v=1.13.75-5c5e3f7f';
-import {isAway,roomResidents} from './adventures.mjs?v=1.13.75-5c5e3f7f';
-import {routeUnlocked} from './rooms.mjs?v=1.13.75-5c5e3f7f';
-import {journeyComplete,journeyFor} from './story-journey.mjs?v=1.13.75-5c5e3f7f';
-import {aftermathFor,afterwordRecord,afterwordScene,STORY_ROUTES} from './story-aftermath.mjs?v=1.13.75-5c5e3f7f';
+import {petReaction} from './dust-character.mjs?v=1.13.81-4728e3b5';
+import {DUSTS,STORIES} from './dust-data.mjs?v=1.13.81-4728e3b5';
+import {unlockedStories} from './dust-engine.mjs?v=1.13.81-4728e3b5';
+import {personality} from './dust-life.mjs?v=1.13.81-4728e3b5';
+import {isAway,roomResidents} from './adventures.mjs?v=1.13.81-4728e3b5';
+import {routeUnlocked} from './rooms.mjs?v=1.13.81-4728e3b5';
+import {journeyComplete,journeyFor} from './story-journey.mjs?v=1.13.81-4728e3b5';
+import {aftermathFor,afterwordRecord,afterwordScene,STORY_ROUTES} from './story-aftermath.mjs?v=1.13.81-4728e3b5';
 
 // A read-only view of existing records. Opening the book does not advance play.
 const moments={

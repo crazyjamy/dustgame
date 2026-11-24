@@ -1,6 +1,19 @@
 const outlines = {
+  scallop: 'M50 10C62 10 66 19 70 24C84 23 91 31 87 44C96 56 91 66 81 70C82 83 71 89 60 84C53 94 42 94 34 85C22 89 13 81 17 69C6 63 7 51 14 44C10 31 18 23 30 24C33 17 40 10 50 10Z',
+  bow: 'M18 19C28 14 40 27 50 34C60 27 72 14 82 19C93 25 84 43 73 50C85 57 91 76 80 82C70 87 60 74 50 67C40 74 30 87 20 82C9 76 15 57 27 50C16 43 7 25 18 19Z',
+  arch: 'M16 65V47C16 25 29 13 50 13C71 13 84 25 84 47V68Q84 85 68 85H32Q16 85 16 65Z',
+  octagon: 'M35 13H65Q70 13 74 17L84 27Q88 31 88 36V64Q88 70 84 74L74 84Q70 88 65 88H35Q30 88 26 84L16 74Q12 70 12 64V36Q12 31 16 27L26 17Q30 13 35 13Z',
+  shell: 'M12 64C12 48 23 31 36 22C53 10 76 14 86 27C99 45 88 54 77 59C68 64 69 81 56 87C39 95 12 84 12 64Z',
+  kite: 'M48 10Q53 8 58 13L86 44Q91 50 86 55L54 89Q49 94 45 87L17 59Q12 53 15 46Z',
+  crown: 'M13 33Q12 23 20 28L34 36L46 13Q50 7 54 13L66 36L80 28Q88 23 87 33L79 73Q76 86 64 86H36Q24 86 21 73Z',
+  wave: 'M11 42C12 27 19 22 29 25C36 27 43 18 51 17C63 16 71 25 73 34C84 35 90 44 89 55C88 68 78 73 72 75C63 86 52 84 44 78C34 85 26 82 22 72C10 66 8 54 11 42Z',
+  twin: 'M50 26C58 15 72 14 81 26C91 39 90 64 79 76C71 85 57 84 50 73C42 84 29 85 20 76C9 64 9 39 19 26C28 14 42 15 50 26Z',
+  comet: 'M12 56C12 33 33 21 50 24C64 25 76 14 87 16Q93 18 87 26L74 40C84 54 81 72 68 82C49 97 12 83 12 56Z',
+  fan: 'M13 68C7 57 14 48 22 43C18 28 29 18 40 22C41 13 57 10 64 22C77 19 87 30 82 43C93 50 94 61 86 71C76 86 24 87 13 68Z',
+  cushion: 'M18 17C29 19 38 23 50 23C62 23 71 19 82 17Q91 16 83 33C78 44 79 56 84 68Q91 85 81 84C70 82 61 77 50 77C39 77 30 82 19 84Q9 85 16 68C21 56 22 44 17 33Q9 16 18 17Z',
   blob: 'M50 12C56 12 56 28 68 33C75 37 88 35 89 43C90 50 77 57 75 67C73 77 80 88 73 90C66 92 58 84 50 84C40 84 33 91 27 89C20 86 26 75 24 67C22 57 10 50 11 43C12 35 26 37 33 33C44 28 44 12 50 12Z',
   round: 'M50 13C72 13 87 28 87 51C87 73 71 87 50 87C28 87 13 73 13 51C13 28 28 13 50 13Z',
+  bud: 'M50 13C58 13 62 17 67 23C73 30 87 36 87 51C87 72 70 87 50 87C29 87 13 72 13 51C13 36 27 30 33 23C38 17 42 13 50 13Z',
   square: 'M32 17H68Q84 17 84 34V68Q84 84 68 84H32Q16 84 16 68V34Q16 17 32 17Z',
   triangle: 'M41 20Q50 6 59 20L86 67Q97 84 77 84H23Q4 84 14 67Z',
   pill: 'M40 24H60C80 24 89 37 89 52C89 68 78 79 60 79H40C22 79 11 68 11 52C11 37 21 24 40 24Z',
@@ -38,17 +51,31 @@ const baseMotifs = {
 };
 
 const collectionLooks = [
-  ['round', 'bands'], ['square', 'bands'], ['drop', 'dots'], ['cloud', 'waves'], ['gem', 'facets'],
-  ['triangle', 'facets'], ['pill', 'waves'], ['round', 'specks'], ['ghost', 'specks'], ['leaf', 'bands'],
-  ['square', 'specks'], ['round', 'dots'], ['diamond', 'facets'], ['triangle', 'specks'], ['flower', 'dots'],
-  ['ripple', 'waves'], ['pill', 'dots'], ['gem', 'specks'], ['heart', 'dots'], ['cloud', 'dots'],
-  ['bean', 'dots'], ['square', 'dots'], ['drop', 'bands'], ['clover', 'dots'], ['star', 'specks'],
-  ['pill', 'bands'], ['snow', 'specks'], ['triangle', 'bands'], ['bean', 'waves'], ['diamond', 'bands'],
+  ['twin', 'bands'], ['octagon', 'bands'], ['drop', 'dots'], ['cloud', 'waves'], ['gem', 'facets'],
+  ['triangle', 'facets'], ['pill', 'waves'], ['scallop', 'specks'], ['ghost', 'specks'], ['leaf', 'bands'],
+  ['cushion', 'specks'], ['round', 'dots'], ['kite', 'facets'], ['crown', 'specks'], ['flower', 'dots'],
+  ['wave', 'waves'], ['arch', 'dots'], ['gem', 'specks'], ['heart', 'dots'], ['fan', 'dots'],
+  ['shell', 'dots'], ['square', 'dots'], ['comet', 'bands'], ['clover', 'dots'], ['star', 'specks'],
+  ['bow', 'bands'], ['snow', 'specks'], ['triangle', 'bands'], ['bean', 'waves'], ['diamond', 'bands'],
 ];
 
-export function starAppearance(shape) {
+const youngOutlines = {
+  blob:'bud', star:'bud', crown:'bud', snow:'bud',
+  square:'arch', octagon:'cushion', diamond:'cushion', gem:'cushion', kite:'drop',
+  clover:'twin', flower:'twin', bow:'twin', fluff:'cloud', scallop:'cloud',
+  ghost:'arch', triangle:'bud', drop:'bud', pill:'bean', leaf:'bean',
+  moon:'shell', shell:'bean', comet:'shell', wave:'moss', ripple:'moss',
+  heart:'fan', fan:'cloud', twin:'pill', cloud:'wave', moss:'wave',
+};
+
+export const starLevelScale = level => [.76, .83, .89, .95, 1][Math.min(level, 5) - 1];
+
+export function starAppearance(shape, stage = 2, level = [1,3,4][stage]) {
+  if (stage === 0) return { path: outlines.round, pattern: '' };
+  if (level === 2) return { path: outlines.bud, pattern: '' };
   const variant = shape.startsWith('soft-') ? Number(shape.slice(5)) : 0;
   const [outline, motif] = collectionLooks[variant - 1] || [shape, baseMotifs[shape]];
+  if (stage === 1) return { path: outlines[youngOutlines[outline] || outline] || outlines.bud, pattern: '' };
   return { path: outlines[outline] || outlines.round, pattern: motifs[motif] || '' };
 }
 

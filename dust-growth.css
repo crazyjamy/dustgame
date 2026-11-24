@@ -254,7 +254,7 @@ body.modal-open .app-shell > .navigation {
   .quest-guide > span { display: none; }
 }
 .brand-dust {
-  background: url('./favicon.svg?v=1.13.63-0f23dbc5') center / contain no-repeat;
+  background: url('./favicon.svg?v=1.13.65-49db833c') center / contain no-repeat;
   font-size: 0 !important;
 }
 .room-open #main > .dust-room {

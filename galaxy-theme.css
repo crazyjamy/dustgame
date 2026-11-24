@@ -1332,7 +1332,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   overflow: hidden;
   pointer-events: none;
   background:
-    url('./assets/galaxy-stars.svg?v=1.13.63-0f23dbc5') center 12% / auto 800px repeat,
+    url('./assets/galaxy-stars.svg?v=1.13.65-49db833c') center 12% / auto 800px repeat,
     radial-gradient(ellipse at 77% 27%, var(--color-glass-orbit-graphite), transparent 57%),
     radial-gradient(ellipse at 13% 54%, var(--color-glass-orbit-slate), transparent 64%),
     radial-gradient(ellipse at 94% 78%, var(--color-glass-orbit-silver), transparent 56%),
@@ -1374,7 +1374,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: url('./assets/planet-horizon.svg?v=1.13.63-0f23dbc5') center 46% / cover no-repeat;
+  background: url('./assets/planet-horizon.svg?v=1.13.65-49db833c') center 46% / cover no-repeat;
 }
 .planet-landscape + .room-playfield .galaxy-portal { top: 39%; left: 82%; }
 .dust-room .birth-glow {
@@ -2393,7 +2393,18 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
 @keyframes pet-close-eyes { 0% { opacity: 0; } 30%, 100% { opacity: 1; } }
 @keyframes pet-hop { 14% { transform: scale(1.12,.88); } 43% { transform: translateY(-13px) scale(.96,1.08); } 78% { transform: scale(1.08,.93); } }
 
-#modal .star-greeting { text-align: center; }
+#modal .star-greeting {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  text-align: center;
+}
+#modal .star-greeting > .dust-art {
+  width: 144px;
+  width: min(144px, 24svh);
+  max-width: 100%;
+}
+#modal .star-greeting > p { margin: 0 0 10px; }
 #modal .star-greeting > p,
 #modal .first-day-welcome > p {
   color: var(--color-text-primary);

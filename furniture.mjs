@@ -1,8 +1,8 @@
-import{NEW_FURNITURE,furnitureChapters}from'./furniture-twenty.mjs?v=1.13.81-4728e3b5';
-import{MORE_FURNITURE_STORIES}from'./furniture-extra.mjs?v=1.13.81-4728e3b5';
+import{NEW_FURNITURE,furnitureChapters}from'./furniture-twenty.mjs?v=1.13.81-3dfe0d36';
+import{MORE_FURNITURE_STORIES}from'./furniture-extra.mjs?v=1.13.81-3dfe0d36';
 export const FURNITURE_STORIES={
  rug:[
- ['첫 번째 자리','아무도 앉지 않던 러그 한가운데, 작은 별이 처음 몸을 눕혔어요. 주름 하나가 조용히 펴졌어요. 이제 이곳에는 돌아와 쉴 자리가 생겼어요.'],
+ ['첫 번째 자리','나리가 행성 고리의 말린 끝을 꼭 눌러 주었어요. 작은 별은 둥근 러그에 올라앉아 루미가 가져온 장미성운 사진을 펼쳤어요. “꽃 한가운데에도 별이 있네.” 별이 옆으로 조금 비켜앉자 나리도 고개를 들이밀었어요.'],
  ['남겨둔 온기','별이 모험을 떠난 뒤에도 러그는 한동안 따뜻했어요. 다른 별은 그 자리를 밟지 않고 옆으로 비켜 앉았어요. 친구가 돌아올 자리를 남겨둔 거예요.'],
  ['작은 발자국','조금 낡은 실밥 사이에 풀잎 가루가 끼었어요. 모험에서 묻혀 온 흔적이었죠. 러그는 깨끗해지는 것보다 이야기가 늘어나는 편이 더 좋았어요.'],
  ['함께 눕는 연습','혼자 뒹굴던 별이 옆으로 조금 움직였어요. 그러자 다른 별도, 또 다른 별도 누울 수 있었어요. 러그의 크기는 그대로인데 자리는 자꾸 늘었어요.'],

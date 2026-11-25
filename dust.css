@@ -144,3 +144,11 @@ body{font-size:var(--text-body);line-height:1.6}small{font-size:var(--text-capti
 
 /* Keep the mobile header for tools and resources. */
 @media(max-width:700px){.topbar .brand{display:none}}
+
+@media (prefers-reduced-motion: no-preference) {
+ .trip-homecoming { animation: trip-homecoming .7s ease-out both; }
+ @keyframes trip-homecoming {
+  35% { transform: translateY(-5px) rotate(-6deg); }
+  70% { transform: translateY(-1px) rotate(4deg); }
+ }
+}

@@ -72,10 +72,15 @@
   --color-glass-orbit-slate: #30384260;
   --color-glass-orbit-silver: #41485250;
 
-  --radius-glass-panel: 26px;
-  --radius-glass-control: 16px;
-  --radius-glass-pill: 999px;
-  --radius-field: .625rem;
+  --radius-tab: 0px;
+  --radius-button: 12px;
+  --radius-field: 10px;
+  --radius-card: 16px;
+  --radius-popup: 24px;
+  --radius-pill: 999px;
+  --radius-glass-panel: var(--radius-popup);
+  --radius-glass-control: var(--radius-card);
+  --radius-glass-pill: var(--radius-pill);
   --select-icon-inset: .5rem;
   --size-switch-track: 2.5rem;
   --size-switch-thumb: 1rem;

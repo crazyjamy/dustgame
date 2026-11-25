@@ -1,5 +1,8 @@
-import {spaceItemArt} from './space-items.mjs?v=1.13.81-4728e3b5';
+import {spaceItemArt} from './space-items.mjs?v=1.13.81-3dfe0d36';
 const shapes={
+ twig:'<path d="m9 39 12-14-1-12 3-2 2 11 11-13 4 1-11 15 10-3 2 3-15 5-13 14Z" fill="#d4ad87"/><path d="M31 15q-4-10 7-12 1 9-7 12Z" fill="#bdd19e"/>',
+ glowShell:'<path d="M22 41 8 28q-4-7 2-10 0-7 7-7 4-7 10-3 7-4 11 3 7 0 7 8 5 5 0 11L30 41Z" fill="#b9dfe1"/><path d="m13 21 11 15m-5-20 6 18m3-20-1 20m11-18-9 20" stroke="#84aabf"/><path d="M21 40h11l-2 4h-8Z" fill="#e2c4d9"/>',
+ moonstone:'<path d="m8 30 6-15 16-7 13 11 1 15-15 10-16-4Z" fill="#c6beda"/><path d="m14 15 11 9 18-5-13-11Z" fill="#e4def0"/><path d="m25 24 4 20 15-10-1-15Z" fill="#afa3c9"/><path d="m16 25 2 4 4 1-4 2-1 4-2-4-3-1 3-2Z" fill="#ffedbc" stroke="none"/>',
  dew:'<path d="M26 6C21 16 12 23 12 32A14 14 0 0 0 40 32C40 23 31 16 26 6Z" fill="#b6d9dc"/><path d="M18 31Q17 38 24 40" stroke="#edf8f4"/>',
  ember:'<path d="M27 5Q42 21 39 34Q37 47 25 46Q12 44 13 32Q14 23 21 18Q20 28 25 27Q30 21 27 5Z" fill="#e9b086"/><path d="M26 29Q34 38 27 42Q19 42 23 34Z" fill="#f3d799"/>',
  stardust:'<path d="M24 8L28 20L40 24L28 28L24 40L20 28L8 24L20 20Z" fill="#d4bfdc"/><path d="M42 34L44 40L50 42L44 44L42 50L40 44L34 42L40 40Z" fill="#e9d5a6"/><circle cx="40" cy="11" r="2" fill="#c4bed9"/>',

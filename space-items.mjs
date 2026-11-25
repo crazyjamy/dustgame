@@ -1,6 +1,21 @@
 // Each silhouette represents a real celestial object or a spacecraft instrument.
 const lavender='#cebafb', blue='#a8dcf6', pink='#f5b9d9', gold='#ffe3a4', violet='#7965b4', dark='#453560';
 export const spaceItemArt={
+ shellLamp:`<ellipse cx="26" cy="42" rx="14" ry="3" fill="#b7a1cd"/>
+  <path d="M23 38C15 33 8 27 9 21q0-5 5-5 1-6 7-5 4-7 9-2 6-2 8 4 7 1 6 8c-1 7-8 13-15 17Z" fill="#eabed9"/>
+  <path d="m15 18 9 14m-3-18 4 16m6-18-4 18m11-14-9 15" stroke="#b187b3" stroke-width="1.2"/>
+  <circle cx="26" cy="32" r="6" fill="#ffedb7"/><circle cx="24" cy="30" r="1.7" fill="#fff8e3" stroke="none"/>
+  <path d="M11 33q13 8 30-1-2 10-15 10-12 0-15-9Z" fill="#a8d8df"/>`,
+ moonShelf:`<path d="M13 29v12l8-10m11 0v11l8-12" fill="#aa97be"/>
+  <path d="m7 27 28-6 11 5-30 7Z" fill="#e0d7ed"/><path d="m7 27 9 6 30-7v5l-30 7-9-6Z" fill="#b3a5ce"/>
+  <path d="M30 7a10 10 0 1 0 8 14q-12 1-8-14Z" fill="#f6dda3"/>
+  <path d="m13 25-1-9 4-1 2 9m2-1-2-11 4-1 2 11" fill="#a8ccde"/>`,
+ woodStool:`<path d="m16 24-4 17q1 2 4 1l5-16m11-1 4 17q3 1 4-1l-4-18" fill="#cb9c88"/>
+  <path d="m24 26 1 10h4l1-10" fill="#ab8583"/>
+  <path d="M9 18q0-6 17-6t17 6v5q-2 6-17 6T9 23Z" fill="#d7aa94"/>
+  <ellipse cx="26" cy="18" rx="17" ry="6.5" fill="#f4d9ab"/>
+  <path d="M15 18q6-4 15-3m-8 6q8 0 14-3" stroke="#bc9283" stroke-width="1.1"/>`,
+
  rug:`<circle cx="26" cy="26" r="14" fill="#aa9bd3" stroke="#8778ad" stroke-width=".85"/>
   <path d="M14 21a13 13 0 0 1 22-3M15 33q11-5 23-5" stroke="#d3c6ed" stroke-width="1.4" opacity=".55"/>
   <path d="M18 37q12-1 18-7" stroke="#8170a8" stroke-width="1.1" opacity=".6"/>

@@ -239,7 +239,7 @@ body.modal-open .app-shell > .navigation {
   .quest-guide > span { display: none; }
 }
 .brand-dust {
-  background: url('./favicon.svg?v=1.13.81-4728e3b5') center / contain no-repeat;
+  background: url('./favicon.svg?v=1.13.81-3dfe0d36') center / contain no-repeat;
   font-size: 0 !important;
 }
 .room-open #main > .dust-room {

@@ -1061,7 +1061,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
 #modal .modal-card :is(.quest-route, .traveler, .player-options, .save-transfer) {
   background: var(--glass-panel-sheen), var(--color-glass-card);
   border-color: var(--color-glass-edge);
-  border-radius: var(--radius-glass-panel);
+  border-radius: var(--radius-card);
   box-shadow: var(--glass-card-shadow);
 }
 .dust-card.undiscovered { background: var(--color-glass-card); }
@@ -1090,7 +1090,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   box-shadow: var(--glass-edge-shadow), var(--glass-floating-shadow);
 }
 @media (min-width: 701px) {
-  .app-shell > .navigation { border-radius: var(--radius-glass-pill); }
+  .app-shell > .navigation { border-radius: var(--radius-popup); }
 }
 #modal .modal-heading {
   background: transparent;
@@ -1128,7 +1128,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   border-radius: var(--radius-glass-control);
 }
 :is(.navigation button, .button.primary, .button.secondary, .collection-filters button, .furniture-filters button) {
-  border-radius: var(--radius-glass-pill);
+  border-radius: var(--radius-button);
 }
 :is(.button.secondary, .modal-card .close, .dust-room .room-plaque,
     .dust-room .room-memory-entry, .dust-room .life-bubble,
@@ -1372,7 +1372,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   overflow: hidden;
   pointer-events: none;
   background:
-    url('./assets/galaxy-stars.svg?v=1.13.81-4728e3b5') center 12% / auto 800px repeat,
+    url('./assets/galaxy-stars.svg?v=1.13.81-3dfe0d36') center 12% / auto 800px repeat,
     radial-gradient(ellipse at 77% 27%, var(--color-glass-orbit-graphite), transparent 57%),
     radial-gradient(ellipse at 13% 54%, var(--color-glass-orbit-slate), transparent 64%),
     radial-gradient(ellipse at 94% 78%, var(--color-glass-orbit-silver), transparent 56%),
@@ -1414,7 +1414,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: url('./assets/planet-horizon.svg?v=1.13.81-4728e3b5') center 46% / cover no-repeat;
+  background: url('./assets/planet-horizon.svg?v=1.13.81-3dfe0d36') center 46% / cover no-repeat;
 }
 .planet-landscape + .room-playfield .galaxy-portal { top: 39%; left: 82%; }
 .dust-room .birth-glow {
@@ -2020,7 +2020,7 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
 .collection-heading { margin: 8px 0 14px; }
 .collection-heading h1 { margin: 0; font-size: 22px; line-height: 1.4; }
 .collection-heading p { margin: 6px 0 0; color: var(--color-text-secondary); font-size: 14px; }
-.app-shell :is(.collection-switch, .collection-tabs.shop-tabs) {
+.app-shell :is(.collection-switch, .collection-tabs[role="tablist"]) {
   display: flex;
   justify-content: flex-start;
   align-items: stretch;
@@ -2036,7 +2036,7 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
   border-radius: 0;
   box-shadow: none;
 }
-.app-shell :is(.collection-switch, .collection-tabs.shop-tabs) button[role="tab"] {
+.app-shell :is(.collection-switch, .collection-tabs[role="tablist"]) button[role="tab"] {
   position: relative;
   display: inline-flex;
   flex: 0 0 auto;
@@ -2059,12 +2059,12 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
   box-shadow: none;
   transform: none;
 }
-.app-shell :is(.collection-switch, .collection-tabs.shop-tabs) button[role="tab"][aria-selected="true"] {
+.app-shell :is(.collection-switch, .collection-tabs[role="tablist"]) button[role="tab"][aria-selected="true"] {
   color: var(--color-text-primary);
   font-weight: 700;
   border-bottom-color: var(--color-accent-highlight);
 }
-.app-shell :is(.collection-switch, .collection-tabs.shop-tabs) button[role="tab"] small {
+.app-shell :is(.collection-switch, .collection-tabs[role="tablist"]) button[role="tab"] small {
   min-width: 0;
   padding: 0;
   background: none;
@@ -2074,10 +2074,10 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
   font-variant-numeric: tabular-nums;
 }
 @media (hover: hover) {
-  .app-shell :is(.collection-switch, .collection-tabs.shop-tabs) button[role="tab"]:hover {
+  .app-shell :is(.collection-switch, .collection-tabs[role="tablist"]) button[role="tab"]:hover {
     color: var(--color-text-primary);
   }
-  .app-shell :is(.collection-switch, .collection-tabs.shop-tabs) button[role="tab"][aria-selected="false"]:hover {
+  .app-shell :is(.collection-switch, .collection-tabs[role="tablist"]) button[role="tab"][aria-selected="false"]:hover {
     border-bottom-color: var(--color-border-control);
   }
 }
@@ -2170,7 +2170,7 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
 @media (max-width: 600px) {
   .collection-heading { margin-top: 4px; }
   .collection-heading h1 { font-size: 20px; }
-  .app-shell :is(.collection-switch, .collection-tabs.shop-tabs) { gap: 17px; margin-bottom: 18px; }
+  .app-shell :is(.collection-switch, .collection-tabs[role="tablist"]) { gap: 17px; margin-bottom: 18px; }
   .app-shell .collection-switch button[role="tab"] { gap: 5px; font-size: 13px; }
   .app-shell .collection-switch button[role="tab"] small { font-size: 11px; }
   .collection-switch .ui-icon { display: none; }
@@ -2413,10 +2413,6 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
 #modal #missionCollection .target-actions { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; width: 100%; min-width: 0; }
 #modal #missionCollection .target-detail-button { width: 100%; min-width: 0; min-height: 44px; margin: 0; padding: 10px 14px; border-radius: 10px; font-size: 14px; font-weight: 500; background: #315785; border: 1px solid #8cb1df40; box-shadow: none; }
 #modal #missionCollection .target-detail-button:hover { background: #3d6595; }
-.target-route { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px 12px; padding: 2px 2px 0; }
-.target-route > span { color: var(--color-text-secondary); font-size: 12px; }
-#modal #missionCollection .target-route .text-button { flex: 0 1 auto; min-width: 0; min-height: 40px; margin: 0; padding: 6px 0 6px 8px; text-align: end; color: var(--color-text-primary); font-size: 14px; background: transparent; box-shadow: none; }
-#modal #missionCollection .target-route .text-button:disabled { color: var(--color-text-secondary); opacity: .7; }
 #modal #missionCollection .target-recommend { min-height: 40px; margin: 0; font-size: 12px; color: var(--color-text-secondary); }
 #modal #missionCollection .target-complete > p { margin: 0; font-size: 16px; line-height: 1.8; }
 @media (max-width: 600px) {
@@ -2427,7 +2423,7 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
 /* Keep disclosure paint inside one rounded shell, including Safari. */
 #modal .observation-note.observation-disclosure {
   display: block; width: 100%; min-width: 0; margin: 16px 0 0; padding: 0;
-  border: 1px solid var(--color-glass-edge); border-radius: 12px;
+  border: 1px solid var(--color-glass-edge); border-radius: var(--radius-card);
   background: transparent; overflow: hidden; clip-path: inset(0 round 12px);
   box-shadow: none; text-align: start;
 }
@@ -2529,3 +2525,108 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
 #modal .merge-complete .merge-actions { margin-top: 6px; }
 #modal .merge-actions .full { margin: 0; }
 #modal .merge-actions .text-button { justify-self: center; min-height: 44px; margin: 0; }
+
+button.decor {padding:0;border:0;background:transparent;color:inherit}
+#dustPopup .furniture-portrait {display:grid;place-items:center;width:44px;height:44px}
+#dustPopup .furniture-portrait svg {width:100%;height:100%}
+
+.trip-book {text-align:start}
+.trip-book nav,.trip-book .trip-actions {display:flex;gap:6px;flex-wrap:wrap}
+.trip-book section {margin:12px 0;padding:14px;border-radius:var(--radius-glass-control);background:var(--color-surface-raised)}
+.trip-book section h3,.trip-book section p {margin:0 0 10px}
+.trip-prop {position:absolute;transform:translate(-50%,-50%);font-size:32px;border:0;background:transparent;pointer-events:auto}
+.trip-reaction {color:var(--color-brand-primary);animation:trip-arrival .35s ease-out}
+@keyframes trip-arrival {from{opacity:.3;transform:translateY(4px)}}
+@media(prefers-reduced-motion:reduce){.trip-reaction{animation:none}}
+.trip-reaction {display:flex;align-items:center;gap:8px}
+.trip-reaction svg {width:42px;height:42px}
+#modal .trip-report .trip-heading {display:flex;align-items:center;gap:10px;margin-bottom:12px}
+#modal .trip-report .trip-heading h3 {margin:2px 0 0}
+#modal .trip-avatar {display:grid;place-items:center;position:relative;isolation:isolate;overflow:hidden;width:44px;height:44px;flex:none}
+#modal .trip-avatar > * {position:relative;inset:auto;width:100%;height:100%;margin:0}
+#modal .trip-avatar svg {width:100%;height:100%}
+#modal .trip-report progress {width:100%;height:6px;display:block;margin:12px 0 6px;accent-color:var(--color-brand-primary)}
+
+/* Shape roles shared by the room, collection, shop and reading surfaces. */
+:is(#main, #modal, #dustPopup, .topbar, .navigation) :is(.button, .text-button, .close, .filter-choice),
+#modal .modal-heading .close, #toastDismiss,
+.topbar .header-utilities button, .navigation button,
+#modal :is(.story-chapters,.furniture-chapters,.memory-chapters) button {
+  border-radius: var(--radius-button);
+}
+#main :is(.collection-filters,.furniture-filters) button { border-radius: var(--radius-button); }
+#main :is(.collection-tabs,.collection-switch,.shop-tabs) button,
+#modal .trip-book nav button {
+  border-radius: var(--radius-tab);
+}
+#modal .trip-book nav {
+  gap: 16px;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+#modal .trip-book nav button {
+  padding-inline: 2px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--color-text-secondary);
+  box-shadow: none;
+}
+#modal .trip-book nav button[aria-pressed="true"] {
+  border-bottom-color: var(--color-brand-primary);
+  color: var(--color-text-primary);
+  font-weight: 700;
+}
+#modal .trip-book nav button::before, #modal .trip-book nav button::after { content: none; }
+#modal .trip-book section, #modal .modal-card .observation-note,
+#modal .settings-dialog :is(.record-help,.player-options,.save-transfer), #toast {
+  border-radius: var(--radius-card);
+}
+#modal .modal-card, #dustPopup .care-dock { border-radius: var(--radius-popup); }
+
+#modal .trip-book .trip-orbit {position:relative;display:block;width:min(240px,100%);height:88px;margin:0 auto;color:var(--color-accent-highlight);overflow:hidden}
+.trip-sky {display:block;width:240px;height:88px;position:absolute;left:50%;transform:translateX(-50%)}
+.trip-pilot {position:absolute;left:50%;top:50%;width:24px;height:24px;margin:-12px;display:grid;place-items:center;overflow:hidden;animation:trip-circuit var(--flight-time) linear var(--elapsed) 1 both}
+#modal .trip-pilot .dust-art,#modal .trip-pilot svg {position:relative;inset:auto;width:24px;height:24px;margin:0;filter:none}
+@keyframes trip-circuit {
+  from {transform:scaleY(.3291) rotate(0turn) translateX(-79px) rotate(0turn) scaleY(3.0385)}
+  to {transform:scaleY(.3291) rotate(1turn) translateX(-79px) rotate(-1turn) scaleY(3.0385)}
+}
+.reduce-motion .trip-pilot,.simple-effects .trip-pilot {animation:none;transform:translateX(-79px)}
+@media(prefers-reduced-motion:reduce){.trip-pilot {animation:none;transform:translateX(-79px)}}
+#modal .trip-book .blueprint-complete {display:inline-flex;align-items:center;gap:5px;color:var(--color-accent-highlight);font-size:var(--text-label);font-weight:600}
+#modal .trip-book .blueprint-complete svg {width:16px;height:16px;color:var(--color-brand-primary)}
+#modal .trip-book .journey-cue {display:grid;gap:3px;padding:8px 10px;border-radius:var(--radius-field);background:var(--color-glass-control);text-align:start}
+
+#modal .trip-book .desk-entry {display:grid;grid-template-columns:minmax(0,1fr);gap:14px;text-align:start}
+#modal .desk-entry-head {display:grid;grid-template-columns:48px minmax(0,1fr);align-items:center;gap:12px}
+#modal .desk-entry-head .desk-entry-art {width:48px;height:48px;border-radius:var(--radius-button);font-size:var(--text-title)}
+#modal .desk-entry-head h3 {margin:2px 0 0}
+#modal .desk-entry-body {display:grid;grid-template-columns:minmax(0,1fr);gap:10px;min-width:0}
+#modal .desk-entry-body :is(p,button,select,label) {margin:0}
+#modal .desk-entry-body .desk-select {width:100%;min-width:0}
+#modal .desk-entry-body button {white-space:normal;overflow-wrap:anywhere}
+#modal .desk-entry-body .text-button {justify-self:start;text-align:start}
+.trip-prop .furniture-art { width: 48px; height: 48px; display: block; }
+.trip-design-art .furniture-art { width: 32px; height: 32px; vertical-align: middle; }
+.placement-mode .room-dust[data-room-item]:not(:focus-visible) { outline: none; }
+.placement-mode.stars-hidden .room-dust,
+.placement-mode.stars-hidden .gold-slot,
+.placement-mode.stars-hidden .daily-sparkle-drops { visibility: hidden; pointer-events: none; }
+.furniture-info .recipe-material { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-variant-numeric: tabular-nums; }
+.recipe-material .material-icon { width: 24px; height: 24px; flex: none; }
+.storage-card .storage-actions {
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 4px;
+}
+.storage-actions :is(.text-button, .button) {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: var(--radius-button);
+}
+.trip-discoveries :is(h3, p) { display: flex; align-items: center; gap: 8px; }
+.trip-discoveries .material-icon { flex: none; width: 20px; height: 20px; }
+.trip-discoveries h3 .material-icon { width: 24px; height: 24px; }

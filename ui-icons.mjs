@@ -1,5 +1,6 @@
 // Shared 24px line icons for game controls. Illustrated game objects use icons.mjs.
 const paths = {
+ upgrade: '<path d="M12 19V5m-7 7 7-7 7 7M5 21h14"/>',
  home: '<path d="m3 11 9-8 9 8M5 10v11h14V10M10 21v-7h4v7"/>',
  collection: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
  storage: '<path d="M4 8h16v13H4ZM3 3h18v5H3ZM9 12h6"/>',
@@ -12,6 +13,8 @@ const paths = {
  sparkle: '<path d="M12 2q1 8 10 10-9 2-10 10-1-8-10-10 9-2 10-10Z"/>',
  close: '<path d="m6 6 12 12M18 6 6 18"/>',
  edit: '<path d="m4 16-1 5 5-1L20 8a2.8 2.8 0 0 0-4-4ZM14 6l4 4"/>',
+ eye: '<path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="2.75"/>',
+ eyeOff: '<path d="m3 3 18 18M9.6 5.8q1.2-.3 2.4-.3c6.5 0 10 6.5 10 6.5a18 18 0 0 1-3 3.6M6.2 7.2A21 21 0 0 0 2 12s3.5 6.5 10 6.5q2.5 0 4.6-1M9.4 11a2.75 2.75 0 0 0 3.6 3.6"/>',
  move: '<path d="M3 12h18m-14-4-4 4 4 4m10-8 4 4-4 4"/>',
  check: '<path d="m5 12 4 4L19 6"/>',
  merge: '<circle cx="5.5" cy="12" r="3.5"/><circle cx="18.5" cy="12" r="3.5"/><path d="M12 9.5v5m-2.5-2.5h5"/>',

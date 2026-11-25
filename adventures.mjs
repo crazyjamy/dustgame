@@ -1,17 +1,17 @@
-import{level}from'./dust-engine.mjs?v=1.13.81-4728e3b5';
-import{routeUnlocked,routeUnlockLevel}from'./rooms.mjs?v=1.13.81-4728e3b5';
-import{initDesk}from'./desk-exploration.mjs?v=1.13.81-4728e3b5';
-import{pauseGoldClock}from'./gold-clock.mjs?v=1.13.81-4728e3b5';
-import{keepPostcard,recordAfterwordReturn}from'./dust-life.mjs?v=1.13.81-4728e3b5';
-import{activeLevel,basketEssenceBonus}from'./furniture.mjs?v=1.13.81-4728e3b5';
-import{goldInterval}from'./gold-rates.mjs?v=1.13.81-4728e3b5';
+import{level}from'./dust-engine.mjs?v=1.13.81-3dfe0d36';
+import{routeUnlocked,routeUnlockLevel}from'./rooms.mjs?v=1.13.81-3dfe0d36';
+import{initDesk}from'./desk-exploration.mjs?v=1.13.81-3dfe0d36';
+import{pauseGoldClock}from'./gold-clock.mjs?v=1.13.81-3dfe0d36';
+import{keepPostcard,recordAfterwordReturn}from'./dust-life.mjs?v=1.13.81-3dfe0d36';
+import{activeLevel,basketEssenceBonus}from'./furniture.mjs?v=1.13.81-3dfe0d36';
+import{goldInterval}from'./gold-rates.mjs?v=1.13.81-3dfe0d36';
 export const MAX_ADVENTURERS=3;
 export const QUESTS=[
  {id:'bookshelf',name:'위성 온실',duration:20000,description:'위성 온실에서 풀잎과 응결된 이슬을 채집해요.',color:'#c3b4ec',rewards:[['group','daily',1],['rarity','common',1],['essence','leaf',2],['essence','dew',1]],sparkles:2},
  {id:'window',name:'태양풍 항로',duration:45000,description:'태양풍을 따라 햇살과 잔불 정수를 모아요.',color:'#efdc9e',rewards:[['group','pop',1],['rarity','rare',1],['essence','spark',3],['essence','ember',1]],sparkles:3},
  {id:'moonpath',name:'달 뒤편 성운',duration:90000,description:'달 그림자를 지나 희귀한 별가루를 찾아요.',color:'#d0c5e4',rewards:[['group','dream',1],['rarity','legend',1],['essence','moon',5],['essence','stardust',1]],sparkles:5}
 ];
-export const isAway=(s,uid)=>(s.adventures?.some(q=>q.uid===uid)||s.deskRun?.uid===uid)||false;
+export const isAway=(s,uid)=>(s.adventures?.some(q=>q.uid===uid)||s.deskRun?.uid===uid||s.starTrips?.trip?.uid===uid)||false;
 export function initAdventures(s){
  if(s.adventures===undefined)s.adventures=[];
  if(s.keeperRoute===undefined)s.keeperRoute='bookshelf';if(!QUESTS.some(q=>q.id===s.keeperRoute))throw Error('invalid keeper route');

@@ -1,4 +1,4 @@
-import{DUSTS}from'./dust-data.mjs?v=1.13.81-4728e3b5';
+import{DUSTS}from'./dust-data.mjs?v=1.13.81-3dfe0d36';
 export const CHARACTERS={
  crumb:{favorite:'rug',motion:'knead',face:'content',action:'몸을 좌우로 기울이며 폭신하게 납작해져요.',words:'여기, 내 모양으로 폭신해졌어.',cue:'폭신하게 꾹 · 반달 눈'},
  soot:{favorite:'cushion',motion:'roll',face:'wink',action:'쿠션을 발견하면 한 바퀴 데굴 구르고 씩 웃어요.',words:'한 바퀴만 더! 진짜 마지막이야.',cue:'한 바퀴 데굴 · 윙크'},

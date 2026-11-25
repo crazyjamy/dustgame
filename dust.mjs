@@ -1,38 +1,38 @@
-import{destinations,recipeQuantity,journal,depart,tripSeconds,collectTrip,tripGold,tripUpgradePrice,workshop}from'./star-trips.mjs?v=1.13.81-d7b619b5';
-import{journeyFor,hasJourney,journeyComplete,journeyHint}from'./story-journey.mjs?v=1.13.81-d7b619b5';
-import{AFTERWORD_KINDS,AFTERWORD_LABELS,STORY_ROUTES,aftermathFor,afterwordRecord,afterwordScene,readAfterword,roomStoryReaction}from'./story-aftermath.mjs?v=1.13.81-d7b619b5';
-import{storyParagraph}from'./story-text.mjs?v=1.13.81-d7b619b5';
-import{connectStoryEffects}from'./story-effects.mjs?v=1.13.81-d7b619b5';
-import{sharedRecords,readableRecords,nextStoryClue}from'./star-records.mjs?v=1.13.81-d7b619b5';
-import{questPage,roomPage,memoryPage}from'./field-book.mjs?v=1.13.81-d7b619b5';
-import { starLight, starFace, starAppearance, starLevelScale } from './star-art.mjs?v=1.13.81-d7b619b5';
-import{dropDailySparkles,collectDailySparkle,autoCollectDailySparkles}from'./daily-sparkles.mjs?v=1.13.81-d7b619b5';
-import{pickMergeDropTarget}from'./merge-drop.mjs?v=1.13.81-d7b619b5';
-import{startDesk,finishDesk,DESK_ITEMS,deskProgress}from'./desk-exploration.mjs?v=1.13.81-d7b619b5';
-import{mountDeskScene}from'./desk-scene.mjs?v=1.13.81-d7b619b5';
-import{APP_VERSION,PREFS_KEY,BACKUP_KEY,loadPreferences}from'./player-settings.mjs?v=1.13.81-d7b619b5';
-import{encodeSave,decodeSave,saveSummary,commitImport,MAX_SAVE_BYTES}from'./save-files.mjs?v=1.13.81-d7b619b5';
-import{createSound}from'./sound.mjs?v=1.13.81-d7b619b5';
-import{THEMES,knownDust,syncCollection,themeProgress,setCollectionTarget,targetDust,materialNeeds,essenceRoute,claimTheme,toggleThemeDecor,routeCollection}from'./collection-book.mjs?v=1.13.81-d7b619b5';
-import{CHARACTERS,characterProfile,dustName,firstGreeting,renameDust,petReaction,rememberPetReaction}from'./dust-character.mjs?v=1.13.81-d7b619b5';
-import{ROOM_MEMORY,syncRoomMemory,memoryProgress,readRoomMemory,toggleMemoryDecor}from'./room-memory.mjs?v=1.13.81-d7b619b5';
-import{firstSteps,nextGoal,goldOverview}from'./progression.mjs?v=1.13.81-d7b619b5';
-import{furnitureQuest,claimFurnitureQuest}from'./furniture-quests.mjs?v=1.13.81-d7b619b5';
-import{HOLD_MS,beginGesture,advanceGesture,armGesture,shouldPlace,insideAdventureGate}from'./room-gestures.mjs?v=1.13.81-d7b619b5';
-import{personality,roomSpot,nearFavorite,companionship,storyCompanion,recipeHint,observeLife,smallWish,claimWish,resumeLife,readLife}from'./dust-life.mjs?v=1.13.81-d7b619b5';
-import{roomCapacity,storageCapacity,homeCount,hasHomeSpace,hasStorageSpace,storedCount,currentRoom,ROOM_CHAPTERS,readRoomChapter,claimRoomChapter,equipRoomDecor,roomGuest,claimRoomGuest,routeUnlocked,routeUnlockLevel}from'./rooms.mjs?v=1.13.81-d7b619b5';
-import{FURNITURE_STORIES,MAX_FURNITURE_LEVEL,furnitureCategory,activeLevel,furnitureLevel,furnitureEffect,upgradeCost}from'./furniture.mjs?v=1.13.81-d7b619b5';
-import{DEFAULT_DECOR,moveRoomItem,insideKeeper,toPlanetScreen,fromPlanetScreen}from'./room-layout.mjs?v=1.13.81-d7b619b5';
-import{QUESTS,isAway,adventureRewards,claimAdventure,selectDust,roomResidents}from'./adventures.mjs?v=1.13.81-d7b619b5';
-import{icon,furnitureArt}from'./icons.mjs?v=1.13.81-d7b619b5';
-import{uiIcon}from'./ui-icons.mjs?v=1.13.81-d7b619b5';
+import{destinations,recipeQuantity,journal,depart,tripSeconds,collectTrip,tripGold,tripUpgradePrice,workshop}from'./star-trips.mjs?v=1.13.81-3f2b718b';
+import{journeyFor,hasJourney,journeyComplete,journeyHint}from'./story-journey.mjs?v=1.13.81-3f2b718b';
+import{AFTERWORD_KINDS,AFTERWORD_LABELS,STORY_ROUTES,aftermathFor,afterwordRecord,afterwordScene,readAfterword,roomStoryReaction}from'./story-aftermath.mjs?v=1.13.81-3f2b718b';
+import{storyParagraph,sentenceMarkup}from'./story-text.mjs?v=1.13.81-3f2b718b';
+import{connectStoryEffects}from'./story-effects.mjs?v=1.13.81-3f2b718b';
+import{sharedRecords,readableRecords,nextStoryClue}from'./star-records.mjs?v=1.13.81-3f2b718b';
+import{questPage,roomPage,memoryPage}from'./field-book.mjs?v=1.13.81-3f2b718b';
+import { starLight, starFace, starAppearance, starLevelScale } from './star-art.mjs?v=1.13.81-3f2b718b';
+import{dropDailySparkles,collectDailySparkle,autoCollectDailySparkles}from'./daily-sparkles.mjs?v=1.13.81-3f2b718b';
+import{pickMergeDropTarget}from'./merge-drop.mjs?v=1.13.81-3f2b718b';
+import{startDesk,finishDesk,DESK_ITEMS,deskProgress}from'./desk-exploration.mjs?v=1.13.81-3f2b718b';
+import{mountDeskScene}from'./desk-scene.mjs?v=1.13.81-3f2b718b';
+import{APP_VERSION,PREFS_KEY,BACKUP_KEY,loadPreferences}from'./player-settings.mjs?v=1.13.81-3f2b718b';
+import{encodeSave,decodeSave,saveSummary,commitImport,MAX_SAVE_BYTES}from'./save-files.mjs?v=1.13.81-3f2b718b';
+import{createSound}from'./sound.mjs?v=1.13.81-3f2b718b';
+import{THEMES,knownDust,syncCollection,themeProgress,setCollectionTarget,targetDust,materialNeeds,essenceRoute,claimTheme,toggleThemeDecor,routeCollection}from'./collection-book.mjs?v=1.13.81-3f2b718b';
+import{CHARACTERS,characterProfile,dustName,firstGreeting,renameDust,petReaction,rememberPetReaction}from'./dust-character.mjs?v=1.13.81-3f2b718b';
+import{ROOM_MEMORY,syncRoomMemory,memoryProgress,readRoomMemory,toggleMemoryDecor}from'./room-memory.mjs?v=1.13.81-3f2b718b';
+import{firstSteps,nextGoal,goldOverview}from'./progression.mjs?v=1.13.81-3f2b718b';
+import{furnitureQuest,claimFurnitureQuest}from'./furniture-quests.mjs?v=1.13.81-3f2b718b';
+import{HOLD_MS,beginGesture,advanceGesture,armGesture,shouldPlace,insideAdventureGate}from'./room-gestures.mjs?v=1.13.81-3f2b718b';
+import{personality,roomSpot,nearFavorite,companionship,storyCompanion,recipeHint,observeLife,smallWish,claimWish,resumeLife,readLife}from'./dust-life.mjs?v=1.13.81-3f2b718b';
+import{roomCapacity,storageCapacity,homeCount,hasHomeSpace,hasStorageSpace,storedCount,currentRoom,ROOM_CHAPTERS,readRoomChapter,claimRoomChapter,equipRoomDecor,roomGuest,claimRoomGuest,routeUnlocked,routeUnlockLevel}from'./rooms.mjs?v=1.13.81-3f2b718b';
+import{FURNITURE_STORIES,MAX_FURNITURE_LEVEL,furnitureCategory,activeLevel,furnitureLevel,furnitureEffect,upgradeCost}from'./furniture.mjs?v=1.13.81-3f2b718b';
+import{DEFAULT_DECOR,moveRoomItem,insideKeeper,toPlanetScreen,fromPlanetScreen}from'./room-layout.mjs?v=1.13.81-3f2b718b';
+import{QUESTS,isAway,adventureRewards,claimAdventure,selectDust,roomResidents}from'./adventures.mjs?v=1.13.81-3f2b718b';
+import{icon,furnitureArt}from'./icons.mjs?v=1.13.81-3f2b718b';
+import{uiIcon}from'./ui-icons.mjs?v=1.13.81-3f2b718b';
 
 for (const placeholder of document.querySelectorAll('[data-ui-icon]')) {
  placeholder.outerHTML = uiIcon(placeholder.dataset.uiIcon, placeholder.className);
 }
-import{ROOMS,FURNITURE,FAIRY_PRICE,GOLD_PRODUCTION_DIVISOR,buyFairy,materialPrice,installed,GOLD_CAP_MS,baseGoldInterval,goldInterval,goldAmount,goldProduction,collectGold,collectAllGold,buyMaterial,upgradeRoom,toggleFurniture,upgradeFurniture}from'./economy.mjs?v=1.13.81-d7b619b5';
-import{DUSTS,GROUPS,RARITIES,ESSENCES,STAGES,STORIES}from'./dust-data.mjs?v=1.13.81-d7b619b5';
-import{createState,restore,migrateCats,getDust,stage,recipe,checkMix,mix,finishMix,mergeDust,mergeCandidates,mergeResultLevel,pet,level,unlockedStories,inRoom,storeDust,takeOutDust,swapStoredDust,readStory}from'./dust-engine.mjs?v=1.13.81-d7b619b5';
+import{ROOMS,FURNITURE,FAIRY_PRICE,GOLD_PRODUCTION_DIVISOR,buyFairy,materialPrice,installed,GOLD_CAP_MS,baseGoldInterval,goldInterval,goldAmount,goldProduction,collectGold,collectAllGold,buyMaterial,upgradeRoom,toggleFurniture,upgradeFurniture}from'./economy.mjs?v=1.13.81-3f2b718b';
+import{DUSTS,GROUPS,RARITIES,ESSENCES,STAGES,STORIES}from'./dust-data.mjs?v=1.13.81-3f2b718b';
+import{createState,restore,migrateCats,getDust,stage,recipe,checkMix,mix,finishMix,mergeDust,mergeCandidates,mergeResultLevel,pet,level,unlockedStories,inRoom,storeDust,takeOutDust,swapStoredDust,readStory}from'./dust-engine.mjs?v=1.13.81-3f2b718b';
 const KEY='tiny-dust-club-v1',$=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));let state,saveBlocked=false,damagedRaw=null;try{const raw=localStorage.getItem(KEY);if(raw){try{state=restore(raw)}catch{saveBlocked=true;damagedRaw=raw;state=createState()}}else{try{state=migrateCats(localStorage.getItem('meow-mix-v2'))}catch{state=createState()}}}catch{state=createState()}
 let userPrefs=loadPreferences(readLocal(PREFS_KEY),!!readLocal(KEY)),introOpen=false;
 const sounds=createSound(()=>userPrefs,window.AudioContext||window.webkitAudioContext);
@@ -247,8 +247,7 @@ function journeyCue(d){
  return renderStoryCue(text);
 }
 function renderStoryCue(text){
- const label=esc(text);
- return `<p class="journey-cue"><span>다음 단서</span><strong class="journey-cue-text">${label}<span class="journey-cue-shimmer" aria-hidden="true">${label}</span></strong></p>`;
+ return `<p class="journey-cue"><span>다음 단서</span><strong class="journey-cue-text story-shimmer">${sentenceMarkup(text)}</strong></p>`;
 }
 function sharedRecordSummary(d){const sections=sharedRecords(state,d);return `성장 ${d.readStories.length}/5 · 엽서 ${sections[1].entries.filter(e=>e.kind==='postcard').length} · 자리 ${sections[2].entries.length} · 친구 ${sections[3].entries.length}`;}
 function sharedStoryEntrance(d,all){
@@ -579,7 +578,8 @@ function updateGoldUI(){
   const p=goldProduction(state,d,now);
   const seconds=Math.ceil(p.remaining/1000);
   timer.classList.toggle('gold-ready',Boolean(p.cycles));
-  $('#goldTimerValue').textContent=p.cycles?p.amount:seconds+'초';
+  const value=$('#goldTimerValue'),label=p.cycles?String(p.amount):seconds+'초';
+  if(value.textContent!==label)value.textContent=label;
   timer.closest('button').setAttribute('aria-label',p.cycles?`${p.amount} 골드 받기 가능 · 골드 안내`:`${seconds}초 뒤 골드 · 골드 안내`);
  }
 }
@@ -684,8 +684,9 @@ document.addEventListener('click',event=>{
  if(!event.target.closest('#dustPopup, .room-dust'))hideDustPopup();
 },true);
 function focusRoomDust(uid,showPopup=false){
+ if(showPopup&&!placementMode&&uid===dustPopupUid&&uid===state.selectedUid&&$('#dustPopupName'))return;
  if(!selectDust(state,uid))return;
- save();renderHeader();const active=selected();
+ save();const active=selected();
  if(showPopup&&!placementMode)dustPopupUid=uid;
  else if(dustPopupUid!==uid)hideDustPopup();
  document.querySelectorAll('.room-dust').forEach(el=>{

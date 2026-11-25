@@ -1,5 +1,5 @@
-import{FURNITURE_SPOTS}from'./dust-life.mjs?v=1.13.81-d7b619b5';
-import {isAway} from './adventures.mjs?v=1.13.81-d7b619b5';
+import{FURNITURE_SPOTS}from'./dust-life.mjs?v=1.13.81-3f2b718b';
+import {isAway} from './adventures.mjs?v=1.13.81-3f2b718b';
 export const DEFAULT_DECOR=FURNITURE_SPOTS;
 export const insideKeeper=(box,x,y)=>x>=box.left-12&&x<=box.right+12&&y>=box.top-12&&y<=box.bottom+12;
 // Keep the saved surface scale. Negative values extend it into the sky.

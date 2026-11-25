@@ -923,7 +923,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
 
 @supports ((background-clip: text) or (-webkit-background-clip: text)) {
   @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
-    html:not(.reduce-motion, .simple-effects) :is(.story-sentence, .journey-cue-shimmer) {
+    html:not(.reduce-motion, .simple-effects) :is(.story-sentence.shimmer-active, #dustPopup .journey-cue .story-sentence) {
       background-image: linear-gradient(90deg, transparent 38%,
         var(--story-shimmer-tint, var(--color-story-shimmer)) 47%, #fff 49% 51%,
         var(--story-shimmer-tint, var(--color-story-shimmer)) 53%, transparent 62%);
@@ -934,13 +934,16 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
       background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    html:not(.reduce-motion, .simple-effects) .story-sentence {
+
+    html:not(.reduce-motion, .simple-effects) :is(.story-sentence.shimmer-active, #dustPopup .journey-cue .story-sentence) {
       background-color: currentColor;
+      animation: story-shimmer calc(var(--sentence-lines, 1) * var(--motion-story-shimmer)) linear backwards;
+      background-position: 0 0;
     }
-    html:not(.reduce-motion, .simple-effects) :is(.story-sentence.shimmer-active, .journey-cue-shimmer) {
-      animation: story-shimmer var(--motion-story-shimmer) linear both;
+    html:not(.reduce-motion, .simple-effects) #dustPopup .journey-cue .story-sentence {
+      animation-delay: calc(var(--preceding-lines, var(--sentence-index)) * var(--motion-story-shimmer));
     }
-    html:not(.reduce-motion, .simple-effects) .journey-cue-shimmer { display: block; }
+    html:not(.reduce-motion, .simple-effects) body.modal-open #dustPopup .journey-cue .story-sentence { animation: none; background-image: none; }
     @keyframes story-shimmer {
       from { background-position: 100% 0; }
       to { background-position: 0 0; }
@@ -1372,7 +1375,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   overflow: hidden;
   pointer-events: none;
   background:
-    url('./assets/galaxy-stars.svg?v=1.13.81-d7b619b5') center 12% / auto 800px repeat,
+    url('./assets/galaxy-stars.svg?v=1.13.81-3f2b718b') center 12% / auto 800px repeat,
     radial-gradient(ellipse at 77% 27%, var(--color-glass-orbit-graphite), transparent 57%),
     radial-gradient(ellipse at 13% 54%, var(--color-glass-orbit-slate), transparent 64%),
     radial-gradient(ellipse at 94% 78%, var(--color-glass-orbit-silver), transparent 56%),
@@ -1414,7 +1417,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: url('./assets/planet-horizon.svg?v=1.13.81-d7b619b5') center 46% / cover no-repeat;
+  background: url('./assets/planet-horizon.svg?v=1.13.81-3f2b718b') center 46% / cover no-repeat;
 }
 .planet-landscape + .room-playfield .galaxy-portal { top: 39%; left: 82%; }
 .dust-room .birth-glow {
@@ -2312,14 +2315,7 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
   font-weight: 500;
   line-height: 1.6;
 }
-.journey-cue-shimmer {
-  display: none;
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  user-select: none;
-  --story-shimmer-tint: #bbddff;
-}
+.journey-cue-text { --story-shimmer-tint: #bbddff; }
 .shared-story-entrance { display: grid; gap: 12px; margin: 22px 0; padding: 18px; text-align: start; border: 1px solid var(--color-glass-edge); border-radius: 14px; background: #bfd5ff08; }
 .shared-story-entrance > header { display: flex; align-items: start; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
 .shared-story-entrance h3 { margin: 0; font-size: 16px; }
@@ -2635,3 +2631,12 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
 .trip-blueprint > header > .furniture-art { width:52px; height:52px; flex:none; }
 #modal .trip-blueprint h3 { margin:0 0 4px; }
 #modal .trip-blueprint .recipe-material { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:0; font-variant-numeric:tabular-nums; }
+
+@media (max-width: 700px), (pointer: coarse) {
+  #dustPopup .care-dock {
+    inset-inline: 0;
+    margin-inline: auto;
+    translate: none;
+  }
+  #dustPopup #goldTimerValue { font-variant-numeric: tabular-nums; }
+}

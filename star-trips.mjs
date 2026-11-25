@@ -1,7 +1,7 @@
-import {QUESTS} from './adventures.mjs?v=1.13.81-d7b619b5';
-import {routeUnlocked} from './rooms.mjs?v=1.13.81-d7b619b5';
-import {keepPostcard,recordAfterwordReturn} from './dust-life.mjs?v=1.13.81-d7b619b5';
-import {activeLevel,basketEssenceBonus} from './furniture.mjs?v=1.13.81-d7b619b5';
+import {QUESTS} from './adventures.mjs?v=1.13.81-3f2b718b';
+import {routeUnlocked} from './rooms.mjs?v=1.13.81-3f2b718b';
+import {keepPostcard,recordAfterwordReturn} from './dust-life.mjs?v=1.13.81-3f2b718b';
+import {activeLevel,basketEssenceBonus} from './furniture.mjs?v=1.13.81-3f2b718b';
 
 function postcardStop(s,pet,random){
  const stops=QUESTS.filter(q=>routeUnlocked(s,q.id)&&!s.life.postcards.some(p=>p.dustId===pet.id&&p.route===q.id));

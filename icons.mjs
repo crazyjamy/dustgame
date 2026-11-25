@@ -1,4 +1,4 @@
-import {spaceItemArt} from './space-items.mjs?v=1.13.81-d7b619b5';
+import {spaceItemArt} from './space-items.mjs?v=1.13.81-3f2b718b';
 const shapes={
  twig:'<path d="m9 39 12-14-1-12 3-2 2 11 11-13 4 1-11 15 10-3 2 3-15 5-13 14Z" fill="#d4ad87"/><path d="M31 15q-4-10 7-12 1 9-7 12Z" fill="#bdd19e"/>',
  glowShell:'<path d="M22 41 8 28q-4-7 2-10 0-7 7-7 4-7 10-3 7-4 11 3 7 0 7 8 5 5 0 11L30 41Z" fill="#b9dfe1"/><path d="m13 21 11 15m-5-20 6 18m3-20-1 20m11-18-9 20" stroke="#84aabf"/><path d="M21 40h11l-2 4h-8Z" fill="#e2c4d9"/>',

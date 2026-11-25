@@ -1,4 +1,4 @@
-import {FURNITURE} from './economy.mjs?v=1.13.81-d7b619b5';
+import {FURNITURE} from './economy.mjs?v=1.13.81-3f2b718b';
 
 const missions = {
  rug: ['첫 별의 이야기 읽기', s => s.dusts.some(d => d.readStories.length > 0)],

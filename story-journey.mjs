@@ -1,5 +1,5 @@
 // A small, additive story arc. Existing chapter indices and XP gates stay intact.
-import {STAR_JOURNEYS} from './star-journeys.mjs?v=1.13.81-d7b619b5';
+import {STAR_JOURNEYS} from './star-journeys.mjs?v=1.13.81-3f2b718b';
 export const SOLA_JOURNEY = {
   question: '내 빛이 멀리 있는 친구에게도 닿을까?',
   ending: '네가 돌아올 자리를 밝혀둘게.',

@@ -1304,13 +1304,16 @@ function blueprintClue(d){
 function recipeMaterial(d,stock){
  return `<p class="recipe-material" aria-label="${d.material} 보유 ${stock}개, 필요 ${recipeQuantity}개">${icon(d.materialArt)} ${d.material} <b>${stock} / ${recipeQuantity}개</b></p>`;
 }
+function craftButton(i,known,stock){
+ return `<button class="button primary full" data-trip-craft="${i}" ${known&&stock>=recipeQuantity?'':'disabled'}>제작하고 놓기</button>`;
+}
 function tripShop(){
  const j=journal(state);
  const materials=destinations.map((d,i)=>`<article class="material-card">${icon(d.materialArt)}<h3>${d.material}</h3><p>보유 ${j.stock[i]}개</p>${tripButton(d.price+' '+d.color+' · 1개 구매','data-trip-buy="'+i+'"',(i?state.sparkles:state.gold)>=d.price)}</article>`).join('');
  const designs=destinations.map((d,i)=>{
   if(j.crafted[i])return '';
   const stock=j.stock[i],known=j.blueprints[i];
-  return `<article class="furniture-card"><div class="furniture-picture">${tripFurnitureArt(i)}<span>${known?'도안 발견':'미발견 도안'}</span></div><div class="furniture-info"><h2>${d.furniture}</h2>${known?'':blueprintClue(d)}${recipeMaterial(d,stock)}<button class="button primary full" data-trip-craft="${i}" ${known&&stock>=recipeQuantity?'':'disabled'}>제작하고 놓기</button></div></article>`;
+  return `<article class="furniture-card"><div class="furniture-picture">${tripFurnitureArt(i)}<span>${known?'도안 발견':'미발견 도안'}</span></div><div class="furniture-info"><h2>${d.furniture}</h2>${known?'':blueprintClue(d)}${recipeMaterial(d,stock)}${craftButton(i,known,stock)}</div></article>`;
  }).join('');
  return `<section class="shop-materials"><h2>탐험 재료</h2><div>${materials}</div></section><section><h2>가구 제작</h2><div class="furniture-grid">${designs||'<p>탐험 가구를 모두 제작했어요.</p>'}</div></section>`;
 
@@ -1345,7 +1348,7 @@ function openTrips(tab='trip'){
   body=destinations.map((d,i)=>{
    if(j.crafted[i])return '';
    const status=j.blueprints[i]?`<span class="blueprint-complete">${uiIcon('check')} 도안 발견 · ${j.stock[i]>=recipeQuantity?'제작 가능':'재료 모으는 중'}</span>`:blueprintClue(d);
-   return `<section class="trip-blueprint"><header>${tripFurnitureArt(i)}<div><h3>${d.furniture}</h3>${recipeMaterial(d,j.stock[i])}</div></header>${status}</section>`;
+   return `<section class="trip-blueprint"><header>${tripFurnitureArt(i)}<div><h3>${d.furniture}</h3>${recipeMaterial(d,j.stock[i])}</div></header>${status}${j.blueprints[i]?craftButton(i,true,j.stock[i]):''}</section>`;
   }).join('')||'<p>탐험 가구를 모두 제작했어요.</p>';
  }else if(tab==='log'){
   body=destinations.map((d,i)=>{
@@ -1379,6 +1382,6 @@ document.addEventListener('click',e=>{
  let ok=false,msg='',tab='trip';
  if('tripStart' in a){const p=selected();if(p)ok=depart(state,p,level(p.xp),getDust(p.id).essence);}
  else if('tripCollect' in a){const i=j.trip?Math.floor(j.trip.q/2):-1,first=i>=0&&j.trip.q%2===0&&!j.blueprints[i];const previous=state.life.postcards.length;ok=collectTrip(state);if(ok)msg=first?'탐험 보상을 받았어요. '+destinations[i].furniture+' 도안이 열렸어요.':'탐험 보상을 받았어요.';if(ok&&state.life.postcards.length>previous){const p=state.life.postcards[0];msg+=' '+find(QUESTS,p.route).name+'에서 새 엽서가 왔어요.';}}
- else {const action=['buy','craft','place','upgrade'].find(k=>b.hasAttribute('data-trip-'+k));if(!action)return;ok=workshop(state,action,Number(b.getAttribute('data-trip-'+action)));if(ok){save();render();if(action==='upgrade'&&page==='room'){const item=document.querySelector('[data-trip-item="'+a.tripUpgrade+'"]');if(item)showFurnitureActions(item);}if(action==='craft')toast('가구를 제작했어요. 보관함에서 강화할 수 있어요.','check');}return;}
+ else {const action=['buy','craft','place','upgrade'].find(k=>b.hasAttribute('data-trip-'+k));if(!action)return;ok=workshop(state,action,Number(b.getAttribute('data-trip-'+action)));if(ok){save();render();if(action==='upgrade'&&page==='room'){const item=document.querySelector('[data-trip-item="'+a.tripUpgrade+'"]');if(item)showFurnitureActions(item);}if(action==='craft'){if(b.closest('.trip-blueprint'))openTrips('work');toast('가구를 제작했어요. 보관함에서 강화할 수 있어요.','check');}}return;}
  if(ok){save();render();openTrips(tab);if(msg)toast(msg,'check');}
 });

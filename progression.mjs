@@ -1,8 +1,8 @@
-import{mergeCandidates}from'./dust-engine.mjs?v=1.13.81-3dfe0d36';
-import{DUSTS}from'./dust-data.mjs?v=1.13.81-3dfe0d36';
-import{ROOMS,ROOM_CHAPTERS}from'./rooms.mjs?v=1.13.81-3dfe0d36';
-import{isAway}from'./adventures.mjs?v=1.13.81-3dfe0d36';
-import{goldProduction,FAIRY_PRICE}from'./economy.mjs?v=1.13.81-3dfe0d36';
+import{mergeCandidates}from'./dust-engine.mjs?v=1.13.81-d7b619b5';
+import{DUSTS}from'./dust-data.mjs?v=1.13.81-d7b619b5';
+import{ROOMS,ROOM_CHAPTERS}from'./rooms.mjs?v=1.13.81-d7b619b5';
+import{isAway}from'./adventures.mjs?v=1.13.81-d7b619b5';
+import{goldProduction,FAIRY_PRICE}from'./economy.mjs?v=1.13.81-d7b619b5';
 
 export function firstSteps(s){return [
  {id:'birth',label:'새 별 관측',done:s.nextUid>2||s.dusts.some(d=>d.xp>0)||s.ownedFurniture.length>0||s.roomLevel>1},
@@ -36,7 +36,11 @@ export function nextGoal(s,now=Date.now()){
  if(missing?.id==='furniture')return {id:'furniture',title:'첫 궤도 장비 받기',description:'나리가 둥근 러그를 내밀었어요. “사진을 같이 보고 싶은데 바닥이 차네. 여기 행성 고리를 펴 줄래?”',reward:'행성 고리 Lv.1 · 합치기 반짝이 +1',action:'rug',cta:'행성 고리 보상 받기',currency:'free',cost:0,have:0,missing:0};
  const chapter=ROOM_CHAPTERS.find(c=>c.level<=s.roomLevel&&!s.roomGrowth.claimed.includes(c.level));if(chapter)return {id:'room-memory',title:'새 성역의 기록 · '+chapter.title,description:'함께 넓힌 은하계에 새 기억이 열렸어요. 이야기를 읽고 보상 장식을 받아요.',reward:chapter.reward,action:'room-chapter',chapter:chapter.level,cta:'성역의 기록과 보상 보기',currency:'free',cost:0,have:0,missing:0};
  if(s.adventureCount===0&&s.adventures.length){const ready=s.adventures.some(q=>now>=q.end);return {id:'adventure',title:ready?'돌아온 친구의 선물 받기':'첫 모험을 다녀오는 중이에요',description:ready?'루미가 친구와 함께 기다려요. 귀환 보상을 받으면 첫 엽서가 모은 별에 보관돼요.':'창을 닫아도 모험은 이어져요. 돌아오면 루미를 눌러 친구를 맞이하고 선물을 받아요.',reward:'첫 모험 엽서 · 조합 재료 · 반짝이',action:'adventure',cta:ready?'루미에게 귀환 보상 받기':'모험 소식 보기',currency:'free',cost:0,have:0,missing:0};}
- if(s.adventureCount===0)return {id:'adventure',title:'루미와 첫 항로 정하기',description:'루미의 항로를 고르고 별을 루미 앞으로 옮겨요. 출발을 확인하면 항해가 시작돼요.',reward:'첫 모험 엽서 · 조합 재료 · 반짝이',action:'adventure',cta:'루미의 항로 지도 보기',currency:'free',cost:0,have:0,missing:0};
+ if(s.adventureCount===0&&s.starTrips?.trip){
+  const ready=now>=(s.starTrips.trip.end??0);
+  return {id:'adventure',title:ready?'돌아온 별의 보상 받기':'첫 랜덤 탐험 중',description:'루미의 수첩에서 귀환 소식을 확인해요.',reward:'골드 · 탐험 재료',action:'adventure',cta:'탐험 수첩 열기',currency:'free',cost:0,have:0,missing:0};
+ }
+ if(s.adventureCount===0)return {id:'adventure',title:'루미와 첫 랜덤 탐험 떠나기',description:'루미의 수첩에서 별을 보내요. 돌아오는 길에 엽서가 도착할 수도 있어요.',reward:'골드 · 탐험 재료',action:'adventure',cta:'탐험 수첩 열기',currency:'free',cost:0,have:0,missing:0};
  if(s.roomLevel>=2&&!s.fairyOwned)return sparkleGoal({id:'fairy',title:'골드 모으는 요정 모아 만나기',description:'은하계에 찾아온 모아를 누르면 준비된 골드를 한 번에 받아요.',reward:'요정 모아 · 골드 모두 받기',action:'shop',cta:s.sparkles>=FAIRY_PRICE?'작은 상점으로':'반짝이 모으러 가기'},FAIRY_PRICE);
  if(s.roomLevel<ROOMS.length){const next=ROOMS[s.roomLevel],chapter=ROOM_CHAPTERS.find(c=>c.level>s.roomLevel);return sparkleGoal({id:'room',title:`은하계 Lv.${next.level} · ${next.capacity}마리의 자리`,description:`두 자리를 더 내어줘요. ${chapter?'Lv.'+chapter.level+'에 '+chapter.name+'의 이야기가 열려요.':'마지막 은하계를 완성해요.'}`,reward:`방 +2자리 · ${chapter?chapter.reward:'200자리 완성'}`,action:'room',cta:s.sparkles>=next.cost?'다음 방 살펴보기':'반짝이 모으러 가기'},next.cost);}
  if(!s.fairyOwned)return sparkleGoal({id:'fairy',title:'골드 모으는 요정 모아 만나기',description:'은하계에 찾아온 모아를 누르면 준비된 골드를 한 번에 받아요.',reward:'요정 모아 · 골드 모두 받기',action:'shop',cta:s.sparkles>=FAIRY_PRICE?'작은 상점으로':'반짝이 모으러 가기'},FAIRY_PRICE);

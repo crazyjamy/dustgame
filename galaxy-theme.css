@@ -1372,7 +1372,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   overflow: hidden;
   pointer-events: none;
   background:
-    url('./assets/galaxy-stars.svg?v=1.13.81-3dfe0d36') center 12% / auto 800px repeat,
+    url('./assets/galaxy-stars.svg?v=1.13.81-d7b619b5') center 12% / auto 800px repeat,
     radial-gradient(ellipse at 77% 27%, var(--color-glass-orbit-graphite), transparent 57%),
     radial-gradient(ellipse at 13% 54%, var(--color-glass-orbit-slate), transparent 64%),
     radial-gradient(ellipse at 94% 78%, var(--color-glass-orbit-silver), transparent 56%),
@@ -1414,7 +1414,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: url('./assets/planet-horizon.svg?v=1.13.81-3dfe0d36') center 46% / cover no-repeat;
+  background: url('./assets/planet-horizon.svg?v=1.13.81-d7b619b5') center 46% / cover no-repeat;
 }
 .planet-landscape + .room-playfield .galaxy-portal { top: 39%; left: 82%; }
 .dust-room .birth-glow {
@@ -2630,3 +2630,8 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
 .trip-discoveries :is(h3, p) { display: flex; align-items: center; gap: 8px; }
 .trip-discoveries .material-icon { flex: none; width: 20px; height: 20px; }
 .trip-discoveries h3 .material-icon { width: 24px; height: 24px; }
+
+.trip-blueprint > header { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+.trip-blueprint > header > .furniture-art { width:52px; height:52px; flex:none; }
+#modal .trip-blueprint h3 { margin:0 0 4px; }
+#modal .trip-blueprint .recipe-material { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:0; font-variant-numeric:tabular-nums; }

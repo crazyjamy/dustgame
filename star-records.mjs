@@ -1,11 +1,11 @@
-import {petReaction} from './dust-character.mjs?v=1.13.81-3dfe0d36';
-import {DUSTS,STORIES} from './dust-data.mjs?v=1.13.81-3dfe0d36';
-import {unlockedStories} from './dust-engine.mjs?v=1.13.81-3dfe0d36';
-import {personality} from './dust-life.mjs?v=1.13.81-3dfe0d36';
-import {isAway,roomResidents} from './adventures.mjs?v=1.13.81-3dfe0d36';
-import {routeUnlocked} from './rooms.mjs?v=1.13.81-3dfe0d36';
-import {journeyComplete,journeyFor} from './story-journey.mjs?v=1.13.81-3dfe0d36';
-import {aftermathFor,afterwordRecord,afterwordScene,STORY_ROUTES} from './story-aftermath.mjs?v=1.13.81-3dfe0d36';
+import {petReaction} from './dust-character.mjs?v=1.13.81-d7b619b5';
+import {DUSTS,STORIES} from './dust-data.mjs?v=1.13.81-d7b619b5';
+import {unlockedStories} from './dust-engine.mjs?v=1.13.81-d7b619b5';
+import {personality} from './dust-life.mjs?v=1.13.81-d7b619b5';
+import {isAway,roomResidents} from './adventures.mjs?v=1.13.81-d7b619b5';
+import {routeUnlocked} from './rooms.mjs?v=1.13.81-d7b619b5';
+import {journeyComplete,journeyFor} from './story-journey.mjs?v=1.13.81-d7b619b5';
+import {aftermathFor,afterwordRecord,afterwordScene,STORY_ROUTES} from './story-aftermath.mjs?v=1.13.81-d7b619b5';
 
 // A read-only view of existing records. Opening the book does not advance play.
 const moments={
@@ -53,6 +53,6 @@ export function nextStoryClue(s,d){
  if(!d.readStories.includes(0))return {line,action:'book',label:'함께 쓴 이야기 펼쳐보기'};
  if(!afterwordRecord(s,d,'friend')&&home.some(x=>x.id!==d.id))return {line,action:'friend',label:'친구 곁에 함께 놓아보기'};
  if(!afterwordRecord(s,d,'favorite')&&s.decorations.includes(favorite.id))return {line,action:'favorite',label:favorite.name+' 곁에 놓아보기'};
- if(!afterwordRecord(s,d,'route')&&routeUnlocked(s,profile.route))return {line,action:'route',label:STORY_ROUTES[profile.route]+'에 다녀와보기'};
+ if(!afterwordRecord(s,d,'route')&&routeUnlocked(s,profile.route))return {line,action:'route',label:'랜덤 탐험 수첩 열기'};
  return {line,action:'book',label:'함께 쓴 기록 다시 펼쳐보기'};
 }

@@ -1,6 +1,6 @@
-import { SKY_STORIES } from './sky-stories.mjs?v=1.13.81-3dfe0d36';
-import{makeMoreDusts}from'./dust-fifty.mjs?v=1.13.81-3dfe0d36';
-import{EXTRA_DUSTS}from'./dust-expansion.mjs?v=1.13.81-3dfe0d36';
+import { SKY_STORIES } from './sky-stories.mjs?v=1.13.81-d7b619b5';
+import{makeMoreDusts}from'./dust-fifty.mjs?v=1.13.81-d7b619b5';
+import{EXTRA_DUSTS}from'./dust-expansion.mjs?v=1.13.81-d7b619b5';
 export const GROUPS=[{id:'daily',name:'포근',icon:'◌'},{id:'pop',name:'몽글',icon:'✿'},{id:'dream',name:'반짝',icon:'✧'}];
 export const RARITIES=[{id:'common',name:'보통',cost:3},{id:'rare',name:'특별',cost:5},{id:'legend',name:'희귀',cost:8}];
 export const ESSENCES=[{id:'leaf',name:'풀잎',icon:'❋'},{id:'spark',name:'햇살',icon:'☀'},{id:'moon',name:'달빛',icon:'☾'},{id:'dew',name:'이슬',icon:'◉',added:true},{id:'ember',name:'잔불',icon:'♧',added:true},{id:'stardust',name:'별가루',icon:'✦',added:true}];

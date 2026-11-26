@@ -254,8 +254,8 @@ function renderStoryCue(text){
  return `<p class="journey-cue"><span>다음 단서</span><strong class="journey-cue-text story-shimmer">${sentenceMarkup(text)}</strong></p>`;
 }
 function sharedRecordSummary(d){const sections=sharedRecords(state,d);return `성장 ${d.readStories.length}/5 · 엽서 ${sections[1].entries.filter(e=>e.kind==='postcard').length} · 자리 ${sections[2].entries.length} · 친구 ${sections[3].entries.length}`;}
-function sharedStoryEntrance(d,all){
- return `<section class="shared-story-entrance" aria-label="선택한 별의 기록"><header><h3>함께 쓴 이야기</h3>${all.length>1?`<label class="record-copy-label">기록을 볼 별<select id="recordCopy" data-record-copy="${d.id}" aria-label="기록을 볼 별">${all.map((v,i)=>`<option value="${v.uid}" ${v.uid===d.uid?'selected':''}>${esc(dustName(v))} #${i+1} · Lv.${level(v.xp)}</option>`).join('')}</select></label>`:`<small>${esc(dustName(d))}의 기록</small>`}</header><p>${esc(nextStoryClue(state,d).line)}</p><button class="button secondary full" data-shared-story="${d.uid}">함께 쓴 이야기 읽기</button><small>${sharedRecordSummary(d)}</small></section>`;
+function sharedStoryEntrance(d){
+ return `<section class="shared-story-entrance" aria-label="선택한 별의 기록"><header><h3>함께 쓴 이야기</h3></header><p>${esc(nextStoryClue(state,d).line)}</p><button class="button secondary full" data-shared-story="${d.uid}">함께 쓴 이야기 읽기</button><small>${sharedRecordSummary(d)}</small></section>`;
 }
 function sharedStoryBook(uid){
  const d=state.dusts.find(x=>x.uid===uid);if(!d)return;
@@ -475,16 +475,25 @@ function showMaterials(){modal('작은 재료 가방',`<p>조합할 때 그룹 1
 function copyAction(star, action, icon, label) {
  return `<button class="text-button copy-action" data-${action}="${star.uid}" title="${label}" aria-label="${esc(dustName(star))} · ${label}">${uiIcon(icon)}</button>`;
 }
+function starHeaderActions(star, all) {
+ const away=isAway(state,star.uid);
+ const stageLabel='Lv.'+level(star.xp)+' · '+growthName(level(star.xp));
+ const status=star.stored?' · 보관 중':away?' · 모험 중':'';
+ const picker=all.length>1?`<select id="recordCopy" data-record-copy="${star.id}" aria-label="보유 별 선택">${all.map((v,i)=>`<option value="${v.uid}" ${v.uid===star.uid?'selected':''}>#${i+1} ${esc(dustName(v))}</option>`).join('')}</select>`:'';
+ const locationAction=star.stored?copyAction(star,'take-out','home','은하계로 꺼내기'):away?copyAction(star,'copy','survey','탐험 확인'):copyAction(star,'copy','home','은하계에서 보기')+copyAction(star,'store','storage','보관하기');
+ return `<div class="star-header-tools"><div class="star-header-status">${picker}<small>${stageLabel}${status}</small></div><div class="copy-row">${locationAction}<button class="button primary copy-action" id="detailMix" aria-label="같은 별 한 마리 더" title="같은 별 한 마리 더">${uiIcon('recipe')}</button></div></div>`;
+}
 function detail(id,uid=null){const d=getDust(id),found=knownDust(state,id),all=copies(id),recordStar=all.find(v=>v.uid===uid)||all.find(v=>v.uid===state.selectedUid)||all[0],xp=Math.max(0,...all.map(x=>x.xp)),max=all.length?stage(xp):-1;const resident=roomResidents(state).find(v=>v.uid===recordStar?.uid);
  const editName=recordStar&&level(recordStar.xp)>=5;
  const portrait=dustArt(id,recordStar?stage(recordStar.xp):found?Math.max(0,max):2,found?'':'silhouette',recordStar?level(recordStar.xp):found?level(xp):5);
- modal(recordStar?esc(dustName(recordStar)):found?d.name:'아직 만나지 못했어요.',`${resident?`<div class="detail-pet"><button type="button" class="pet-portrait" aria-describedby="petRewardHint" aria-label="${esc(dustName(resident))} 쓰다듬기"><span class="dust-lift">${portrait}</span></button><small class="pet-reward-hint help-text" id="petRewardHint">별을 살살 문질러 주세요 ${rewardAmount(uiIcon('sparkle'),'반짝이',petSparkles(state,resident),'sparkle')}</small></div>`:portrait}<div class="star-profile-summary"><div class="detail-tags"><span>${find(GROUPS,d.group).name}</span><span>${find(RARITIES,d.rarity).name}</span><span>보유 ${all.length}마리</span></div><p class="star-intro">${found?d.story:recipeHint(id)}</p></div>${found?preferenceDetails(id,roomResidents(state).find(v=>v.uid===recordStar?.uid&&v.id===id)):'<span class="hint-caption help-text">단서에서 그룹 · 희귀도 · 정수를 떠올려보세요.</span>'}${recordStar?sharedStoryEntrance(recordStar,all):''}${knownDust(state,id)?recipeRecord(getDust(id)):`<div class="detail-collect-target"><button class="button primary full" data-collect-target="${id}">이 친구를 다음 수집 목표로 →</button><p>정수 단서에 맞는 재료는 ${find(QUESTS,essenceRoute(d.essence)).name}에서 모을 수 있어요.</p></div>`}<div class="growth-pair growth-preview" aria-label="성장 단계">${STAGES.map((name,i)=>{
+ modal(recordStar?esc(dustName(recordStar)):found?d.name:'아직 만나지 못했어요.',`${resident?`<div class="detail-pet"><button type="button" class="pet-portrait" aria-describedby="petRewardHint" aria-label="${esc(dustName(resident))} 쓰다듬기"><span class="dust-lift">${portrait}</span></button><small class="pet-reward-hint help-text" id="petRewardHint">별을 살살 문질러 주세요 ${rewardAmount(uiIcon('sparkle'),'반짝이',petSparkles(state,resident),'sparkle')}</small></div>`:portrait}<div class="star-profile-summary"><div class="detail-tags"><span>${find(GROUPS,d.group).name}</span><span>${find(RARITIES,d.rarity).name}</span><span>보유 ${all.length}마리</span></div><p class="star-intro">${found?d.story:recipeHint(id)}</p></div>${found?preferenceDetails(id,roomResidents(state).find(v=>v.uid===recordStar?.uid&&v.id===id)):'<span class="hint-caption help-text">단서에서 그룹 · 희귀도 · 정수를 떠올려보세요.</span>'}${recordStar?sharedStoryEntrance(recordStar):''}${knownDust(state,id)?recipeRecord(getDust(id)):`<div class="detail-collect-target"><button class="button primary full" data-collect-target="${id}">이 친구를 다음 수집 목표로 →</button><p>정수 단서에 맞는 재료는 ${find(QUESTS,essenceRoute(d.essence)).name}에서 모을 수 있어요.</p></div>`}<div class="growth-pair growth-preview" aria-label="성장 단계">${STAGES.map((name,i)=>{
  const rank=i+1, unlocked=found&&all.length>0&&level(xp)>=rank;
  return `<div class="${unlocked?'':'unseen'}">${dustArt(id,stage(i*2),found?'':'silhouette',rank)}<span>${name}</span><small>Lv.${rank}${rank===5?'+':''}</small></div>`;
-}).join('')}</div>${all.length?`<div class="copies">${all.map((v,i)=>`<div class="copy-row"><div class="copy-identity"><strong>${esc(dustName(v))}${all.length>1?' #'+(i+1):''}</strong><small>Lv.${level(v.xp)} · ${v.stored?'보관 중':isAway(state,v.uid)?'모험 중':growthName(level(v.xp))}</small></div>${level(v.xp)>=5&&recordStar?.uid!==v.uid?copyAction(v,'rename','edit','별명 수정'):''}${v.stored?copyAction(v,'take-out','home','은하계로 꺼내기'):isAway(state,v.uid)?copyAction(v,'copy','survey','탐험 확인'):copyAction(v,'copy','home','은하계에서 보기')+copyAction(v,'store','storage','보관하기')}${i===all.length-1?`<button class="button primary copy-action" id="detailMix" aria-label="같은 별 한 마리 더" title="같은 별 한 마리 더">${uiIcon('recipe')}</button>`:''}</div>`).join('')}</div>`:''}${all.length?'':`<button class="button primary full" id="detailMix">${found?'같은 별 한 마리 더':'단서로 직접 조합해보기'} →</button>`}`,()=>{
+}).join('')}</div>${all.length?'':`<button class="button primary full" id="detailMix">${found?'같은 별 한 마리 더':'단서로 직접 조합해보기'} →</button>`}`,()=>{
  $('#modal .modal-card').classList.add('star-detail');
  if(resident)bindPortraitPet($('#modal .pet-portrait'),resident.uid,()=>petDetail(resident));
  if(editName)$('#modalTitle').insertAdjacentHTML('afterend',`<button class="text-button detail-rename" data-rename="${recordStar.uid}" aria-label="별명 수정">${uiIcon('edit')}</button>`);
+ if(recordStar)$('#modal .modal-heading').insertAdjacentHTML('beforeend',starHeaderActions(recordStar,all));
  $('#detailMix').onclick=()=>{close();openMix(found?{group:d.group,rarity:d.rarity,essence:d.essence}:null)};
  })}
 

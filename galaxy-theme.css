@@ -2729,3 +2729,11 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
 #modal .star-detail .copy-identity small { margin: 0; }
 #modal .star-detail .copy-row > .copy-action { background: var(--color-glass-surface, var(--color-surface-inset)); color: var(--color-text-primary); }
 #modal .star-detail .copy-row > .primary { background: var(--color-glass-action); color: #fff; }
+
+#modal .star-detail .modal-heading:has(.star-header-tools) {display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;row-gap:6px}
+#modal .star-detail .modal-heading > div:first-child {min-width:0}
+#modal .star-detail .star-header-tools {grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:8px}
+#modal .star-detail .star-header-status {min-width:0;display:grid;gap:2px;text-align:start}
+#modal .star-detail .star-header-status small {font-size:var(--text-caption);color:var(--color-text-secondary)}
+#modal .star-detail .star-header-status select {width:100%;min-width:0;max-width:100%}
+#modal .star-detail .star-header-tools .copy-row {flex:none}

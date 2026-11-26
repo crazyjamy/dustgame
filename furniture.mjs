@@ -1,5 +1,5 @@
 import{NEW_FURNITURE,furnitureChapters}from'./furniture-twenty.mjs?v=1.13.81-3f2b718b';
-import{MORE_FURNITURE_STORIES}from'./furniture-extra.mjs?v=1.13.81-3f2b718b';
+import{MORE_FURNITURE_STORIES}from'./furniture-extra.mjs?v=furniture-chapters-fix';
 export const FURNITURE_STORIES={
  rug:[
  ['첫 번째 자리','나리가 행성 고리의 말린 끝을 꼭 눌러 주었어요. 작은 별은 둥근 러그에 올라앉아 루미가 가져온 장미성운 사진을 펼쳤어요. “꽃 한가운데에도 별이 있네.” 별이 옆으로 조금 비켜앉자 나리도 고개를 들이밀었어요.'],
@@ -31,7 +31,9 @@ export const FURNITURE_STORIES={
  ]
 };
 Object.assign(FURNITURE_STORIES,MORE_FURNITURE_STORIES);
-for(const id of Object.keys(FURNITURE_STORIES))FURNITURE_STORIES[id].push(...furnitureChapters(id).slice(5));
+for(const [id,chapters] of Object.entries(FURNITURE_STORIES)){
+ FURNITURE_STORIES[id]=[...chapters,...furnitureChapters(id).slice(chapters.length)];
+}
 for(const f of NEW_FURNITURE)FURNITURE_STORIES[f.id]=furnitureChapters(f.id);
 export const MAX_FURNITURE_LEVEL=10;
 export const FURNITURE_UPGRADE_COSTS=[0,40,80,140,220,320,450,600,800,1050];

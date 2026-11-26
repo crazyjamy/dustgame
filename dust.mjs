@@ -457,13 +457,18 @@ function showMaterials(){modal('작은 재료 가방',`<p>조합할 때 그룹 1
 function copyAction(star, action, icon, label) {
  return `<button class="text-button copy-action" data-${action}="${star.uid}" title="${label}" aria-label="${esc(dustName(star))} · ${label}">${uiIcon(icon)}</button>`;
 }
+function starIdentity(star, headingId) {
+ const rank=level(star.xp);
+ const name=esc(dustName(star));
+ const rarity=find(RARITIES,getDust(star.id).rarity).name;
+ const status=star.stored?' · 보관 중':isAway(state,star.uid)?' · 모험 중':'';
+ return `<div class="star-identity"><div class="compact-name"><h2 id="${headingId}" title="${name}">${name}</h2><b>Lv.${rank}</b></div><p class="star-meta">${growthName(rank)} · ${rarity}${status}</p></div>`;
+}
 function starHeaderActions(star, all) {
  const away=isAway(state,star.uid);
- const rank=level(star.xp);
- const status=star.stored?' · 보관 중':away?' · 모험 중':'';
  const picker=all.length>1?`<select id="recordCopy" data-record-copy="${star.id}" aria-label="보유 별 선택">${all.map((v,i)=>`<option value="${v.uid}" ${v.uid===star.uid?'selected':''}>#${i+1} ${esc(dustName(v))}</option>`).join('')}</select>`:'';
- const locationAction=star.stored?copyAction(star,'take-out','home','은하계로 꺼내기'):away?copyAction(star,'copy','survey','탐험 확인'):copyAction(star,'copy','home','은하계에서 보기')+copyAction(star,'store','storage','보관하기');
- return `<div class="star-header-tools"><div class="star-header-status">${picker}<small>Lv.${rank}</small><small>${growthName(rank)}${status}</small></div><div class="copy-row">${locationAction}<button class="button primary copy-action" id="detailMix" aria-label="같은 별 한 마리 더" title="같은 별 한 마리 더">${uiIcon('recipe')}</button></div></div>`;
+ const locationAction=star.stored?copyAction(star,'take-out','home','은하계로 꺼내기'):away?copyAction(star,'copy','survey','탐험 확인'):copyAction(star,'store','storage','보관하기');
+ return `<div class="star-header-tools">${picker}<div class="copy-row">${locationAction}<button class="button primary copy-action" id="detailMix" aria-label="같은 별 한 마리 더" title="같은 별 한 마리 더">${uiIcon('recipe')}</button></div></div>`;
 }
 function detail(id,uid=null){const d=getDust(id),found=knownDust(state,id),all=copies(id),recordStar=all.find(v=>v.uid===uid)||all.find(v=>v.uid===state.selectedUid)||all[0],xp=Math.max(0,...all.map(x=>x.xp)),max=all.length?stage(xp):-1;const resident=roomResidents(state).find(v=>v.uid===recordStar?.uid);
  const reaction=resident && portraitReaction(resident.id);
@@ -475,8 +480,11 @@ function detail(id,uid=null){const d=getDust(id),found=knownDust(state,id),all=c
 }).join('')}</div>${all.length?'':`<button class="button primary full" id="detailMix">${found?'같은 별 한 마리 더':'단서로 직접 조합해보기'} →</button>`}`,()=>{
  $('#modal .modal-card').classList.add('star-detail');
  if(resident)bindPortraitPet($('#modal .pet-portrait'),resident.uid,()=>petDetail(resident),reaction);
- if(editName)$('#modalTitle').insertAdjacentHTML('afterend',`<button class="text-button detail-rename" data-rename="${recordStar.uid}" aria-label="별명 수정">${uiIcon('edit')}</button>`);
- if(recordStar)$('#modal .modal-heading .close').insertAdjacentHTML('beforebegin',starHeaderActions(recordStar,all));
+ if(recordStar){
+  $('#modalTitle').parentElement.outerHTML=starIdentity(recordStar,'modalTitle');
+  if(editName)$('#modal .star-identity').insertAdjacentHTML('afterend',`<button class="text-button detail-rename" data-rename="${recordStar.uid}" aria-label="별명 수정">${uiIcon('edit')}</button>`);
+  $('#modal .modal-heading .close').insertAdjacentHTML('beforebegin',starHeaderActions(recordStar,all));
+ }
  $('#detailMix').onclick=()=>{close();openMix(found?{group:d.group,rarity:d.rarity,essence:d.essence}:null)};
  })}
 
@@ -680,7 +688,7 @@ function renderHeader(){
  $('#lifeUnread').textContent=unread?'+'+unread:'';
 }
 
-function careDock(active){const d=getDust(active.id);return `<section class="care-dock care-panel compact-dock" aria-labelledby="dustPopupName"><div class="compact-top"><div class="compact-profile">${dustPortrait(active,journeyComplete(active))}<div><div class="compact-name"><h2 id="dustPopupName" title="${esc(dustName(active))}">${esc(dustName(active))}</h2><b>Lv.${level(active.xp)}</b></div><p>${growthName(level(active.xp))} · ${find(RARITIES,d.rarity).name}</p></div></div><div class="compact-actions">
+function careDock(active){return `<section class="care-dock care-panel compact-dock" aria-labelledby="dustPopupName"><div class="compact-top"><div class="compact-profile">${dustPortrait(active,journeyComplete(active))}${starIdentity(active,'dustPopupName')}</div><div class="compact-actions">
  ${selectedIncome()}
  <button class="text-button" data-detail="${active.id}" data-detail-uid="${active.uid}" aria-label="별 상세보기" title="별 상세보기">${uiIcon('detail')}</button>
  <button class="text-button" data-store="${active.uid}" aria-label="보관하기" title="보관하기">${uiIcon('storage')}</button>

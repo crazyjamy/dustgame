@@ -2648,7 +2648,6 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
   }
   #dustPopup #goldTimerValue { font-variant-numeric: tabular-nums; }
 }
-#modal .modal-heading > div:has(.detail-rename) { display: flex; align-items: center; gap: 4px; min-width: 0; }
 #modal .detail-rename { flex: none; width: 44px; height: 44px; }
 #modal .detail-pet { display: grid; justify-items: center; gap: 8px; }
 #modal .detail-pet .dust-lift { position: relative; width: min(110px, 100%); }
@@ -2730,15 +2729,38 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
 #modal .star-detail .copy-row > .copy-action { background: var(--color-glass-surface, var(--color-surface-inset)); color: var(--color-text-primary); }
 #modal .star-detail .copy-row > .primary { background: var(--color-glass-action); color: #fff; }
 
-#modal .star-detail .modal-heading:has(.star-header-tools) {display:flex;align-items:center;gap:4px}
-#modal .star-detail .modal-heading:has(.star-header-tools) > div:first-child {display:flex;align-items:center;min-width:0;flex:0 1 auto;gap:2px}
-#modal .star-detail .modal-heading:has(.star-header-tools) h2 {min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-#modal .star-detail .star-header-tools {display:contents}
-#modal .star-detail .star-header-status {min-width:0;flex:1;overflow:hidden}
-#modal .star-detail .star-header-status small {display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:var(--text-caption);color:var(--color-text-secondary)}
-#modal .star-detail .star-header-status select {width:100%;min-width:0}
-#modal .star-detail .star-header-tools .copy-row {flex:none;gap:2px}
-#modal .star-detail .modal-heading .close {flex:none;margin:0}
+.star-identity { min-width: 0; }
+:is(#modal .star-detail, #dustPopup) .star-identity h2 {
+  min-width: 0;
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--text-title-small);
+  font-weight: 500;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.star-identity .compact-name > b { flex-shrink: 0; }
+:is(#modal .star-detail, #dustPopup) .star-identity .star-meta {
+  display: block;
+  margin: 3px 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--text-meta);
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+#modal .star-detail .modal-heading:has(.star-header-tools) { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+#modal .star-detail .star-header-tools { display: contents; }
+#modal .star-detail #recordCopy { flex: 0 1 auto; width: 88px; }
+#modal .star-detail .star-header-tools .copy-row { flex: none; gap: 2px; margin-inline-start: auto; }
+#modal .star-detail .modal-heading .close { flex: none; margin: 0; }
+@media (max-width: 640px) {
+  :is(#modal .star-detail, #dustPopup) .star-identity h2 { font-size: var(--text-body-large); }
+  #modal .star-detail .modal-heading:has(.star-header-tools) > .star-identity { flex: 1 1 92px; }
+  #modal .star-detail #recordCopy { order: 1; flex: 0 0 100%; }
+}
 
 
 .portrait-status { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip-path:inset(50%); }

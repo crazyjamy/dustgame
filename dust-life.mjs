@@ -51,6 +51,7 @@ export function initLife(s,now=Date.now()){
  if(l.version!==1||!Number.isFinite(l.lastSeen)||l.lastSeen<0||!Number.isSafeInteger(l.nextId)||l.nextId<1)throw Error('invalid life');
  for(const key of ['journal','postcards','memories','pairs'])if(!Array.isArray(l[key])||l[key].length>(key==='journal'?120:key==='postcards'?200:10000))throw Error('invalid life list');
  for(const e of l.journal)if(!Number.isSafeInteger(e.id)||e.id<1||e.id>=l.nextId||!Number.isFinite(e.at)||typeof e.seen!=='boolean'||!['offline','favorite','friend','wish','postcard','story'].includes(e.kind)||typeof e.title!=='string'||e.title.length>200||typeof e.text!=='string'||e.text.length>2000)throw Error('invalid life entry');
+ for(const e of l.journal)if(e.earnedSparkles!==undefined&&(!Number.isSafeInteger(e.earnedSparkles)||e.earnedSparkles<0))throw Error('invalid journal reward');
  for(const e of l.journal)if(e.storyUid!==undefined&&(!Number.isSafeInteger(e.storyUid)||e.storyUid<1||!['favorite','route','friend','complete'].includes(e.afterwordKind)))throw Error('invalid story link');
  for(const p of l.postcards)if(!lookup(p.dustId)||!['bookshelf','window','moonpath'].includes(p.route)||p.id!==p.dustId+':'+p.route||typeof p.title!=='string'||p.title.length>200||typeof p.text!=='string'||p.text.length>2000||!Number.isFinite(p.at))throw Error('invalid postcard');
  for(const key of ['memories','pairs'])if(l[key].some(x=>typeof x!=='string'||x.length>100)||new Set(l[key]).size!==l[key].length)throw Error('invalid discoveries');
@@ -64,6 +65,7 @@ function discoverAfterword(s,d,kind,now,other){
  if(d.id==='crumb'&&kind==='favorite'&&!s.life.storyMoments.includes(afterwordKey(d.uid)))s.life.storyMoments.push(afterwordKey(d.uid));
  const scene=afterwordScene(d,entry,personality(d.id).favorite);
  const event=record(s,kind==='favorite'?'favorite':kind==='friend'?'friend':kind==='route'?'postcard':'story',lookup(d.id).name+'의 후일담 · '+scene.title,scene.title+' 장면이 남았어요. '+scene.change,now);
+ if(kind==='friend')event.pairKey=[d.uid,other.uid].sort((a,b)=>a-b).join(':');
  Object.assign(event,{storyUid:d.uid,afterwordKind:kind});return event;
 }
 export function recordAfterwordReturn(s,d,route,now=Date.now()){
@@ -81,7 +83,7 @@ export function observeLife(s,now=Date.now()){
    const other=storyCompanion(s,d);if(other){const e=discoverAfterword(s,d,'friend',now,other);if(e)events.push(e);}
   }
   if(nearFavorite(s,d)&&(s.furnitureLevels[p.favorite.id]||1)>=3&&!s.life.memories.includes(key)){s.life.memories.push(key);events.push(record(s,'favorite',lookup(d.id).name+'의 오래된 자리',p.favorite.memory,now));}
-  const pair=companionship(s,d);if(pair){const key=[d.uid,pair.other.uid].sort((a,b)=>a-b).join(':');if(!s.life.pairs.includes(key)){s.life.pairs.push(key);events.push(record(s,'friend','둘이 함께한 첫 순간',`${lookup(d.id).name}와 ${lookup(pair.other.id).name}, ${pair.kind==='nap'?'서로의 온기에 기대어 나란히 잠들었어요.':'서로의 그림자를 따라 빙글빙글 놀았어요.'}`,now));}}
+  const pair=companionship(s,d);if(pair){const key=[d.uid,pair.other.uid].sort((a,b)=>a-b).join(':');if(!s.life.pairs.includes(key)){s.life.pairs.push(key);const meeting=record(s,'friend','둘이 함께한 첫 순간',`${lookup(d.id).name}와 ${lookup(pair.other.id).name}, ${pair.kind==='nap'?'서로의 온기에 기대어 나란히 잠들었어요.':'서로의 그림자를 따라 빙글빙글 놀았어요.'}`,now);meeting.pairKey=key;events.push(meeting);}}
  }
  return events;
 }
@@ -94,7 +96,7 @@ export function smallWish(s,d,now=Date.now()){
 }
 export function claimWish(s,uid,now=Date.now()){
  initLife(s,now);const d=residents(s).find(x=>x.uid===uid);if(!d)return {ok:false,message:'은하계에서 함께하는 별의 부탁을 들어주세요.'};const w=smallWish(s,d,now);if(w.done||!w.ready)return {ok:false,message:w.done?'오늘의 고마움은 이미 받았어요.':'원하는 자리로 옮겨주면 고마움을 전할 거예요.'};
- s.life.requests[uid]=w.day;s.sparkles+=w.reward;record(s,'wish',lookup(d.id).name+'의 작은 고마움','“'+w.text+'” 그 작은 마음을 알아주었어요. 반짝이 '+w.reward+'개를 나누었어요.',now);return {ok:true,amount:w.reward};
+ s.life.requests[uid]=w.day;s.sparkles+=w.reward;record(s,'wish',lookup(d.id).name+'의 작은 고마움','“'+w.text+'” 그 작은 마음을 알아주었어요. 반짝이 '+w.reward+'개를 나누었어요.',now).earnedSparkles=w.reward;return {ok:true,amount:w.reward};
 }
 const LETTERS={
  bookshelf:[['잎맥 사이의 길','풀잎의 줄을 따라 한참 걸었어요. 길의 끝보다 길 위에서 들리던 사각거림이 오래 기억날 것 같아요.'],['먼저 건넨 인사','잎 아래 숨어 있던 친구에게 조심스럽게 인사했어요. 대답 대신 작은 풀잎을 건네받았어요. 말이 없어도 반가운 마음은 전해졌어요.'],['주머니 속 지도','잎 뒷면에 길을 그려왔어요. 모퉁이마다 다른 무늬가 있었어요. 다음번에는 아직 그리지 못한 빈칸도 찾아보고 싶어요.'],['숲의 베개','나뭇잎 위에 누웠더니 바람이 천천히 흔들어줬어요. 짧게 잤는데도 아주 긴 여행을 다녀온 기분이에요.'],['풀잎과 숨바꼭질','잎 뒤에 숨었다가 내 그림자에게 먼저 들켰어요. 숲이 사각사각 웃는 것 같아서 나도 소리 없이 웃었어요.']],
@@ -111,6 +113,27 @@ export function resumeLife(s,now=Date.now()){
  const friends=residents(s).slice(0,3),parts=friends.map(d=>{const p=personality(d.id),pair=companionship(s,d);return topic(d.id)+(pair?` ${lookup(pair.other.id).name} 곁에서 ${pair.kind==='nap'?'나란히 잠을 잤어요.':'그림자 놀이를 했어요.'}`:nearFavorite(s,d)?` ${p.favorite.action}`:` ${p.mood.idle}`);});
  if(!parts.length)parts.push(s.adventures.length?'루미가 작은 지도를 펴고 모험을 떠난 친구들의 귀갓길을 살폈어요.':'보관함의 친구들이 각자의 꿈을 꾸며 다음 만남을 기다렸어요.');
  const entry=record(s,'offline','네가 없는 동안에도',parts.join('\n'),now);s.life.welcome=entry.id;return entry;
+}
+export function journalCards(entries){
+ const meetings=entries.filter(e=>e.kind==='friend'&&!e.storyUid);
+ const linked=new Map(),hidden=new Set();
+ for(const story of entries){
+  if(story.afterwordKind!=='friend')continue;
+  const matches=meetings.filter(meeting=>{
+   if(meeting.at!==story.at||meeting.seen!==story.seen)return false;
+   if(meeting.pairKey&&story.pairKey)return meeting.pairKey===story.pairKey;
+   // Older records identify the participants in the first clause of the encounter.
+   const names=meeting.text.split(',')[0].split('와 ');
+   const title=story.title.split(' · ')[1];
+   return names.length===2&&names.some((name,i)=>['과','와'].some(p=>title===name+p+' '+names[1-i]));
+  });
+  if(matches.length!==1)continue;
+  const meeting=matches[0];
+  if(!linked.has(meeting))linked.set(meeting,[]);
+  linked.get(meeting).push(story);
+  hidden.add(story);
+ }
+ return entries.filter(e=>!hidden.has(e)).map(e=>linked.has(e)?{...e,linkedStories:linked.get(e)}:e);
 }
 export function readLife(s){for(const e of s.life.journal)e.seen=true;s.life.welcome=null;}
 

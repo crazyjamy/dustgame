@@ -2851,3 +2851,13 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
 @media (prefers-reduced-motion:reduce) {
  .pet-portrait[data-personality]:is([data-response="invite"],[data-response="reply"]) .pet-pose {animation:none;transform:scale(1.03)}
 }
+
+.life-dialog .journal-section > h3, .life-dialog .journal-reward h3 { font-size: 1rem; margin: 0 0 .65rem; }
+.life-dialog .journal-section + .journal-section { margin-top: 1.5rem; }
+.life-dialog .journal-section .life-entry { display: block; }
+.life-dialog .journal-line { display: flex; align-items: flex-start; gap: .45rem; margin: .4rem 0; }
+.life-dialog .journal-stars { display: inline-flex; flex: none; align-items: center; }
+.life-dialog .journal-stars svg { display: block; width: 1.5rem; height: 1.5rem; }
+.life-dialog .journal-reward { padding: 1rem; margin-bottom: 1.25rem; border-radius: .9rem; background: var(--color-surface-raised); }
+.life-dialog .journal-sparkles { display: inline-flex; align-items: center; gap: .3rem; }
+.life-dialog .journal-sparkles svg { width: 1rem; height: 1rem; color: var(--color-sparkle-fill); }

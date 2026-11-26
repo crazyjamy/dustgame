@@ -2,7 +2,7 @@ import {portraitReaction} from './portrait-reactions.mjs';
 import {bindPortraitPet} from './petting.mjs?v=europa-pose';
 import {today,sky,art,light} from './constellation.mjs';
 import {creditReturn, selectStory, status as monthStatus} from './monthly-sky.mjs';
-import {monthlyViews} from './monthly-sky-view.mjs';
+import {monthlyViews} from './monthly-sky-view.mjs?v=c9675d35';
 import{destinations,recipeQuantity,journal,depart,tripSeconds,collectTrip,tripGold,tripUpgradePrice,workshop}from'./star-trips.mjs?v=1.13.81-3f2b718b';
 import{journeyFor,hasJourney,journeyComplete,journeyHint}from'./story-journey.mjs?v=1.13.81-3f2b718b';
 import{AFTERWORD_KINDS,AFTERWORD_LABELS,STORY_ROUTES,aftermathFor,afterwordRecord,afterwordScene,readAfterword,roomStoryReaction}from'./story-aftermath.mjs?v=1.13.81-3f2b718b';
@@ -24,7 +24,7 @@ import{ROOM_MEMORY,syncRoomMemory,memoryProgress,readRoomMemory,toggleMemoryDeco
 import{firstSteps,nextGoal,goldOverview}from'./progression.mjs?v=1.13.81-3f2b718b';
 import{furnitureQuest,claimFurnitureQuest}from'./furniture-quests.mjs?v=1.13.81-3f2b718b';
 import{HOLD_MS,beginGesture,advanceGesture,armGesture,shouldPlace,insideAdventureGate}from'./room-gestures.mjs?v=1.13.81-3f2b718b';
-import{personality,roomSpot,nearFavorite,companionship,storyCompanion,recipeHint,observeLife,smallWish,claimWish,resumeLife,readLife}from'./dust-life.mjs?v=1.13.81-3f2b718b';
+import{personality,roomSpot,nearFavorite,companionship,storyCompanion,recipeHint,observeLife,smallWish,claimWish,resumeLife,readLife,journalCards}from'./dust-life.mjs?v=c9675d35';
 import{roomCapacity,storageCapacity,homeCount,hasHomeSpace,hasStorageSpace,storedCount,currentRoom,ROOM_CHAPTERS,readRoomChapter,claimRoomChapter,equipRoomDecor,roomGuest,claimRoomGuest,routeUnlocked,routeUnlockLevel}from'./rooms.mjs?v=1.13.81-3f2b718b';
 import{FURNITURE_STORIES,MAX_FURNITURE_LEVEL,furnitureCategory,activeLevel,furnitureLevel,furnitureEffect,upgradeCost}from'./furniture.mjs?v=furniture-chapters-fix';
 import{DEFAULT_DECOR,moveRoomItem,insideKeeper,toPlanetScreen,fromPlanetScreen}from'./room-layout.mjs?v=1.13.81-3f2b718b';
@@ -684,7 +684,7 @@ function renderShop(){const room=currentRoom(state),next=ROOMS[state.roomLevel];
 
 
 function renderHeader(){
- const unread=state.life.journal.filter(e=>!e.seen).length;
+ const unread=journalCards(state.life.journal.filter(e=>!e.seen)).length;
  $('#lifeUnread').textContent=unread?'+'+unread:'';
 }
 
@@ -908,7 +908,7 @@ function updateLifeView(){if(page!=='room')return;
  for(const el of document.querySelectorAll('.room-dust')){const d=state.dusts.find(x=>x.uid===Number(el.dataset.dust));if(!d)continue;const classes=lifeClass(d);for(const c of ['cozy','social-nap','social-play','character-active','story-settled','story-traveler','story-speaking',...Object.keys(CHARACTERS).map(id=>'character-'+id)])el.classList.toggle(c,classes.includes(c));const bubble=el.querySelector('[data-life-bubble]');if(bubble)bubble.textContent=lifeLabel(d);}
  const active=selected();
  for(const el of document.querySelectorAll('.decor'))el.classList.toggle('favorite-decor',!!active&&personality(active.id).favorite.id===el.dataset.roomId);
- const badge=$('#lifeUnread');if(badge){const count=state.life.journal.filter(e=>!e.seen).length;badge.textContent=count?'+'+count:'';}
+ const badge=$('#lifeUnread');if(badge){const count=journalCards(state.life.journal.filter(e=>!e.seen)).length;badge.textContent=count?'+'+count:'';}
  const postcardCount=$('#postcardCount');if(postcardCount)postcardCount.textContent=state.life.postcards.length;
 }
 function dailySparkleButton(d){return `<button class="daily-sparkle" data-daily-sparkle="${d.uid}" aria-label="${esc(getDust(d.dustId).name)} · 반짝이 ${d.amount||1}개 받기" title="별이 흘린 반짝이 +${d.amount||1}" style="left:${d.x}%;top:${toPlanetScreen(d).y}%"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3Q18 13 29 16Q18 19 16 29Q13 19 3 16Q13 13 16 3Z" fill="var(--color-sparkle-fill)" stroke="var(--color-sparkle-edge)" stroke-width="1.4"/><circle cx="16" cy="16" r="2" fill="var(--color-sparkle-core)"/></svg>${d.amount>1?`<small>+${d.amount}</small>`:''}</button>`;}
@@ -941,6 +941,10 @@ function updateDailySparkleUI(){
  if(!layer||saveBlocked||roomDrag||!$('#modal').classList.contains('hidden'))return;
  const now=Date.now(),created=dropDailySparkles(state,now,d=>roomSpot(state,d));
  const auto=placementMode?{amount:0,changed:false}:autoCollectDailySparkles(state,now);
+ if(auto.amount){
+  const entry=state.life.journal.find(e=>e.id===state.life.welcome&&!e.seen);
+  if(entry)entry.earnedSparkles=(entry.earnedSparkles||0)+auto.amount;
+ }
  if(created.length||auto.changed)save();
  if(auto.amount){
   $('#sparkles').textContent=state.sparkles;
@@ -959,14 +963,46 @@ function maybeShowReturnBook(){
  const entry=state.life.welcome;
  if(saveBlocked||document.hidden||page!=='room'||state.pending||!entry||entry===lastShownReturn||!$('#modal').classList.contains('hidden'))return;
  lastShownReturn=entry;
- lifeBook(true);
+ updateDailySparkleUI();
+ lifeBook();
 }
-function lifeBook(returning=false){
- if(!returning)acknowledgeLifeBook();
- modal('은하계 생활 수첩',`${returning?'<section class="life-return-note"><p>자리를 비운 사이 별들이 남긴 소식이 있어요.</p><button class="button primary" id="confirmLifeReturn">소식 확인했어요</button></section>':''}<div class="life-book-intro"><span>은하계에서 남긴 기록</span><p>설치물과의 추억, 친구와의 첫 만남, 들어준 부탁이 차곡차곡 쌓여요.</p><button class="text-button" data-postcards>모험 엽서함 ${state.life.postcards.length} / 150 ↗</button></div><div class="life-timeline">${state.life.journal.length?state.life.journal.map(e=>`<article class="life-entry ${e.kind}"><span>${uiIcon(e.kind==='offline'?'moon':e.kind==='postcard'?'mail':'heart')}</span><div><small>${lifeDate(e.at)} · ${{offline:'부재 중 이야기',postcard:'모험에서 온 소식',favorite:'오래 함께한 설치물',friend:'친구와의 발견',wish:'작은 부탁',story:'이야기 다음의 하루'}[e.kind]}</small><h3>${esc(e.title)}</h3><p>${esc(e.text).replaceAll('\n','<br>')}</p>${e.storyUid&&state.dusts.some(d=>d.uid===e.storyUid)?`<button class="text-button" data-shared-entry="${e.storyUid}|afterword:${e.afterwordKind}">${afterwordRecord(state,{uid:e.storyUid},e.afterwordKind)?.read?'후일담 다시 읽기':'후일담 읽고 변화 만나기'}</button>`:''}${e.kind==='offline'?'<small>자리를 비운 사이 별들이 남긴 이야기예요.</small>':''}</div></article>`).join(''):`<div class="empty-life"><span>${uiIcon('journal')}</span><p>아직 첫 페이지가 비어 있어요.</p><small>친구들을 가까이 놓거나 작은 부탁을 들어주세요.<br>좋아하는 설치물 Lv.3 곁에서도 추억이 시작돼요.</small></div>`}</div><p class="life-footnote help-text">생활 기록은 최근 120개, 발견한 엽서·추억·후일담은 계속 보관해요.</p>`,()=>{
+function journalReward(entry){
+ // Older wish receipts stored the credited amount in the sentence.
+ return entry.earnedSparkles??(entry.kind==='wish'?Number(entry.text.match(/반짝이 (\d+)개를 나누었어요/)?.[1]||0):0);
+}
+function journalEntry(entry){
+ const labels={offline:'부재 중 이야기',postcard:'모험에서 온 소식',favorite:'오래 함께한 설치물',friend:'친구와의 발견',wish:'작은 부탁',story:'이야기 다음의 하루'};
+ const rows=entry.text.split('\n').map(line=>{
+  const stars=DUSTS.filter(d=>line.includes(d.name)||entry.title.startsWith(d.name));
+  const art=stars.map(d=>dustArt(d.id,0)).join('');
+  return `<p class="journal-line">${art?`<span class="journal-stars" aria-hidden="true">${art}</span>`:''}<span>${esc(line)}</span></p>`;
+ }).join('');
+ const links=entry.linkedStories||(entry.storyUid?[entry]:[]);
+ const afterword=links.map(story=>{
+  const star=state.dusts.find(d=>d.uid===story.storyUid);
+  if(!star)return '';
+  const label=links.length>1?esc(dustName(star))+'의 후일담 읽기':'후일담 읽기';
+  return `<button class="text-button" data-shared-entry="${story.storyUid}|afterword:${story.afterwordKind}">${label}</button>`;
+ }).join('');
+ const reward=journalReward(entry);
+ return `<article class="life-entry"><div><small>${lifeDate(entry.at)} · ${labels[entry.kind]}</small><h3>${esc(entry.title)}</h3>${rows}${reward?`<small class="journal-sparkles">${uiIcon('sparkle')} 반짝이 +${reward}</small>`:''}${afterword}</div></article>`;
+}
+function lifeBook(){
+ const entries=journalCards(state.life.journal);
+ const fresh=entries.filter(e=>!e.seen);
+ const reward=fresh.reduce((sum,e)=>sum+journalReward(e),0);
+ const sections=[
+  ['자리를 비운 사이',fresh.filter(e=>e.kind==='offline')],
+  ['새 소식',fresh.filter(e=>e.kind!=='offline')],
+  ['이전 기록',entries.filter(e=>e.seen)]
+ ];
+ const timeline=sections.filter(([,items])=>items.length).map(([title,items])=>
+  `<section class="journal-section"><h3>${title}</h3><div class="life-timeline">${items.map(journalEntry).join('')}</div></section>`
+ ).join('');
+ modal('은하계 생활 수첩',`${reward?`<section class="journal-reward"><h3>획득한 보상</h3><b class="journal-sparkles">${uiIcon('sparkle')} 반짝이 +${reward}</b></section>`:''}${timeline||'<p class="empty-life">아직 별들이 남긴 기록이 없어요.</p>'}<p class="life-footnote help-text">생활 기록은 최근 120개, 발견한 엽서·추억·후일담은 계속 보관해요.</p>`,()=>{
   $('.modal-card').classList.add('life-dialog');
-  if(returning)$('#confirmLifeReturn').onclick=()=>{acknowledgeLifeBook();close();};
  });
+ acknowledgeLifeBook();
 }
 function lifeDate(at){return new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}).format(at);}
 function postcardPaper(p,isNew=false){return `<article class="postcard-paper"><div class="postcard-heading"><span>FROM A TINY FRIEND</span><i>${uiIcon('mail')}</i></div><small>${isNew?'새로운 엽서 · ':''}${find(QUESTS,p.route).name}에서 · ${personality(p.dustId).mood.name}</small><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p><footer>너에게, ${getDust(p.dustId).name} 보냄<span>${lifeDate(p.at)}</span></footer></article>`;}

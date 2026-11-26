@@ -1,9 +1,11 @@
+import {storyParagraph} from './story-text.mjs';
 import { monthlyStories } from './monthly-story-data.mjs';
 import { editions, activeStory, releaseMonth, releaseDays, status } from './monthly-sky.mjs';
 
 const stamps = Object.fromEntries(`And ✧ Ant ⚙ Aps 🪶 Aqr 🏺 Aql 🦅 Ara 🔥 Ari 🐏 Aur 🐐 Boo ✴ Cae ✒ Cam 🦒 Cnc 🐝 CVn 🌀 CMa ✦ CMi △ Cap 🐐 Car ⚓ Cas ✧ Cen ✉ Cep ♖ Cet 🐋 Cha 🍃 Cir ◯ Col 🕊 Com 🎀 CrA ♕ CrB ♛ Crv 🪶 Crt 🏺 Cru ✛ Cyg 🦢 Del 🐬 Dor 🐟 Dra 🐉 Equ ♘ Eri ≋ For 🪟 Gem ♊ Gru 🪶 Her ✧ Hor ◷ Hya 🐍 Hyi ✉ Ind 🗺 Lac 🦎 Leo ♌ LMi 🐾 Lep 🐇 Lib ⚖ Lup 🐾 Lyn 🐾 Lyr ♫ Men ⛰ Mic 🔬 Mon 🌹 Mus 🪽 Nor 📐 Oct ◎ Oph 🐍 Ori ✦ Pav 🦚 Peg 🪽 Per ✧ Phe 🪶 Pic 🎨 Psc 🐟 PsA ◯ Pup ⚓ Pyx 🧭 Ret ▦ Sge ➶ Sgr 🫖 Sco ♏ Scl ◒ Sct 🛡 Ser 🐍 Sex ◴ Tau ♉ Tel 🔭 Tri △ TrA △ Tuc ☁ UMa 🐻 UMi ✧ Vel ⛵ Vir 🌾 Vol 🐟 Vul 🦊`.split(' ').reduce((pairs, value, i, all) => i%2 ? pairs : [...pairs,[value,all[i+1]]],[]));
 
 export function monthlyViews({esc, notePanel}) {
+  const openedEpisodes=new Set();
   const byId = id => monthlyStories.find(s => s.id === id);
   const fmt = id => releaseMonth(id).replace('-', '년 ') + '월';
   const cover = s => '<div class="month-cover"><span aria-hidden="true">'+stamps[s.id]+'</span><b>'+esc(s.name)+'</b><p>'+esc(s.motif)+'</p></div>';
@@ -35,10 +37,13 @@ export function monthlyViews({esc, notePanel}) {
     const p=status(state,s,day), limit=p.opened;
     if(index>=limit)return null;
     const [title,body,note]=s.episodes[index];
+    const key=id+'-'+index;
+    const firstRead=!openedEpisodes.has(key);
+    openedEpisodes.add(key);
     const attr='data-month-read';
     const steps=[index>0?'<button class="button secondary" '+attr+'="'+id+'-'+(index-1)+'">이전 편</button>':'',index+1<limit?'<button class="button primary" '+attr+'="'+id+'-'+(index+1)+'">다음 편</button>':''].join('');
     const card=index===4?'<button class="button primary full" '+'data-month-card'+'="'+id+'">완성 엽서 펼치기</button>':'';
-    return {title,html:'<article class="month-reader"><small>'+esc(s.name)+' · '+releaseDays[index]+'일'+'</small><p class="story-body">'+esc(body)+'</p>'+notePanel('루미의 관측 노트','<p>'+esc(note)+'</p>')+'<div class="month-nav">'+steps+'</div>'+card+'</article>'};
+    return {title,html:'<article class="month-reader"><small>'+esc(s.name)+' · '+releaseDays[index]+'일'+'</small>'+storyParagraph(body,firstRead,'story-body')+notePanel('루미의 관측 노트',storyParagraph(note,true,'observation-copy'))+'<div class="month-nav">'+steps+'</div>'+card+'</article>'};
   }
   return {byId,panel,reader,postcard};
 }

@@ -1,0 +1,51 @@
+import { monthlyStories } from './monthly-story-data.mjs';
+
+export const releaseDays = [1, 7, 14, 21, 28];
+const firstYear = ['Cas','Ori','Tau','Gem','Leo','UMa','Vir','Boo','Sco','Lyr','Cyg','Peg'];
+const ordered = [...firstYear, ...monthlyStories.map(s => s.id).filter(id => !firstYear.includes(id))];
+export const editions = ordered.map(id => monthlyStories.find(s => s.id === id));
+export const firstMonth = 2026 * 12 + 10;
+
+export function releaseMonth(id) {
+  const slot = firstMonth + ordered.indexOf(id);
+  return Math.floor(slot / 12) + '-' + String(slot % 12 + 1).padStart(2, '0');
+}
+
+export function currentStory(day) {
+  const slot = Number(day.slice(0, 4)) * 12 + Number(day.slice(5, 7)) - 1 - firstMonth;
+  return editions[slot] || null;
+}
+
+export function status(state, story, day) {
+  const month = releaseMonth(story.id), now = day.slice(0, 7);
+  const due = now > month ? 5 : now < month ? 0 : releaseDays.filter(d => d <= Number(day.slice(-2))).length;
+  const saved = state.monthlySky?.entries?.[story.id];
+  const travelers = Array.isArray(saved?.travelers) ? saved.travelers.slice(0, 5).filter(n => typeof n === 'string') : [];
+  const opened = Math.min(due, travelers.length);
+  return {due, opened, credits:travelers.length, travelers, sender:opened === 5 ? travelers[4] : '', cardSeen:saved?.cardSeen === true};
+}
+
+export function activeStory(state, day) {
+  const selected = editions.find(s => s.id === state.monthlySky?.target);
+  if (selected && releaseMonth(selected.id) <= day.slice(0,7) && status(state,selected,day).credits < 5) return selected;
+  return currentStory(day);
+}
+
+export function selectStory(state, story, day) {
+  if (!story || releaseMonth(story.id) > day.slice(0,7) || status(state,story,day).credits >= 5) return false;
+  state.monthlySky ??= {entries:{}};
+  state.monthlySky.target = story.id;
+  return true;
+}
+
+export function creditReturn(state, name, day) {
+  const story = activeStory(state, day);
+  if (!story) return null;
+  const old = status(state,story,day);
+  if (old.credits >= 5) return null;
+  const book = state.monthlySky ??= {};
+  book.entries ??= {};
+  book.entries[story.id] = {travelers:[...old.travelers, name], cardSeen:false};
+  if (old.credits === 4 && book.target === story.id) delete book.target;
+  return {story, opened:Math.min(old.due,old.credits+1) > old.opened};
+}

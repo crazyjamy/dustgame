@@ -1,3 +1,6 @@
+import {today,sky,art,light} from './constellation.mjs';
+import {creditReturn, selectStory, status as monthStatus} from './monthly-sky.mjs';
+import {monthlyViews} from './monthly-sky-view.mjs';
 import{destinations,recipeQuantity,journal,depart,tripSeconds,collectTrip,tripGold,tripUpgradePrice,workshop}from'./star-trips.mjs?v=1.13.81-3f2b718b';
 import{journeyFor,hasJourney,journeyComplete,journeyHint}from'./story-journey.mjs?v=1.13.81-3f2b718b';
 import{AFTERWORD_KINDS,AFTERWORD_LABELS,STORY_ROUTES,aftermathFor,afterwordRecord,afterwordScene,readAfterword,roomStoryReaction}from'./story-aftermath.mjs?v=1.13.81-3f2b718b';
@@ -181,7 +184,7 @@ document.addEventListener('keydown',event=>{
 function counts(){return{types:state.collectionBook.discovered.length,total:state.dusts.length,grown:state.dusts.filter(d=>stage(d.xp)===2).length,active:inRoom(state).length,stored:state.dusts.filter(d=>d.stored).length,away:Number(!!state.starTrips?.trip)+state.adventures.length+(state.deskRun?1:0)}}
 function heading(tag,title,sub){return `<section class="heading"><div><span class="kicker">${tag}</span><h1>${title}</h1><p>${sub}</p></div></section>`}
 let dustPopupUid=null;
-function renderRoom(){if(!selected())return renderEmptyRoom();const active=selected(),visible=roomResidents(state);return `<section class="dust-room ${placementMode?(hidePlacementStars?'placement-mode stars-hidden':'placement-mode'):'care-mode'} room-level-${state.roomLevel} room-theme-${currentRoom(state).theme}" style="--room-color:${currentRoom(state).color};--tier-accent:${currentRoom(state).accent};--room-growth:${currentRoom(state).detail};--room-floor:${2+currentRoom(state).detail}px" aria-label="별이 머무는 곳 · 나의 은하계"><div class="planet-landscape" aria-hidden="true"></div><div class="room-playfield">${roomDecor()}${roomOrnament()}${guestButton()}${memoryDecor()}${themeDecorations()}${questGuide()}${roomGestureTools()}${adventureDoor()}${roomFairy()}${windowSpot()}${glowButton()}<div id="dailySparkleDrops" class="daily-sparkle-drops" aria-label="별들이 흘린 반짝이">${dailySparkleButtons()}</div><div class="merge-drop-status" id="mergeDropStatus" role="status" aria-live="polite"></div><span class="room-speck s1">✦</span><span class="room-speck s2">·</span><span class="room-speck s3">✧</span><span class="room-speck s4">·</span>${visible.map((v,i)=>{const saved=state.roomPositions.dust[v.uid],spot=toPlanetScreen(roomSpot(state,v,i)),p=[spot.x,spot.y];return `<button class="room-dust ${lifeClass(v)} ${saved?'positioned':''} ${v.uid===active.uid?'selected':''}  ${v.uid===happyUid?'happy':''}" data-dust="${v.uid}" data-room-item="dust" data-room-id="${v.uid}" aria-pressed="${v.uid===active.uid}" aria-expanded="${v.uid===dustPopupUid&&!placementMode}" aria-controls="dustPopup" aria-label="${esc(dustName(v))} ${growthName(level(v.xp))} 선택" style="left:${p[0]}%;top:${p[1]}%;--delay:${-i*1.7}s;--duration:${10+i*1.3}s;--drift:${i%2?-22:22}px;--color:${getDust(v.id).color}"><span class="dust-hit-area" aria-hidden="true"></span><span class="selection-aura" aria-hidden="true"></span><span class="dust-lift">${characterArt(v,journeyComplete(v))}</span>${storyKeepsake(v)}${lifeBubble(v)}<span class="dust-shadow"></span><span class="dust-name">${esc(dustName(v))}</span><span class="hearts" aria-hidden="true">♡</span></button><span class="gold-slot ${saved?'positioned':''}" data-gold-slot="${v.uid}" style="left:${p[0]}%;top:${p[1]}%;--delay:${-i*1.7}s;--duration:${10+i*1.3}s;--drift:${i%2?-22:22}px"></span>`}).join('')}<div id="dustPopup">${!placementMode&&dustPopupUid===active.uid?careDock(active):''}</div></div></section>`}
+function renderRoom(){if(!selected())return renderEmptyRoom();const active=selected(),visible=roomResidents(state);return `<section class="dust-room ${placementMode?(hidePlacementStars?'placement-mode stars-hidden':'placement-mode'):'care-mode'} room-level-${state.roomLevel} room-theme-${currentRoom(state).theme}" style="--room-color:${currentRoom(state).color};--tier-accent:${currentRoom(state).accent};--room-growth:${currentRoom(state).detail};--room-floor:${2+currentRoom(state).detail}px" aria-label="별이 머무는 곳 · 나의 은하계"><div class="planet-landscape" aria-hidden="true"></div>${skyButton()}<div class="room-playfield">${roomDecor()}${roomOrnament()}${guestButton()}${memoryDecor()}${themeDecorations()}${questGuide()}${roomGestureTools()}${adventureDoor()}${roomFairy()}${windowSpot()}${glowButton()}<div id="dailySparkleDrops" class="daily-sparkle-drops" aria-label="별들이 흘린 반짝이">${dailySparkleButtons()}</div><div class="merge-drop-status" id="mergeDropStatus" role="status" aria-live="polite"></div><span class="room-speck s1">✦</span><span class="room-speck s2">·</span><span class="room-speck s3">✧</span><span class="room-speck s4">·</span>${visible.map((v,i)=>{const saved=state.roomPositions.dust[v.uid],spot=toPlanetScreen(roomSpot(state,v,i)),p=[spot.x,spot.y];return `<button class="room-dust ${lifeClass(v)} ${saved?'positioned':''} ${v.uid===active.uid?'selected':''}  ${v.uid===happyUid?'happy':''}" data-dust="${v.uid}" data-room-item="dust" data-room-id="${v.uid}" aria-pressed="${v.uid===active.uid}" aria-expanded="${v.uid===dustPopupUid&&!placementMode}" aria-controls="dustPopup" aria-label="${esc(dustName(v))} ${growthName(level(v.xp))} 선택" style="left:${p[0]}%;top:${p[1]}%;--delay:${-i*1.7}s;--duration:${10+i*1.3}s;--drift:${i%2?-22:22}px;--color:${getDust(v.id).color}"><span class="dust-hit-area" aria-hidden="true"></span><span class="selection-aura" aria-hidden="true"></span><span class="dust-lift">${characterArt(v,journeyComplete(v))}</span>${storyKeepsake(v)}${lifeBubble(v)}<span class="dust-shadow"></span><span class="dust-name">${esc(dustName(v))}</span><span class="hearts" aria-hidden="true">♡</span></button><span class="gold-slot ${saved?'positioned':''}" data-gold-slot="${v.uid}" style="left:${p[0]}%;top:${p[1]}%;--delay:${-i*1.7}s;--duration:${10+i*1.3}s;--drift:${i%2?-22:22}px"></span>`}).join('')}<div id="dustPopup">${!placementMode&&dustPopupUid===active.uid?careDock(active):''}</div></div></section>`}
 function glowButton(){
  const hasSpace=hasHomeSpace(state);
  const needsStar=hasSpace && !state.pending;
@@ -233,7 +236,7 @@ function storedStars(){const all=state.dusts.filter(d=>d.stored);return `<div cl
 function renderEmptyRoom(){
  const c=counts();
  const action=c.away ? '' : '<button class="button primary" data-open-storage>보관함에서 꺼내기 →</button>';
- return `<section style="--room-color:${currentRoom(state).color}" class="dust-room empty-room ${placementMode?(hidePlacementStars?'placement-mode stars-hidden':'placement-mode'):'care-mode'} room-level-${state.roomLevel} room-theme-${currentRoom(state).theme}" aria-label="별들이 보관함에서 쉬는 빈 은하계"><div class="planet-landscape" aria-hidden="true"></div><div class="room-playfield">${roomDecor()}${roomOrnament()}${guestButton()}${memoryDecor()}${themeDecorations()}${questGuide()}${roomGestureTools()}${adventureDoor()}${roomFairy()}${windowSpot()}${glowButton()}<div id="dailySparkleDrops" class="daily-sparkle-drops" aria-label="별들이 흘린 반짝이">${dailySparkleButtons()}</div>${action?`<div class="empty-room-message">${action}</div>`:''}<div id="dustPopup"></div></div></section>`;}
+ return `<section style="--room-color:${currentRoom(state).color}" class="dust-room empty-room ${placementMode?(hidePlacementStars?'placement-mode stars-hidden':'placement-mode'):'care-mode'} room-level-${state.roomLevel} room-theme-${currentRoom(state).theme}" aria-label="별들이 보관함에서 쉬는 빈 은하계"><div class="planet-landscape" aria-hidden="true"></div>${skyButton()}<div class="room-playfield">${roomDecor()}${roomOrnament()}${guestButton()}${memoryDecor()}${themeDecorations()}${questGuide()}${roomGestureTools()}${adventureDoor()}${roomFairy()}${windowSpot()}${glowButton()}<div id="dailySparkleDrops" class="daily-sparkle-drops" aria-label="별들이 흘린 반짝이">${dailySparkleButtons()}</div>${action?`<div class="empty-room-message">${action}</div>`:''}<div id="dustPopup"></div></div></section>`;}
 function archiveDust(uid){const r=storeDust(state,uid);if(!r.ok)return toast(r.message);save();close();render();toast('보관함에서 쉬는 별 · '+dustName(r.dust)+' · 레벨과 이야기는 그대로예요.','storage');}
 function bringBack(uid){const r=takeOutDust(state,uid);if(!r.ok)return toast(r.message);save();close();go('room');toast('다시 만난 별 · '+dustName(r.dust)+' · Lv.'+level(r.dust.xp)+'부터 이어서 키워주세요.');}
 function openStorage(){storageTab='stars';go('storage');}
@@ -1338,11 +1341,42 @@ function tripOrbit(index,end,traveler){
  <circle cx="120" cy="44" r="21" fill="var(--planet-tint)" opacity=".17"/><g transform="translate(120 44)" stroke="var(--planet-tint)" stroke-linecap="round" stroke-linejoin="round" fill="none" stroke-width="1.8">${landmarks[index]}</g></svg>
  <div class="trip-pilot">${traveler?dustPortrait(traveler):'✦'}</div></div>`;
 }
+function skyButton(){
+ const f=sky(today()),n=state.nightSky?.counts[f[0]]||0;
+ return `<button class="night-figure" data-trip-tab="sky" aria-label="오늘 밤의 ${f[0]} · 별빛 ${n}개">${art(f,n)}</button>`;
+}
+let calendarDay='', monthViewId='';
+const monthly = monthlyViews({esc, notePanel:storyNotePanel});
+const monthBack = '<button class="button secondary full" data-month-back>별자리 달력으로</button>';
+function showMonthlyCard(id) {
+ const s=monthly.byId(id);
+ if(!s)return;
+ const p=monthStatus(state,s,today());
+ if(p.opened!==5)return;
+ if(!p.cardSeen){state.monthlySky.entries[id].cardSeen=true;save();}
+ modal(s.name+' 완성 엽서',monthly.postcard(s,p.sender)+monthBack);
+}
+function openMonthlyChoice(id) {monthViewId=id;openTrips('sky');}
+document.addEventListener('change',e=>{
+ if(e.target.id==='monthlyArchive')openMonthlyChoice(e.target.value);
+});
+
+function calendar(){
+ const day=calendarDay||today(),f=sky(day),book=state.nightSky,entry=book?.days[day];
+ const n=day===today()?book?.counts[f[0]]||0:entry?.count||0;
+ const month=day.slice(0,7),first=new Date(month+'-01T00:00:00Z'),days=new Date(Date.UTC(first.getUTCFullYear(),first.getUTCMonth()+1,0)).getUTCDate();
+ const cells=Array.from({length:days},(_,i)=>{
+  const date=month+'-'+String(i+1).padStart(2,'0');
+  return `<button data-sky-day="${date}" aria-pressed="${date===day}" style="${i===0?'grid-column:'+(first.getUTCDay()+1):''}">${i+1}${book?.days[date]?' ✦':''}</button>`;
+ }).join('');
+ return `<section class="sky-calendar"><label>관측 날짜 <input type="date" value="${day}" id="skyDate"></label><div class="sky-days">${[...'일월화수목금토'].map(d=>'<small>'+d+'</small>').join('')}${cells}</div><h3>${f[0]} · ${n}/${f[1].length}</h3>${art(f,n)}<small>서울 · 밤 9시 기준</small><p>${day===today()?(n===f[1].length?'별자리가 완성됐어요.':'랜덤 탐험에서 돌아온 별을 맞이하면 별빛 하나가 켜져요.'):'이날 밤의 별자리예요.'}</p>${entry?'<p>함께한 별 · '+entry.names.map(esc).join(', ')+(entry.letters?' · 엽서 '+entry.letters+'장':'')+'</p>':''}</section>`;
+}
+document.addEventListener('change',e=>{if(e.target.id==='skyDate'&&/^\d{4}-\d{2}-\d{2}$/.test(e.target.value)){calendarDay=e.target.value;openTrips('sky');}});
 function openTrips(tab='trip'){
  const j=journal(state),t=j.trip,pet=selected();
- const tabs=[['trip','랜덤 탐험'],['survey','직접 탐사'],['work','도안 단서'],['log','남은 발견']].map(([key,name])=>`<button class="button ${key===tab?'primary':'secondary'}" data-trip-tab="${key}" aria-pressed="${key===tab}">${name}</button>`).join('');
+ const tabs=[['trip','랜덤 탐험'],['survey','직접 탐사'],['work','도안 단서'],['log','남은 발견'],['sky','별자리 달력']].map(([key,name])=>`<button class="button ${key===tab?'primary':'secondary'}" data-trip-tab="${key}" aria-pressed="${key===tab}">${name}</button>`).join('');
  let body='';
- if(tab==='survey'){
+ if(tab==='sky'){body=monthly.panel(state,today(),monthViewId)+calendar();}else if(tab==='survey'){
   body=deskEntryCard();
  }else if(tab==='work'){
   body=destinations.map((d,i)=>{
@@ -1378,10 +1412,52 @@ document.addEventListener('click',e=>{
   if(result.ok){const el=document.querySelector(`.room-dust[data-dust="${uid}"]`),dust=state.dusts.find(d=>d.uid===uid);if(el&&dust)playPetReaction(el,dust);sounds.play('pet');save();$('#sparkles').textContent=state.sparkles;toast('반짝이 +'+result.amount);}
   return;
  }
+ if('monthBack' in a)return openTrips('sky');
+ if('monthTarget' in a){if(selectStory(state,monthly.byId(a.monthTarget),today()))save();return openMonthlyChoice(a.monthTarget);}
+ if(a.monthCard)return showMonthlyCard(a.monthCard);
+ if(a.monthRead){
+  const [id,index]=a.monthRead.split('-');
+  const page=monthly.reader(state,today(),id,Number(index));
+  if(page)modal(page.title,page.html+monthBack);
+  return;
+ }
+ if(a.skyDay){calendarDay=a.skyDay;return openTrips('sky');}
+ if(a.tripTab==='sky')calendarDay=today();
  if('tripUi' in a||a.tripTab)return openTrips(a.tripTab);
- let ok=false,msg='',tab='trip';
+ let ok=false;
  if('tripStart' in a){const p=selected();if(p)ok=depart(state,p,level(p.xp),getDust(p.id).essence);}
- else if('tripCollect' in a){const i=j.trip?Math.floor(j.trip.q/2):-1,first=i>=0&&j.trip.q%2===0&&!j.blueprints[i];const previous=state.life.postcards.length;ok=collectTrip(state);if(ok)msg=first?'탐험 보상을 받았어요. '+destinations[i].furniture+' 도안이 열렸어요.':'탐험 보상을 받았어요.';if(ok&&state.life.postcards.length>previous){const p=state.life.postcards[0];msg+=' '+find(QUESTS,p.route).name+'에서 새 엽서가 왔어요.';}}
+ else if('tripCollect' in a){
+  if(!j.trip)return;
+  const i=Math.floor(j.trip.q/2),first=j.trip.q%2===0&&!j.blueprints[i];
+  const previous=state.life.postcards.length;
+  const traveler=state.dusts.find(d=>d.uid===j.trip.uid);
+  if(!collectTrip(state))return;
+  const letter=state.life.postcards.length>previous?state.life.postcards[0]:null;
+  const day=today(), sender=traveler?dustName(traveler):'별';
+  light(state,sender,!!letter,day);
+  const credited=creditReturn(state,sender,day);
+  if(credited)monthViewId=credited.story.id;
+  const monthlyLink=credited?.opened?'<button class="button secondary full" data-month-back>'+esc(credited.story.name)+' · 켜진 별빛 보기</button>':'';
+  const completed=credited && monthStatus(state,credited.story,day).opened===5;
+  const msg=first?'탐험 보상을 받았어요. '+destinations[i].furniture+' 도안이 열렸어요.':'탐험 보상을 받았어요.';
+  save();render();
+  if(letter){
+   modal('새 엽서가 도착했어요',`${postcardPaper(letter,true)}<p>${esc(msg)}</p>${completed?'<button class="button primary full" data-month-card="'+credited.story.id+'">별자리 완성 엽서도 읽기</button>':monthlyLink}<button class="button primary full" data-trip-tab="trip">탐험 수첩으로</button>`);
+  }else if(completed){
+   showMonthlyCard(credited.story.id);
+  }else if(credited?.opened){
+   openTrips('sky');toast(msg,'check');
+  }else{
+   openTrips('trip');toast(msg,'check');
+  }
+  return;
+ }
  else {const action=['buy','craft','place','upgrade'].find(k=>b.hasAttribute('data-trip-'+k));if(!action)return;ok=workshop(state,action,Number(b.getAttribute('data-trip-'+action)));if(ok){save();render();if(action==='upgrade'&&page==='room'){const item=document.querySelector('[data-trip-item="'+a.tripUpgrade+'"]');if(item)showFurnitureActions(item);}if(action==='craft'){if(b.closest('.trip-blueprint'))openTrips('work');toast('가구를 제작했어요. 보관함에서 강화할 수 있어요.','check');}}return;}
- if(ok){save();render();openTrips(tab);if(msg)toast(msg,'check');}
+ if(ok){save();render();openTrips('trip');}
 });
+
+function openLinkedStoryCalendar(){
+ if(location.hash==="#monthly-stories") openTrips("sky");
+}
+window.addEventListener("hashchange", openLinkedStoryCalendar);
+openLinkedStoryCalendar();

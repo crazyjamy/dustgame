@@ -1,0 +1,101 @@
+.night-figure{position:absolute;top:12%;left:35%;width:clamp(64px,18%,110px);min-height:44px;background:none;border:0;color:#fff3d2;filter:drop-shadow(0 1px 2px #5b527e);cursor:pointer;z-index:2}.night-figure svg,.sky-calendar svg{display:block;width:100%}.sky-calendar>svg{width:90px;color:#75639e}.sky-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;text-align:center;margin:12px 0}.sky-days button{padding:5px 0;border:0;border-radius:8px;background:transparent;color:inherit}.sky-days button[aria-pressed=true]{background:#e3d8f4;color:#372b48}.sky-calendar input{font:inherit}
+.monthly-book label{display:block;max-width:100%}
+.month-card-link{width:100%;margin-top:.75rem;padding:.5rem;background:transparent;color:inherit;border:1px solid var(--color-border-control);border-radius:.65rem}
+.month-cover{position:relative;isolation:isolate;display:grid;place-items:center;align-content:center;min-height:120px;text-align:center;border-radius:.65rem;padding:.85rem;background:var(--glass-panel-sheen),var(--color-surface-raised);color:var(--color-brand-primary)}
+.month-cover>span{font:2.3rem/1.2 Georgia,serif}.month-cover p{margin:.35rem 0 0!important;color:var(--color-text-secondary)!important}.month-postcard footer{text-align:right}.month-card-link>b{display:block;margin:.5rem}
+.month-nav{display:flex;gap:.6rem;margin:.8rem 0}.month-nav button{flex:1}.month-reader .story-body,.month-postcard .story-body{line-height:1.85}.month-reader .observation-note{margin-top:1rem}
+
+
+#modal .sky-calendar, #modal .monthly-book, #modal .month-postcard {
+  padding: 1rem;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 1rem;
+  background: var(--glass-panel-sheen), var(--color-glass-card);
+  color: var(--color-text-primary);
+}
+.sky-calendar label, .monthly-book label {
+  display: grid;
+  gap: .35rem;
+  color: var(--color-text-secondary);
+  font-size: var(--text-body);
+}
+#modal .sky-calendar input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: .5rem .65rem;
+  border: 1px solid var(--color-border-control);
+  border-radius: .5rem;
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+}
+#modal .sky-days button {
+  min-height: 44px;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-primary);
+}
+#modal .sky-days button:hover, .month-episode:enabled:hover {
+  background: var(--color-surface-hover);
+}
+#modal .sky-days button[aria-pressed=true] {
+  background: var(--glass-selection);
+  color: var(--color-brand-primary);
+  box-shadow: inset 0 0 0 1px currentColor;
+  font-weight: 700;
+}
+#modal .sky-calendar > svg { color: var(--color-brand-primary); }
+.sky-calendar small, .month-reader > small, .month-postcard footer {
+  color: var(--color-text-secondary);
+}
+.month-episode:enabled small { color: var(--color-brand-primary); }
+#modal :is(.monthly-book,.sky-calendar,.month-reader) :focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-transparency: reduce) {
+  #modal :is(.sky-calendar,.monthly-book,.month-postcard) { background: var(--color-surface-panel); }
+}
+
+.monthly-book .select-field { margin: .35rem 0 .7rem; }
+
+#modal .monthly-book {
+  margin: .75rem 0 1rem;
+  padding: 14px;
+  border-radius: var(--radius-card);
+}
+#modal .monthly-book > h2 {
+  margin: 0 0 .75rem;
+  font-size: var(--text-title-small);
+  line-height: 1.4;
+}
+#modal .monthly-book > h3 {
+  margin: 1rem 0 .25rem;
+  font-size: var(--text-body-large);
+}
+#modal .monthly-book > p {
+  margin: .25rem 0;
+  line-height: 1.6;
+}
+#modal .monthly-book .month-count {
+  font-size: var(--text-meta);
+  color: var(--color-text-secondary);
+}
+#modal .month-chapters { margin-top: .75rem; }
+#modal .month-chapters .month-episode {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) auto;
+  gap: .5rem;
+  align-items: center;
+  width: 100%;
+  padding: .5rem;
+  text-align: start;
+  font: inherit;
+}
+#modal .month-episode > span {
+  font-size: var(--text-meta);
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+#modal .month-episode b { word-break: keep-all; overflow-wrap: anywhere; }
+#modal .month-episode:enabled small { color: var(--color-brand-primary); }

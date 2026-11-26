@@ -19,9 +19,15 @@
   color: var(--color-text-secondary);
   font-size: var(--text-body);
 }
+#modal .sky-calendar label {
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+}
 #modal .sky-calendar input {
   box-sizing: border-box;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   min-height: 44px;
   padding: .5rem .65rem;
   border: 1px solid var(--color-border-control);

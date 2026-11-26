@@ -29,7 +29,7 @@ import{roomCapacity,storageCapacity,homeCount,hasHomeSpace,hasStorageSpace,store
 import{FURNITURE_STORIES,MAX_FURNITURE_LEVEL,furnitureCategory,activeLevel,furnitureLevel,furnitureEffect,upgradeCost}from'./furniture.mjs?v=1.13.81-3f2b718b';
 import{DEFAULT_DECOR,moveRoomItem,insideKeeper,toPlanetScreen,fromPlanetScreen}from'./room-layout.mjs?v=1.13.81-3f2b718b';
 import{QUESTS,isAway,adventureRewards,claimAdventure,selectDust,roomResidents}from'./adventures.mjs?v=1.13.81-3f2b718b';
-import{icon,furnitureArt}from'./icons.mjs?v=1.13.81-3f2b718b';
+import{icon,furnitureArt}from'./icons.mjs?v=furniture-art-growth';
 import{uiIcon}from'./ui-icons.mjs?v=1.13.81-3f2b718b';
 
 for (const placeholder of document.querySelectorAll('[data-ui-icon]')) {
@@ -41,7 +41,7 @@ import{createState,restore,migrateCats,getDust,stage,recipe,checkMix,mix,finishM
 const KEY='tiny-dust-club-v1',$=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));let state,saveBlocked=false,damagedRaw=null;try{const raw=localStorage.getItem(KEY);if(raw){try{state=restore(raw)}catch{saveBlocked=true;damagedRaw=raw;state=createState()}}else{try{state=migrateCats(localStorage.getItem('meow-mix-v2'))}catch{state=createState()}}}catch{state=createState()}
 let userPrefs=loadPreferences(readLocal(PREFS_KEY),!!readLocal(KEY)),introOpen=false;
 const sounds=createSound(()=>userPrefs,window.AudioContext||window.webkitAudioContext);
-let offlineReturn=Date.now()-state.life.lastSeen>=60000,goalHTML='';
+let offlineReturn=Date.now()-state.life.lastSeen>=60000,goalHTML='',lastShownReturn=null;
 resumeLife(state);
 let dustFilter='all',postcardRoute='all',postcardShowMissing=false;
 let roomDialogOpen=false,lifeLastTick=0,hidePlacementStars=false,placementMode=false;
@@ -494,7 +494,7 @@ function tick(finish=true){
  if(trip){const seconds=Math.max(0,Math.ceil(((trip.end??0)-Date.now())/1000));
  const door=$('#adventureDoorStatus');if(door)door.textContent=seconds?'탐험 중 · '+seconds+'초':'돌아온 별 맞이하기';
  if(clock){if(seconds){clock.textContent=seconds+'초 뒤 돌아와요';clock.previousElementSibling.value=clock.previousElementSibling.max-seconds;}else openTrips();}}
- if(finish&&!document.hidden)tickLife();
+ if(finish&&!document.hidden){tickLife();maybeShowReturnBook();}
  if(!finish||page==='explore'||!state.pending)return;
  const result=finishMix(state);
  if(!result)return;
@@ -835,10 +835,9 @@ function showFurnitureActions(item){
  host.innerHTML=`<section id="furnitureActions" class="care-dock care-panel compact-dock" aria-labelledby="furniturePopupName"><div class="compact-top"><div class="compact-profile"><span class="furniture-portrait">${art}</span><div><div class="compact-name"><h2 id="furniturePopupName">${esc(name)}</h2><b>Lv.${lv}</b></div><p>${esc(effect)}</p></div></div><div class="compact-actions"><button class="text-button" aria-label="이야기 읽기" title="이야기 읽기" ${storyAttr}>${uiIcon("story")}</button><button class="button primary" aria-label="${label}" title="${label}" ${upgradeAttr} ${price===null||state.gold<price?"disabled":""}>${uiIcon(price===null?"check":"upgrade")}</button></div></div>${renderStoryCue(clue)}</section>`;
 
 }
-function roomGestureTools(){return `<div class="room-placement"><button class="button ${placementMode?'primary':'secondary'}" id="togglePlacement" aria-pressed="${placementMode}" aria-label="${placementMode?'배치 끝내기':'배치하기'}" title="${placementMode?'배치 끝내기':'배치하기'}">${uiIcon(placementMode?'check':'move')}<span class="desktop-label">${placementMode?'배치 끝내기':'배치하기'}</span></button>${placementMode?`<button id="togglePlacementStars" class="button ${hidePlacementStars?'primary':'secondary'}" aria-label="별 숨기기" aria-pressed="${hidePlacementStars}" title="${hidePlacementStars?'별 다시 표시':'별 숨기기'}">${uiIcon(hidePlacementStars?'eyeOff':'eye')}<span class="desktop-label">${hidePlacementStars?'별 숨김':'별 표시'}</span></button>`:''}<small>${placementMode?'원하는 곳으로 끌어다 놓으세요':'길게 눌러도 옮길 수 있어요'}</small></div>`;}
+function roomGestureTools(){return `<div class="room-placement"><button class="button ${placementMode?'primary':'secondary'}" id="togglePlacement" aria-pressed="${placementMode}" aria-label="${placementMode?'배치 끝내기':'배치하기'}" title="${placementMode?'배치 끝내기':'배치하기'}">${uiIcon(placementMode?'check':'move')}<span class="desktop-label">${placementMode?'배치 끝내기':'배치하기'}</span></button>${placementMode?`<button id="togglePlacementStars" class="button secondary" aria-label="별 숨기기" aria-pressed="${hidePlacementStars}" title="${hidePlacementStars?'별 다시 표시':'별 숨기기'}">${uiIcon(hidePlacementStars?'eyeOff':'eye')}<span class="desktop-label">${hidePlacementStars?'별 숨김':'별 표시'}</span></button>`:''}<small>${placementMode?'원하는 곳으로 끌어다 놓으세요':'길게 눌러도 옮길 수 있어요'}</small></div>`;}
 
-function furnitureLevelTrack(lv){return `<div class="furniture-level-track" aria-label="설치물 레벨 ${lv} / 10">${Array.from({length:10},(_,i)=>i+1).map(n=>`<i class="${lv>=n?'lit':''}"></i>`).join('')}</div>`;}
-function furnitureCard(f){const owned=state.ownedFurniture.includes(f.id),on=installed(state,f.id),lv=furnitureLevel(state,f.id),price=upgradeCost(state,f.id),nextEffect=lv<10?furnitureEffect({...state,ownedFurniture:[...new Set([...state.ownedFurniture,f.id])],furnitureLevels:{...state.furnitureLevels,[f.id]:lv+1||1}},f.id):null;return `<article class="furniture-card ${on?'placed':''}"><div class="furniture-picture" style="--furniture-color:${f.color}">${furnitureArt(f.id,lv||1)}<span>${on?'우리 은하계에 있어요':owned?'보관 중 · 효과 쉼':'새로운 살림'} · ${owned?'Lv.'+lv+' / 10':'퀘스트 보상'}</span></div><div class="furniture-info"><span class="effect-badge">${furnitureEffect(state,f.id)}</span><h2>${f.name}</h2>${furnitureLevelTrack(lv)}${nextEffect?`<p class="next-furniture-effect">${owned?'다음 단계':'처음 놓으면'} · ${nextEffect}</p>`:'<p class="next-furniture-effect">모든 효과와 이야기가 열렸어요.</p>'}<p>${owned?FURNITURE_STORIES[f.id][lv-1][0]:'처음 놓는 날, 이 설치물의 첫 이야기가 시작돼요.'}</p>${owned?`<button class="button primary full" data-upgrade-furniture="${f.id}" ${price===null||state.gold<price?'disabled':''}>${price===null?'Lv.10 · 가장 포근한 모습':price+' 골드 · Lv.'+(lv+1)+'로 업그레이드'}</button>`:''}<div class="furniture-toolbar"><button class="button secondary" ${owned?`data-furniture="${f.id}"`:`data-quest-guide="furniture:${f.id}"`}>${on?'회수하기':owned?'은하계에 설치':'획득 퀘스트 보기'}</button><button class="text-button" data-furniture-story="${f.id}:${Math.max(0,lv-1)}">이야기 ${lv} / 10 ↗</button></div></div></article>`;}
+function furnitureCard(f){const owned=state.ownedFurniture.includes(f.id),on=installed(state,f.id),lv=furnitureLevel(state,f.id),price=upgradeCost(state,f.id),nextEffect=lv<10?furnitureEffect({...state,ownedFurniture:[...new Set([...state.ownedFurniture,f.id])],furnitureLevels:{...state.furnitureLevels,[f.id]:lv+1||1}},f.id):null;return `<article class="furniture-card ${on?'placed':''}"><div class="furniture-picture" style="--furniture-color:${f.color}">${furnitureArt(f.id,lv||1)}<span>${on?'우리 은하계에 있어요':owned?'보관 중 · 효과 쉼':'새로운 살림'} · ${owned?'Lv.'+lv+' / 10':'퀘스트 보상'}</span></div><div class="furniture-info"><span class="effect-badge">${furnitureEffect(state,f.id)}</span><h2>${f.name}</h2>${nextEffect?`<p class="next-furniture-effect">${owned?'다음 단계':'처음 놓으면'} · ${nextEffect}</p>`:'<p class="next-furniture-effect">모든 효과와 이야기가 열렸어요.</p>'}<p>${owned?FURNITURE_STORIES[f.id][lv-1][0]:'처음 놓는 날, 이 설치물의 첫 이야기가 시작돼요.'}</p>${owned?`<button class="button primary full" data-upgrade-furniture="${f.id}" ${price===null||state.gold<price?'disabled':''}>${price===null?'Lv.10 · 가장 포근한 모습':price+' 골드 · Lv.'+(lv+1)+'로 업그레이드'}</button>`:''}<div class="furniture-toolbar"><button class="button secondary" ${owned?`data-furniture="${f.id}"`:`data-quest-guide="furniture:${f.id}"`}>${on?'회수하기':owned?'은하계에 설치':'획득 퀘스트 보기'}</button><button class="text-button" data-furniture-story="${f.id}:${Math.max(0,lv-1)}">이야기 ${lv} / 10 ↗</button></div></div></article>`;}
 const ringNotes=[
  '사진을 펼쳐 놓고도 둘이 앉을 자리가 남네. 딱 이만큼이면 되겠다.',
  '빈자리가 아직 따뜻해. 돌아올 때까지 나도 옆에 앉아 있어야지.',
@@ -851,7 +850,13 @@ const ringNotes=[
  '리본이 한쪽으로 기울었네. 별이 묶은 그대로 두고 싶어.',
  '눈을 감고 만져도 처음 기운 자리를 찾을 수 있어.'
 ];
-function furnitureBook(id,index=0){const f=FURNITURE.find(x=>x.id===id);if(!f)return;const lv=furnitureLevel(state,id),i=Math.min(Math.max(index,0),Math.max(0,lv-1)),chapter=FURNITURE_STORIES[id][i];modal(f.name+'의 작은 이야기',`<div class="furniture-story-art" style="--furniture-color:${f.color}">${furnitureArt(id,lv||1)}</div><span class="new-badge">Lv.${lv} / 10 · ${furnitureEffect(state,id)}</span>${lv?`<h3 class="unlocked-story-title">${chapter[0]}</h3><p class="story-body">${chapter[1]}</p>`:'<p>아직 우리 은하계에 오지 않은 설치물예요.<br>별빛 임무에서 보상을 받으면 첫 이야기가 열려요.</p>'} ${id==='rug'&&lv>0?storyNotePanel('나리의 생각',`<p>${esc(ringNotes[i])}</p>`,true):''}${id==='rug'&&lv>0&&i===0?storyNotePanel('루미의 관측 노트 · 장미성운',`<p>사진 속 꽃의 가운데를 들여다보세요. 그곳에는 NGC 2244라는 별무리가 있어요. 이 별들이 내보내는 빛과 항성풍이 주변 가스를 밀어내 가운데에 빈 공간이 생겨요.</p><a href="https://apod.nasa.gov/apod/ap240214.html" target="_blank" rel="noopener noreferrer">NASA에서 장미성운 사진 보기 ↗</a>`):''}<div class="furniture-chapters">${FURNITURE_STORIES[id].map((c,j)=>`<button data-furniture-story="${id}:${j}" ${j>=lv?'disabled':''} class="${i===j&&lv?'current':''}"><b>${j+1}</b><span>${j<lv?c[0]:'Lv.'+(j+1)+'에 열리는 이야기'}</span></button>`).join('')}</div><button class="button secondary full" data-page="shop">작은 상점으로 돌아가기 →</button>`);}
+const seenFurnitureChapters=new Set();
+function firstFurnitureRead(key){
+ const firstRead=!seenFurnitureChapters.has(key);
+ seenFurnitureChapters.add(key);
+ return firstRead;
+}
+function furnitureBook(id,index=0){const f=FURNITURE.find(x=>x.id===id);if(!f)return;const lv=furnitureLevel(state,id),i=Math.min(Math.max(index,0),Math.max(0,lv-1)),chapter=FURNITURE_STORIES[id][i];modal(f.name+'의 작은 이야기',`<div class="furniture-story-art" style="--furniture-color:${f.color}">${furnitureArt(id,lv||1)}</div><div class="compact-name furniture-story-status"><b>Lv.${lv} / 10</b><span>${esc(furnitureEffect(state,id))}</span></div>${lv?`<h3 class="unlocked-story-title">${chapter[0]}</h3>${storyParagraph(chapter[1],firstFurnitureRead(id+':'+i),'story-body')}`:'<p>아직 우리 은하계에 오지 않은 설치물예요.<br>별빛 임무에서 보상을 받으면 첫 이야기가 열려요.</p>'} ${id==='rug'&&lv>0?storyNotePanel('나리의 생각',`<p>${esc(ringNotes[i])}</p>`,true):''}${id==='rug'&&lv>0&&i===0?storyNotePanel('루미의 관측 노트 · 장미성운',`<p>사진 속 꽃의 가운데를 들여다보세요. 그곳에는 NGC 2244라는 별무리가 있어요. 이 별들이 내보내는 빛과 항성풍이 주변 가스를 밀어내 가운데에 빈 공간이 생겨요.</p><a href="https://apod.nasa.gov/apod/ap240214.html" target="_blank" rel="noopener noreferrer">NASA에서 장미성운 사진 보기 ↗</a>`):''}<div class="furniture-chapters story-chapters" aria-label="가구 이야기 목록">${FURNITURE_STORIES[id].map((c,j)=>`<button data-furniture-story="${id}:${j}" ${j>=lv?'disabled':''} aria-current="${Boolean(i===j&&lv)}"><i aria-hidden="true">${j+1}</i><span>${j<lv?esc(c[0]):'Lv.'+(j+1)+'에 열리는 이야기'}</span></button>`).join('')}</div>`);}
 
 function roomListContent(){const r=currentRoom(state),next=ROOMS[state.roomLevel],milestone=ROOM_CHAPTERS.find(c=>c.level>state.roomLevel),available=ROOM_CHAPTERS.filter(c=>c.level<=state.roomLevel&&!state.roomGrowth.claimed.includes(c.level));return `<p class="rooms-intro">Lv.${state.roomLevel} / 100 · 은하계 ${homeCount(state)} / ${r.capacity}자리 · 보관함 ${r.storage}자리<br>레벨마다 +2마리 · 10레벨마다 새로운 은하계와 이야기</p><section class="room-level-next"><b>${r.name} · 골드 +${r.bonus}%</b><progress value="${state.roomLevel}" max="100" aria-label="은하계 성장 ${state.roomLevel} / 100"></progress><span>✧ ${state.sparkles}개 보유${next?` · 다음 비용 ${next.cost}개`:''}</span><button class="button primary full" data-upgrade-room ${!next||state.sparkles<next.cost?'disabled':''}>${next?`${state.sparkles<next.cost?`반짝이 ${next.cost-state.sparkles}개 부족`:`Lv.${next.level} · ${next.capacity}자리로 넓히기`}`:'200마리의 작은 우주 완성'}</button><small>${milestone?`다음 큰 변화 Lv.${milestone.level} · ${milestone.name} · ${milestone.reward}`:'마지막 이야기를 다시 읽고 특별 장식을 확인해요.'}</small></section>${state.roomGrowth.legacyRoutes?'<p class="room-legacy-note">이전 레벨과 별·설치물·생산 보너스·열린 모험을 유지해요. 정원보다 많은 친구도 사라지지 않아요.</p>':''}${available.length?`<div class="room-unclaimed"><b>새 이야기와 보상 ${available.length}개</b>${available.map(c=>`<button class="button secondary" data-room-chapter="${c.level}">Lv.${c.level} · ${c.title} ↗</button>`).join('')}</div>`:''}<div class="room-decades">${[{level:0,name:'작은 쉼터',title:'처음 펼친 성단 지도',reward:'첫 두 자리에서 시작해요'},...ROOM_CHAPTERS].map(c=>{const lo=c.level||1,hi=c.level===100?100:c.level===0?9:c.level+9,open=state.roomLevel>=lo,claimed=c.level&&state.roomGrowth.claimed.includes(c.level);return `<details><summary><b>Lv.${lo}${hi>lo?'–'+hi:''} · ${c.name}</b><span>${open?claimed?'✓':c.level?'이야기 열림':'성장 중':'⌑'}</span></summary><p>${c.reward}</p>${c.level?`<button class="button secondary" data-room-chapter="${c.level}" ${open?'':'disabled'}>${claimed?'이야기 다시 읽기':'이야기와 보상 보기'}</button>`:'<button class="text-button" data-room-story="1">첫 은하계의 이야기 읽기 ↗</button>'}${claimed?`<button class="button secondary" data-room-decor="${state.roomGrowth.decor===c.level?0:c.level}">${state.roomGrowth.decor===c.level?'장식 넣어두기':'보상 장식 놓기'}</button>`:''}<div class="room-level-grid">${ROOMS.slice(lo-1,hi).map(v=>`<span class="${v.level===state.roomLevel?'current':''}"><b>Lv.${v.level}</b><small>${v.capacity}자리</small><small>${v.level===1?'시작':'✧ '+v.cost}</small></span>`).join('')}</div></details>`;}).join('')}</div>`;}
 function openRooms(){modal('은하계 성장 지도',`<button class="text-button mission-return" data-quest-guide="progress">← 별빛 임무</button><div id="roomList">${roomListContent()}</div>`);roomDialogOpen=true;$('.modal-card').classList.add('rooms-dialog');}
@@ -945,7 +950,24 @@ function updateDailySparkleUI(){
  if(created.length||auto.amount)syncDailySparkleButtons();
 }
 function tickLife(){const now=Date.now();if(now-lifeLastTick<2000)return;lifeLastTick=now;const events=observeLife(state,now);if(events.length)save();if(!roomDrag?.active){updateLifeView();updateDailySparkleUI();}}
-function lifeBook(){readLife(state);save();updateLifeView();modal('은하계 생활 수첩',`<div class="life-book-intro"><span>은하계에서 남긴 기록</span><p>설치물과의 추억, 친구와의 첫 만남, 들어준 부탁이 차곡차곡 쌓여요.</p><button class="text-button" data-postcards>모험 엽서함 ${state.life.postcards.length} / 150 ↗</button></div><div class="life-timeline">${state.life.journal.length?state.life.journal.map(e=>`<article class="life-entry ${e.kind}"><span>${uiIcon(e.kind==='offline'?'moon':e.kind==='postcard'?'mail':'heart')}</span><div><small>${lifeDate(e.at)} · ${{offline:'부재 중 이야기',postcard:'모험에서 온 소식',favorite:'오래 함께한 설치물',friend:'친구와의 발견',wish:'작은 부탁',story:'이야기 다음의 하루'}[e.kind]}</small><h3>${esc(e.title)}</h3><p>${esc(e.text).replaceAll('\n','<br>')}</p>${e.storyUid&&state.dusts.some(d=>d.uid===e.storyUid)?`<button class="text-button" data-shared-entry="${e.storyUid}|afterword:${e.afterwordKind}">${afterwordRecord(state,{uid:e.storyUid},e.afterwordKind)?.read?'후일담 다시 읽기':'후일담 읽고 변화 만나기'}</button>`:''}${e.kind==='offline'?'<small>자리를 비운 사이 별들이 남긴 이야기예요.</small>':''}</div></article>`).join(''):`<div class="empty-life"><span>${uiIcon('journal')}</span><p>아직 첫 페이지가 비어 있어요.</p><small>친구들을 가까이 놓거나 작은 부탁을 들어주세요.<br>좋아하는 설치물 Lv.3 곁에서도 추억이 시작돼요.</small></div>`}</div><p class="life-footnote help-text">생활 기록은 최근 120개, 발견한 엽서·추억·후일담은 계속 보관해요.</p>`);$('.modal-card').classList.add('life-dialog');}
+function acknowledgeLifeBook(){
+ readLife(state);
+ save();
+ renderHeader();
+}
+function maybeShowReturnBook(){
+ const entry=state.life.welcome;
+ if(saveBlocked||document.hidden||page!=='room'||state.pending||!entry||entry===lastShownReturn||!$('#modal').classList.contains('hidden'))return;
+ lastShownReturn=entry;
+ lifeBook(true);
+}
+function lifeBook(returning=false){
+ if(!returning)acknowledgeLifeBook();
+ modal('은하계 생활 수첩',`${returning?'<section class="life-return-note"><p>자리를 비운 사이 별들이 남긴 소식이 있어요.</p><button class="button primary" id="confirmLifeReturn">소식 확인했어요</button></section>':''}<div class="life-book-intro"><span>은하계에서 남긴 기록</span><p>설치물과의 추억, 친구와의 첫 만남, 들어준 부탁이 차곡차곡 쌓여요.</p><button class="text-button" data-postcards>모험 엽서함 ${state.life.postcards.length} / 150 ↗</button></div><div class="life-timeline">${state.life.journal.length?state.life.journal.map(e=>`<article class="life-entry ${e.kind}"><span>${uiIcon(e.kind==='offline'?'moon':e.kind==='postcard'?'mail':'heart')}</span><div><small>${lifeDate(e.at)} · ${{offline:'부재 중 이야기',postcard:'모험에서 온 소식',favorite:'오래 함께한 설치물',friend:'친구와의 발견',wish:'작은 부탁',story:'이야기 다음의 하루'}[e.kind]}</small><h3>${esc(e.title)}</h3><p>${esc(e.text).replaceAll('\n','<br>')}</p>${e.storyUid&&state.dusts.some(d=>d.uid===e.storyUid)?`<button class="text-button" data-shared-entry="${e.storyUid}|afterword:${e.afterwordKind}">${afterwordRecord(state,{uid:e.storyUid},e.afterwordKind)?.read?'후일담 다시 읽기':'후일담 읽고 변화 만나기'}</button>`:''}${e.kind==='offline'?'<small>자리를 비운 사이 별들이 남긴 이야기예요.</small>':''}</div></article>`).join(''):`<div class="empty-life"><span>${uiIcon('journal')}</span><p>아직 첫 페이지가 비어 있어요.</p><small>친구들을 가까이 놓거나 작은 부탁을 들어주세요.<br>좋아하는 설치물 Lv.3 곁에서도 추억이 시작돼요.</small></div>`}</div><p class="life-footnote help-text">생활 기록은 최근 120개, 발견한 엽서·추억·후일담은 계속 보관해요.</p>`,()=>{
+  $('.modal-card').classList.add('life-dialog');
+  if(returning)$('#confirmLifeReturn').onclick=()=>{acknowledgeLifeBook();close();};
+ });
+}
 function lifeDate(at){return new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}).format(at);}
 function postcardPaper(p,isNew=false){return `<article class="postcard-paper"><div class="postcard-heading"><span>FROM A TINY FRIEND</span><i>${uiIcon('mail')}</i></div><small>${isNew?'새로운 엽서 · ':''}${find(QUESTS,p.route).name}에서 · ${personality(p.dustId).mood.name}</small><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p><footer>너에게, ${getDust(p.dustId).name} 보냄<span>${lifeDate(p.at)}</span></footer></article>`;}
 function postcardBook(){collectionTab='postcards';go('collection');}
@@ -1354,7 +1376,7 @@ function ownedFurnitureShelf(){
  const crafted=destinations.map((d,i)=>{
   if(!j.crafted[i])return '';
   const lv=j.levels[i],price=tripUpgradePrice(lv);
-  return `<article class="furniture-card ${j.placed[i]?'placed':''}"><div class="furniture-picture">${tripFurnitureArt(i,lv)}<span>${j.placed[i]?'우리 은하계에 있어요':'보관 중 · 효과 쉼'} · Lv.${lv} / 10</span></div><div class="furniture-info"><span class="effect-badge">${d.name} 탐험 골드 +${lv-1}</span><h2>${d.furniture}</h2>${furnitureLevelTrack(lv)}<p class="next-furniture-effect">${lv<10?'다음 단계 · 탐험 골드 +'+lv:'최고 레벨에 도달했어요.'}</p><button class="button primary full" data-trip-upgrade="${i}" ${lv>=10||state.gold<price?'disabled':''}>${lv>=10?'최고 레벨':price+' 골드 · Lv.'+(lv+1)+'로 업그레이드'}</button><div class="furniture-toolbar">${tripButton(j.placed[i]?'회수하기':'은하계에 설치','data-trip-place="'+i+'"')}</div></div></article>`;
+  return `<article class="furniture-card ${j.placed[i]?'placed':''}"><div class="furniture-picture">${tripFurnitureArt(i,lv)}<span>${j.placed[i]?'우리 은하계에 있어요':'보관 중 · 효과 쉼'} · Lv.${lv} / 10</span></div><div class="furniture-info"><span class="effect-badge">${d.name} 탐험 골드 +${lv-1}</span><h2>${d.furniture}</h2><p class="next-furniture-effect">${lv<10?'다음 단계 · 탐험 골드 +'+lv:'최고 레벨에 도달했어요.'}</p><button class="button primary full" data-trip-upgrade="${i}" ${lv>=10||state.gold<price?'disabled':''}>${lv>=10?'최고 레벨':price+' 골드 · Lv.'+(lv+1)+'로 업그레이드'}</button><div class="furniture-toolbar">${tripButton(j.placed[i]?'회수하기':'은하계에 설치','data-trip-place="'+i+'"')}</div></div></article>`;
  }).join('');
  return `<section><div class="furniture-grid">${regular+crafted||'<p>아직 획득한 가구가 없어요.</p>'}</div></section>`;
 }
@@ -1370,7 +1392,8 @@ function tripOrbit(index,end,traveler){
 }
 function skyButton(){
  const f=sky(today()),n=state.nightSky?.counts[f[0]]||0;
- return `<button class="night-figure" data-trip-tab="sky" aria-label="오늘 밤의 ${f[0]} · 별빛 ${n}개">${art(f,n)}</button>`;
+ const completed=n>=f[1].length;
+ return `<button class="night-figure${completed?' is-complete':''}" data-trip-tab="sky" aria-label="오늘 밤의 ${f[0]} · ${completed?'완성':'별빛 '+n+'/'+f[1].length}">${art(f,n)}<span aria-hidden="true">${f[0]}${completed?' · 완성':''}</span></button>`;
 }
 let calendarDay='', monthViewId='';
 const monthly = monthlyViews({esc, notePanel:storyNotePanel});
@@ -1401,7 +1424,7 @@ function calendar(){
 document.addEventListener('change',e=>{if(e.target.id==='skyDate'&&/^\d{4}-\d{2}-\d{2}$/.test(e.target.value)){calendarDay=e.target.value;openTrips('sky');}});
 function openTrips(tab='trip'){
  const j=journal(state),t=j.trip,pet=selected();
- const tabs=[['trip','랜덤 탐험'],['survey','직접 탐사'],['work','도안 단서'],['log','남은 발견'],['sky','별자리 달력']].map(([key,name])=>`<button class="button ${key===tab?'primary':'secondary'}" data-trip-tab="${key}" aria-pressed="${key===tab}">${name}</button>`).join('');
+ const tabs=[['trip','랜덤 탐험'],['survey','직접 탐사'],['work','도안 단서'],['log','남은 발견'],['sky','별자리 달력']].map(([key,name])=>`<button class="trip-tab" data-trip-tab="${key}" aria-pressed="${key===tab}">${name}</button>`).join('');
  let body='';
  if(tab==='sky'){body=monthly.panel(state,today(),monthViewId)+calendar();}else if(tab==='survey'){
   body=deskEntryCard();
@@ -1423,7 +1446,7 @@ function openTrips(tab='trip'){
  }else{
   body=`<section><h3>${pet?esc(dustName(pet))+'의 탐험':'탐험할 별이 필요해요'}</h3><p>${pet?'Lv.'+level(pet.xp)+' · 갈 수 있는 별에서 임무를 하나 발견해요. 가끔 돌아오는 길에 엽서도 보내요.':'보관함에서 별을 은하계로 데려와 주세요.'}</p>${tripButton('랜덤 탐험 떠나기','data-trip-start',!!pet)}</section>`;
  }
- modal('루미의 탐험 수첩',`<div class="trip-book"><nav>${tabs}</nav>${body}${tab==='trip'&&state.adventures.length?legacyTravelers():''}${tab==='log'?tripButton(uiIcon('mail')+' 받은 모험 엽서 '+state.life.postcards.length,'data-postcards'):''}</div>`);
+ modal('루미의 탐험 수첩',`<div class="trip-book"><nav aria-label="탐험 수첩 보기">${tabs}</nav>${body}${tab==='trip'&&state.adventures.length?legacyTravelers():''}${tab==='log'?tripButton(uiIcon('mail')+' 받은 모험 엽서 '+state.life.postcards.length,'data-postcards'):''}</div>`);
  if(tab==='trip'&&state.adventures.length){adventureDialogOpen=true;updateAdventureUI();}
 }
 document.addEventListener('click',e=>{
@@ -1483,3 +1506,4 @@ function openLinkedStoryCalendar(){
 }
 window.addEventListener("hashchange", openLinkedStoryCalendar);
 openLinkedStoryCalendar();
+maybeShowReturnBook();

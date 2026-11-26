@@ -429,8 +429,6 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline-color: var
   font-size: var(--text-body);
   line-height: 1.6;
 }
-.furniture-card .furniture-level-track i { background: var(--color-border-subtle); }
-.furniture-card .furniture-level-track .lit { background: var(--color-brand-primary); }
 .furniture-card.placed { border-color: var(--color-border-subtle); }
 .route-collection-card .quest-rewards { justify-content: flex-start; }
 .economy-table-wrap { border-color: var(--color-border-subtle); }
@@ -2558,29 +2556,72 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
 #modal :is(.story-chapters,.furniture-chapters,.memory-chapters) button {
   border-radius: var(--radius-button);
 }
+#modal .furniture-story-status {
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  color: var(--color-text-secondary);
+  font-size: var(--text-meta);
+}
+#modal .furniture-chapters button span { font-size: var(--text-body); }
+#modal .furniture-chapters button[aria-current="true"] {
+  background: var(--color-glass-control);
+  border-color: var(--color-glass-edge);
+  color: var(--color-text-primary);
+}
+#modal .furniture-chapters button i {
+  min-width: 25px;
+  padding: 2px 4px;
+  border-radius: 5px;
+  background: var(--color-surface-tag);
+  color: var(--color-text-secondary);
+  font-size: var(--text-meta);
+  text-align: center;
+}
+#modal .life-return-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 12px;
+  border: 1px solid var(--color-glass-edge);
+  border-radius: var(--radius-card);
+  background: var(--color-glass-card);
+}
+#modal .life-return-note p { margin: 0; text-align: start; }
+
 #main :is(.collection-filters,.furniture-filters) button { border-radius: var(--radius-button); }
-#main :is(.collection-tabs,.collection-switch,.shop-tabs) button,
-#modal .trip-book nav button {
+#main :is(.collection-tabs,.collection-switch,.shop-tabs) button {
   border-radius: var(--radius-tab);
 }
 #modal .trip-book nav {
-  gap: 16px;
-  border-bottom: 1px solid var(--color-border-subtle);
+  flex-wrap: nowrap;
+  gap: clamp(12px, 3vw, 24px);
+  overflow-x: auto;
+  scrollbar-width: thin;
+  border-bottom: 1px solid var(--color-glass-edge);
 }
-#modal .trip-book nav button {
-  padding-inline: 2px;
+#modal .trip-book .trip-tab {
+  flex: 0 0 auto;
+  min-width: 44px;
+  min-height: 48px;
+  padding: 11px 2px;
   border: 0;
   border-bottom: 2px solid transparent;
   background: transparent;
   color: var(--color-text-secondary);
-  box-shadow: none;
+  font-size: var(--text-body);
+  font-weight: 500;
+  cursor: pointer;
 }
-#modal .trip-book nav button[aria-pressed="true"] {
-  border-bottom-color: var(--color-brand-primary);
+#modal .trip-book .trip-tab[aria-pressed="true"] {
+  border-bottom-color: var(--color-accent-highlight);
   color: var(--color-text-primary);
   font-weight: 700;
 }
-#modal .trip-book nav button::before, #modal .trip-book nav button::after { content: none; }
+#modal .trip-book .trip-tab:focus-visible { outline-offset: -3px; }
 #modal .trip-book section, #modal .modal-card .observation-note,
 #modal .settings-dialog :is(.record-help,.player-options,.save-transfer), #toast {
   border-radius: var(--radius-card);

@@ -1,4 +1,40 @@
-.night-figure{position:absolute;top:12%;left:35%;width:clamp(64px,18%,110px);min-height:44px;background:none;border:0;color:#fff3d2;filter:drop-shadow(0 1px 2px #5b527e);cursor:pointer;z-index:2}.night-figure svg,.sky-calendar svg{display:block;width:100%}.sky-calendar>svg{width:90px;color:#75639e}.sky-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;text-align:center;margin:12px 0}.sky-days button{padding:5px 0;border:0;border-radius:8px;background:transparent;color:inherit}.sky-days button[aria-pressed=true]{background:#e3d8f4;color:#372b48}.sky-calendar input{font:inherit}
+.night-figure {
+  position: absolute;
+  top: 12%;
+  left: 35%;
+  width: clamp(64px, 18%, 110px);
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-accent-highlight);
+  cursor: pointer;
+  z-index: 2;
+}
+.night-figure svg, .sky-calendar svg { display: block; width: 100%; }
+.night-figure svg { filter: drop-shadow(0 0 5px #bfdcff85); }
+.night-figure line { stroke-width: 1.25; }
+.night-figure circle { opacity: .8; }
+.night-figure span { display: none; }
+.night-figure.is-complete { color: var(--color-currency-gold); }
+.night-figure.is-complete svg { filter: drop-shadow(0 0 7px #f1d397ae); }
+.night-figure.is-complete line { stroke-width: 1.8; }
+.night-figure.is-complete circle { opacity: 1; }
+@media (min-width: 701px) {
+  .night-figure span {
+    display: block;
+    width: max-content;
+    max-width: 150%;
+    margin: 3px auto 0;
+    padding: 3px 6px;
+    border-radius: var(--radius-glass-pill);
+    background: var(--color-surface-tag);
+    color: var(--color-text-primary);
+    font-size: var(--text-meta);
+  }
+  .night-figure.is-complete span { color: var(--color-currency-gold); }
+}
+.sky-calendar>svg{width:90px;color:#75639e}.sky-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;text-align:center;margin:12px 0}.sky-days button{padding:5px 0;border:0;border-radius:8px;background:transparent;color:inherit}.sky-days button[aria-pressed=true]{background:#e3d8f4;color:#372b48}.sky-calendar input{font:inherit}
 .monthly-book label{display:block;max-width:100%}
 .month-card-link{width:100%;margin-top:.75rem;padding:.5rem;background:transparent;color:inherit;border:1px solid var(--color-border-control);border-radius:.65rem}
 .month-cover{position:relative;isolation:isolate;display:grid;place-items:center;align-content:center;min-height:120px;text-align:center;border-radius:.65rem;padding:.85rem;background:var(--glass-panel-sheen),var(--color-surface-raised);color:var(--color-brand-primary)}

@@ -45,8 +45,15 @@ export function icon(id,cls=''){return `<svg class="material-icon ${cls}" viewBo
 
 export function furnitureArt(id,level=1){
  const lv=Math.max(1,Math.min(10,level));
- const markers=Array.from({length:lv-1},(_,i)=>
-  `<circle cx="${8+i*4.5}" cy="49" r="1.1" fill="${i%3===0?'#ffe3a4':'#c6b5f3'}" stroke="none"/>`
- ).join('');
- return `<svg class="material-icon furniture-art" viewBox="0 0 52 52" fill="none" stroke="#7761a0" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${spaceItemArt[id]||shapes.dream}${markers}</svg>`;
+ const growth=(lv-1)/9;
+ const base=spaceItemArt[id]||shapes.dream;
+ const art=growth===0?base:base.replace(/(fill|stroke)="#([0-9a-f]{6})"/gi,(_,attr,hex)=>{
+  const original=[0,2,4].map(offset=>parseInt(hex.slice(offset,offset+2),16));
+  const target=attr==='fill'?[255,239,202]:[60,48,101];
+  const mix=growth*(attr==='fill'?.28:.22);
+  const channels=original.map((value,i)=>Math.round(value+(target[i]-value)*mix));
+  return `${attr}="rgb(${channels.join(',')})"`;
+ });
+ const outline=(1.65+growth*.55).toFixed(2);
+ return `<svg class="material-icon furniture-art" viewBox="0 0 52 52" fill="none" stroke="#7761a0" stroke-width="${outline}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${art}</svg>`;
 }

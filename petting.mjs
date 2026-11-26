@@ -23,7 +23,7 @@ export function bindPortraitPet(portrait, uid, onPet, personality = null) {
   clearTimeout(timer);
   phase = next;
   portrait.dataset.response = next;
-  status.textContent = next ? personality[next] : '';
+  status.textContent = next === 'invite' ? '한 번 더 톡 눌러 주세요' : next ? personality[next] : '';
   portrait.setAttribute('aria-label', next === 'invite' ? '한 번 더 만지기' : originalLabel);
   if (next) timer = setTimeout(() => react(''), next === 'invite' ? 2600 : 850);
   else {
@@ -48,6 +48,10 @@ export function bindPortraitPet(portrait, uid, onPet, personality = null) {
   }
   stroke = trackRub(stroke, { uid, pointerId: pointer, x, y, time: event.timeStamp, inside });
   if (stroke?.reached) {
+   if (personality && !completed) {
+    portrait.dataset.response = 'ready';
+    status.textContent = '이제 손을 떼 보세요';
+   }
    completed = true;
    onPet();
    stroke.distance = 0;
@@ -86,6 +90,8 @@ export function bindPortraitPet(portrait, uid, onPet, personality = null) {
    react('invite');
    return;
   }
+  if (personality && completed) react('');
+  completed = false;
   portrait.style.removeProperty('--gaze-x');
   portrait.style.removeProperty('--gaze-y');
  }

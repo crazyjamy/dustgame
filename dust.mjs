@@ -1,3 +1,4 @@
+import {portraitReaction} from './portrait-reactions.mjs';
 import {bindPortraitPet} from './petting.mjs?v=europa-pose';
 import {today,sky,art,light} from './constellation.mjs';
 import {creditReturn, selectStory, status as monthStatus} from './monthly-sky.mjs';
@@ -18,7 +19,7 @@ import{APP_VERSION,PREFS_KEY,BACKUP_KEY,loadPreferences}from'./player-settings.m
 import{encodeSave,decodeSave,saveSummary,commitImport,MAX_SAVE_BYTES}from'./save-files.mjs?v=1.13.81-3f2b718b';
 import{createSound}from'./sound.mjs?v=1.13.81-3f2b718b';
 import{THEMES,knownDust,syncCollection,themeProgress,setCollectionTarget,targetDust,materialNeeds,essenceRoute,claimTheme,toggleThemeDecor,routeCollection}from'./collection-book.mjs?v=1.13.81-3f2b718b';
-import{CHARACTERS,characterProfile,dustName,firstGreeting,renameDust,petReaction,rememberPetReaction}from'./dust-character.mjs?v=1.13.81-3f2b718b';
+import{CHARACTERS,characterProfile,dustName,firstGreeting,renameDust,rememberPetReaction}from'./dust-character.mjs?v=1.13.81-3f2b718b';
 import{ROOM_MEMORY,syncRoomMemory,memoryProgress,readRoomMemory,toggleMemoryDecor}from'./room-memory.mjs?v=1.13.81-3f2b718b';
 import{firstSteps,nextGoal,goldOverview}from'./progression.mjs?v=1.13.81-3f2b718b';
 import{furnitureQuest,claimFurnitureQuest}from'./furniture-quests.mjs?v=1.13.81-3f2b718b';
@@ -315,37 +316,14 @@ function storyBook(uid,index=null){const d=state.dusts.find(x=>x.uid===uid);if(!
  </nav>${index+1>=count&&count<5?`<p class="next-story-hint help-text">다음 이야기는 Lv.${count+2}에 열려요.</p>`:'<p class="next-story-hint help-text">작은 이야기는 언제든 다시 읽을 수 있어요.</p>'}${journeyExtra(d,true)}</div>`);}
 let roomDrag=null,moveReady=null,suppressRoomClickUntil=0;
 let suppressDustClickUntil=0;
-const portraitPlay = {
- lemon: { invite:'헬리아가 손끝 쪽을 바라보고 폴짝 뛰어요. 한 번 더 만져 보세요.', reply:'헬리아가 한 번 더 폴짝 뛰며 윙크해요.' },
- cocoa: { invite:'유로파가 손끝 쪽으로 천천히 다가와 기대요. 한 번 더 만져 보세요.', reply:'유로파가 눈을 감고 손에 더 깊이 기대요.' }
-};
 function petDetail(dust){
  const result=pet(state,Date.now(),dust.uid);
  if(!result.ok)return;
- playPetReaction($('#modal .detail-pet'),dust);
+ rememberPetReaction(state,dust.id);
  sounds.play('pet');
  save();
  $('#sparkles').textContent=state.sparkles;
  toast('반짝이 +'+result.amount);
-}
-function playPetReaction(button,dust){
- const reaction=petReaction(dust.id);
- if(!reaction)return false;
- const art=button.querySelector('.dust-lift');
- if(art && !art.dataset.petMotion){
-  const face={
-   blush:'<g opacity=".35"><ellipse cx="34" cy="54" rx="5" ry="3"/><ellipse cx="66" cy="54" rx="5" ry="3"/></g><path d="M38 48h4m16 0h4m-16 8q4 4 8 0"/>',
-   sleep:'<path class="pet-drowsy" d="M37 48q4-3 8 0m10 0q4-3 8 0"/><path class="pet-sleepy" d="M37 47q4 4 8 0m10 0q4 4 8 0"/><path d="M48 56q2 2 4 0"/>',
-   smile:'<path d="M37 48q4-5 8 0m10 0q4-5 8 0m-18 6h10q-5 10-10 0Z"/>',
-  }[reaction.face];
-  if(stage(dust.xp)===2)art.insertAdjacentHTML('beforeend',`<svg class="pet-expression" viewBox="0 0 100 100" aria-hidden="true" style="color:${getDust(dust.id).face}"><g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${face}</g></svg>`);
-  art.dataset.petMotion=reaction.motion;
-  setTimeout(()=>{
-   art.querySelector('.pet-expression')?.remove();
-   delete art.dataset.petMotion;
-  },1050);
- }
- return rememberPetReaction(state,dust.id);
 }
 function render(){if(dustPopupUid!==null&&(page!=='room'||placementMode||selected()?.uid!==dustPopupUid))hideDustPopup();if(page==='room'&&!saveBlocked&&dropDailySparkles(state,Date.now(),d=>roomSpot(state,d)).length)save();deskScene?.dispose();deskScene=null;cancelRoomInteraction();if(page==='explore'&&!state.deskRun)page='room';document.documentElement.classList.toggle('desk-open',page==='explore');document.documentElement.classList.toggle('room-open',page==='room');const c=counts();renderHeader();$('#sparkles').textContent=state.sparkles;$('#gold').textContent=state.gold;$('.gold-wallet').setAttribute('aria-label',`골드 ${state.gold} · 상점 열기`);$('#collectionCount').textContent=c.types;$('#storageCount').textContent=c.stored;$('#main').innerHTML=page==='explore'?renderDesk():page==='room'?renderRoom():page==='mix'?renderMix():page==='shop'?renderShop():page==='storage'?renderStorage():renderCollection();document.querySelectorAll('.navigation button').forEach(button=>{const active=button.dataset.page===page;button.classList.toggle('active',active);if(active)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');});tick(false);if(page==='explore')attachDesk();}
 function refreshGame(){
@@ -481,21 +459,22 @@ function copyAction(star, action, icon, label) {
 }
 function starHeaderActions(star, all) {
  const away=isAway(state,star.uid);
- const stageLabel='Lv.'+level(star.xp)+' · '+growthName(level(star.xp));
+ const rank=level(star.xp);
  const status=star.stored?' · 보관 중':away?' · 모험 중':'';
  const picker=all.length>1?`<select id="recordCopy" data-record-copy="${star.id}" aria-label="보유 별 선택">${all.map((v,i)=>`<option value="${v.uid}" ${v.uid===star.uid?'selected':''}>#${i+1} ${esc(dustName(v))}</option>`).join('')}</select>`:'';
  const locationAction=star.stored?copyAction(star,'take-out','home','은하계로 꺼내기'):away?copyAction(star,'copy','survey','탐험 확인'):copyAction(star,'copy','home','은하계에서 보기')+copyAction(star,'store','storage','보관하기');
- return `<div class="star-header-tools"><div class="star-header-status">${picker}<small>${stageLabel}${status}</small></div><div class="copy-row">${locationAction}<button class="button primary copy-action" id="detailMix" aria-label="같은 별 한 마리 더" title="같은 별 한 마리 더">${uiIcon('recipe')}</button></div></div>`;
+ return `<div class="star-header-tools"><div class="star-header-status">${picker}<small>Lv.${rank}</small><small>${growthName(rank)}${status}</small></div><div class="copy-row">${locationAction}<button class="button primary copy-action" id="detailMix" aria-label="같은 별 한 마리 더" title="같은 별 한 마리 더">${uiIcon('recipe')}</button></div></div>`;
 }
 function detail(id,uid=null){const d=getDust(id),found=knownDust(state,id),all=copies(id),recordStar=all.find(v=>v.uid===uid)||all.find(v=>v.uid===state.selectedUid)||all[0],xp=Math.max(0,...all.map(x=>x.xp)),max=all.length?stage(xp):-1;const resident=roomResidents(state).find(v=>v.uid===recordStar?.uid);
+ const reaction=resident && portraitReaction(resident.id);
  const editName=recordStar&&level(recordStar.xp)>=5;
  const portrait=dustArt(id,recordStar?stage(recordStar.xp):found?Math.max(0,max):2,found?'':'silhouette',recordStar?level(recordStar.xp):found?level(xp):5);
- modal(recordStar?esc(dustName(recordStar)):found?d.name:'아직 만나지 못했어요.',`${resident?`<div class="detail-pet"><button type="button" class="pet-portrait" data-personality="${resident.id}" aria-describedby="petRewardHint" aria-label="${esc(dustName(resident))} 쓰다듬기"><span class="pet-pose"><span class="dust-lift">${portrait}</span></span></button>${portraitPlay[id]?'<span role="status" class="portrait-status"></span>':''}<small class="pet-reward-hint help-text" id="petRewardHint">별을 살살 문질러 주세요 ${rewardAmount(uiIcon('sparkle'),'반짝이',petSparkles(state,resident),'sparkle')}</small></div>`:portrait}<div class="star-profile-summary"><div class="detail-tags"><span>${find(GROUPS,d.group).name}</span><span>${find(RARITIES,d.rarity).name}</span><span>보유 ${all.length}마리</span></div><p class="star-intro">${found?d.story:recipeHint(id)}</p></div>${found?preferenceDetails(id,roomResidents(state).find(v=>v.uid===recordStar?.uid&&v.id===id)):'<span class="hint-caption help-text">단서에서 그룹 · 희귀도 · 정수를 떠올려보세요.</span>'}${recordStar?sharedStoryEntrance(recordStar):''}${knownDust(state,id)?recipeRecord(getDust(id)):`<div class="detail-collect-target"><button class="button primary full" data-collect-target="${id}">이 친구를 다음 수집 목표로 →</button><p>정수 단서에 맞는 재료는 ${find(QUESTS,essenceRoute(d.essence)).name}에서 모을 수 있어요.</p></div>`}<div class="growth-pair growth-preview" aria-label="성장 단계">${STAGES.map((name,i)=>{
+ modal(recordStar?esc(dustName(recordStar)):found?d.name:'아직 만나지 못했어요.',`${resident?`<div class="detail-pet"><button type="button" class="pet-portrait" data-personality="${reaction?.motion||''}" aria-describedby="petRewardHint" aria-label="${esc(dustName(resident))} 쓰다듬기"><span class="pet-pose"><span class="dust-lift">${portrait}</span></span></button>${reaction?'<span role="status" class="portrait-status"></span>':''}<small class="pet-reward-hint help-text" id="petRewardHint">별을 살살 문질러 주세요 ${rewardAmount(uiIcon('sparkle'),'반짝이',petSparkles(state,resident),'sparkle')}</small></div>`:portrait}<div class="star-profile-summary"><div class="detail-tags"><span>${find(GROUPS,d.group).name}</span><span>${find(RARITIES,d.rarity).name}</span><span>보유 ${all.length}마리</span></div><p class="star-intro">${found?d.story:recipeHint(id)}</p></div>${found?preferenceDetails(id,roomResidents(state).find(v=>v.uid===recordStar?.uid&&v.id===id)):'<span class="hint-caption help-text">단서에서 그룹 · 희귀도 · 정수를 떠올려보세요.</span>'}${recordStar?sharedStoryEntrance(recordStar):''}${knownDust(state,id)?recipeRecord(getDust(id)):`<div class="detail-collect-target"><button class="button primary full" data-collect-target="${id}">이 친구를 다음 수집 목표로 →</button><p>정수 단서에 맞는 재료는 ${find(QUESTS,essenceRoute(d.essence)).name}에서 모을 수 있어요.</p></div>`}<div class="growth-pair growth-preview" aria-label="성장 단계">${STAGES.map((name,i)=>{
  const rank=i+1, unlocked=found&&all.length>0&&level(xp)>=rank;
  return `<div class="${unlocked?'':'unseen'}">${dustArt(id,stage(i*2),found?'':'silhouette',rank)}<span>${name}</span><small>Lv.${rank}${rank===5?'+':''}</small></div>`;
 }).join('')}</div>${all.length?'':`<button class="button primary full" id="detailMix">${found?'같은 별 한 마리 더':'단서로 직접 조합해보기'} →</button>`}`,()=>{
  $('#modal .modal-card').classList.add('star-detail');
- if(resident)bindPortraitPet($('#modal .pet-portrait'),resident.uid,()=>petDetail(resident),portraitPlay[id]);
+ if(resident)bindPortraitPet($('#modal .pet-portrait'),resident.uid,()=>petDetail(resident),reaction);
  if(editName)$('#modalTitle').insertAdjacentHTML('afterend',`<button class="text-button detail-rename" data-rename="${recordStar.uid}" aria-label="별명 수정">${uiIcon('edit')}</button>`);
  if(recordStar)$('#modal .modal-heading .close').insertAdjacentHTML('beforebegin',starHeaderActions(recordStar,all));
  $('#detailMix').onclick=()=>{close();openMix(found?{group:d.group,rarity:d.rarity,essence:d.essence}:null)};

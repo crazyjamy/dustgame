@@ -1,0 +1,60 @@
+// Motion is shared; the reply belongs to the star the player is touching.
+const profiles = {
+ crumb: ['lean', '솔라가 옆자리에 폭신하게 기대요.'],
+ soot: ['roll', '움브라가 한 바퀴 더 구르고 윙크해요.'],
+ pink: ['peek', '로제타가 빼꼼 고개를 내밀고 눈웃음을 지어요.'],
+ puff: ['sway', '종소리에 맞추듯 좌우로 한 번 더 춤춰요.'],
+ violet: ['rest', '눈을 감고 손끝 옆에 동그랗게 웅크려요.'],
+ star: ['peek', '길을 알려주려는 듯 손끝 너머를 빼꼼 봐요.'],
+ milk: ['rest', '아이오가 이불 속에 파묻히듯 눈을 감아요.'],
+ toast: ['hop', '베가가 아침 인사를 건네듯 폴짝 뛰어요.'],
+ sprout: ['peek', '새로운 색을 발견한 듯 고개를 내밀어요.'],
+ moss: ['lean', '기다리고 있었다는 듯 손끝에 가만히 기대요.'],
+ cloud: ['rest', '쿠션에 앉듯 몸을 낮추고 눈을 감아요.'],
+ peach: ['sway', '물감을 섞듯 몸을 좌우로 흔들어요.'],
+ mint: ['roll', '둥근 모양을 자랑하듯 몸을 굴려요.'],
+ coral: ['hop', '들려줄 이야기가 떠올랐는지 통통 뛰어요.'],
+ clover: ['peek', '반짝이는 것을 찾은 듯 손끝 곁을 들여다봐요.'],
+ snow: ['lean', '따뜻한 손 가까이 몸을 더 기울여요.'],
+ dew: ['roll', '작은 이슬방울처럼 한 바퀴 더 굴러요.'],
+ tangerine: ['hop', '오늘 이야기가 궁금한 듯 다시 폴짝 뛰어요.'],
+ night: ['rest', '말없이 눈을 감고 곁에서 쉬어요.'],
+ opal: ['peek', '사진을 들여다보듯 살짝 고개를 내밀어요.'],
+ linen: ['lean', '지도를 접어 두고 쉬듯 손에 기대요.'],
+ cookie: ['peek', '빠진 그림 조각을 찾듯 빼꼼 들여다봐요.'],
+ puddle: ['roll', '물 위에 다시 떠오른 듯 데굴 굴러요.'],
+ breeze: ['sway', '기다리던 바람을 만난 듯 몸을 흔들어요.'],
+ honey: ['lean', '뒤늦게 대답하듯 천천히 손에 기대요.'],
+ ash: ['lean', '손을 든든하게 받쳐 주듯 몸을 붙여요.'],
+ bubble: ['hop', '비눗방울처럼 가볍게 한 번 더 솟아요.'],
+ petal: ['sway', '책 사이의 꽃잎처럼 살랑살랑 흔들려요.'],
+ sesame: ['peek', '지도 끝의 작은 점처럼 빼꼼 모습을 보여요.'],
+ cocoa: ['lean', '유로파가 눈을 감고 손에 더 깊이 기대요.'],
+ lemon: ['hop', '헬리아가 한 번 더 폴짝 뛰며 윙크해요.'],
+ lavender: ['sway', '색을 고르는 듯 이쪽저쪽 몸을 기울여요.'],
+ seafoam: ['roll', '파도 끝을 따라가듯 한 바퀴 더 굴러요.'],
+ chestnut: ['lean', '둥근 쪽을 내어 주듯 살며시 기대요.'],
+ lily: ['peek', '작은 목소리를 들려주려는 듯 고개를 내밀어요.'],
+ butterfly: ['sway', '리본 날개처럼 양쪽으로 사뿐히 흔들려요.'],
+ sugar: ['rest', '비워 둔 따뜻한 자리에 포근히 내려앉아요.'],
+ mushroom: ['sway', '빗방울의 박자를 짚듯 몸을 흔들어요.'],
+ aurora: ['sway', '커튼을 젖히듯 몸을 살랑이며 인사해요.'],
+ comet: ['hop', '먼 길을 달려온 기세로 한 번 더 튀어요.'],
+ lullaby: ['sway', '손길에 맞춰 짧은 박자를 한 번 더 타요.'],
+ ripple: ['sway', '물결이 번지듯 몸을 양옆으로 흔들어요.'],
+ flame: ['hop', '작은 불씨처럼 톡 뛰어올라요.'],
+ pearl: ['lean', '길을 안내하다 함께 쉬듯 손에 기대요.'],
+ dandelion: ['hop', '바람을 탄 씨앗처럼 가볍게 뛰어요.'],
+ mist: ['peek', '안개 사이에서 인사를 건네듯 빼꼼 나와요.'],
+ ribbon: ['sway', '책갈피 끈처럼 끝을 살랑이며 반겨요.'],
+ acorn: ['roll', '모자를 꼭 붙잡은 듯 둥글게 굴러요.'],
+ echo: ['peek', '조금 늦은 답장을 보내듯 고개를 내밀어요.'],
+ rainbow: ['sway', '빛의 각도를 바꾸듯 몸을 좌우로 기울여요.']
+};
+
+export function portraitReaction(id) {
+ const profile = profiles[id];
+ if (!profile) return null;
+ const [motion, reply] = profile;
+ return {motion, reply};
+}

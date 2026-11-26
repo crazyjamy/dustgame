@@ -8,3 +8,50 @@ export function trackRub(previous,sample,threshold=48){
  const moved=delta>=.5,distance=Math.min(threshold,previous.distance+(moved?Math.min(delta,16):0));
  return{...sample,distance,moved,reached:moved&&distance>=threshold};
 }
+
+// The gesture belongs to this mounted portrait and ends when the pointer lifts.
+export function bindPortraitPet(portrait, uid, onPet) {
+ let pointer = null;
+ let stroke = null;
+
+ function sample(event) {
+  const rect = portrait.getBoundingClientRect();
+  const x = event.clientX, y = event.clientY;
+  const inside = withinPetArea(rect, x, y);
+  if (inside && stroke) {
+   const clamp = value => Math.max(-1, Math.min(1, value));
+   const dx = clamp((x - stroke.x) / 8) * .65 + clamp(2 * (x - rect.left) / rect.width - 1) * .35;
+   const dy = clamp((y - stroke.y) / 8) * .65 + clamp(2 * (y - rect.top) / rect.height - 1) * .35;
+   portrait.style.setProperty('--gaze-x', dx * 4 + 'px');
+   portrait.style.setProperty('--gaze-y', dy * 3 + 'px');
+  } else {
+   portrait.style.removeProperty('--gaze-x');
+   portrait.style.removeProperty('--gaze-y');
+  }
+  stroke = trackRub(stroke, { uid, pointerId: pointer, x, y, time: event.timeStamp, inside });
+  if (stroke?.reached) {
+   onPet();
+   stroke.distance = 0;
+  }
+ }
+
+ portrait.addEventListener('pointerdown', event => {
+  if (!event.isPrimary || event.button !== 0 || pointer !== null) return;
+  pointer = event.pointerId;
+  portrait.setPointerCapture(pointer);
+  sample(event);
+ });
+ portrait.addEventListener('pointermove', event => {
+  if (event.pointerId === pointer) sample(event);
+ });
+ function end(event) {
+  if (event.pointerId !== pointer) return;
+  pointer = null;
+  stroke = null;
+  portrait.style.removeProperty('--gaze-x');
+  portrait.style.removeProperty('--gaze-y');
+ }
+ for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) portrait.addEventListener(type, end);
+ // Keyboard and assistive-technology activation uses the same reward cooldown.
+ portrait.addEventListener('click', event => { if (event.detail === 0 && !event.pointerType) onPet(); });
+}

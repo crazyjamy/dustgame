@@ -25,7 +25,10 @@
 }
 #modal .sky-calendar input {
   box-sizing: border-box;
-  width: 100%;
+  justify-self: stretch;
+  width: auto;
+  -webkit-appearance: none;
+  appearance: none;
   min-width: 0;
   max-width: 100%;
   min-height: 44px;

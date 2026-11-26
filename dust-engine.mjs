@@ -39,7 +39,10 @@ export function mergeDust(s,uid,otherUid,now=Date.now()){
  const bonus=activeLevel(s,'rug')+(level(dust.xp)>=3?Math.ceil(activeLevel(s,'starmobile')/2):0);s.sparkles+=bonus;syncCollection(s);
  return {ok:true,dust,consumed:other,gold,bonus,grew:stage(dust.xp)>prev,leveled:true,chapter:level(dust.xp)-2};
 }
-export function pet(s,now=Date.now(),uid=s.selectedUid){const dust=s.dusts.find(d=>d.uid===uid);if(!dust||dust.stored||isAway(s,uid))return{ok:false,message:'은하계에 있는 별을 쓰다듬어주세요.'};if(now<s.petAt)return{ok:false,message:'좋아서 몽글거리는 중이에요.'};const amount=1+activeLevel(s,'plant')+(getDust(dust.id).rarity==='legend'?Math.ceil(activeLevel(s,'prism')/2):0);s.sparkles+=amount;s.petAt=now+1100-activeLevel(s,'teacup')*50;return{ok:true,amount};}
+export function petSparkles(s,dust){
+ return 1+activeLevel(s,'plant')+(getDust(dust.id).rarity==='legend'?Math.ceil(activeLevel(s,'prism')/2):0);
+}
+export function pet(s,now=Date.now(),uid=s.selectedUid){const dust=s.dusts.find(d=>d.uid===uid);if(!dust||dust.stored||isAway(s,uid))return{ok:false,message:'은하계에 있는 별을 쓰다듬어주세요.'};if(now<s.petAt)return{ok:false,message:'좋아서 몽글거리는 중이에요.'};const amount=petSparkles(s,dust);s.sparkles+=amount;s.petAt=now+1100-activeLevel(s,'teacup')*50;return{ok:true,amount};}
 
 export function storeDust(s,uid,now=Date.now()){const d=s.dusts.find(d=>d.uid===uid);if(!d||d.stored||isAway(s,uid))return{ok:false,message:'보관할 별을 골라주세요.'};if(!hasStorageSpace(s))return {ok:false,message:'보관함 '+storageCapacity(s)+'자리가 가득 찼어요. 은하계를 업그레이드해 주세요.'};pauseGold(s,d,now);d.stored=true;if(s.selectedUid===uid)s.selectedUid=inRoom(s)[0]?.uid??null;return{ok:true,dust:d};}
 export function takeOutDust(s,uid,now=Date.now()){const d=s.dusts.find(d=>d.uid===uid);if(!d||!d.stored)return{ok:false,message:'이미 은하계에 있는 별예요.'};if(!hasHomeSpace(s))return {ok:false,message:'방 '+roomCapacity(s)+'자리가 가득 찼어요. 모험 중인 친구 자리도 포함돼요.'};d.stored=false;d.goldAt=now+d.goldRemaining;s.selectedUid=uid;return{ok:true,dust:d};}

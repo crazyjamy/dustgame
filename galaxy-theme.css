@@ -35,9 +35,15 @@ html:not(.room-open, .desk-open) .app-shell {
   .app-shell > .topbar { gap: 6px; }
   .app-shell > .topbar .header-utilities .wallet {
     display: grid;
-    grid-template-columns: repeat(2, minmax(44px, 1.15fr)) repeat(2, minmax(44px, 1fr)) repeat(2, 44px);
+    grid-template-columns: minmax(44px, max-content) minmax(44px, max-content) minmax(0, 1fr) 44px 44px;
+    grid-template-areas: "gold sparkles . journal settings";
+    reading-flow: grid-rows;
     gap: 2px;
   }
+  .topbar .wallet #settings { grid-area: settings; }
+  .topbar .wallet .header-life { grid-area: journal; }
+  .topbar .wallet .gold-wallet { grid-area: gold; }
+  .topbar .wallet .sparkle-wallet { grid-area: sparkles; }
   .app-shell > .topbar .wallet :is(.resource-count, .gold-wallet, .sparkle-wallet, .header-life, #settings) {
     width: 100%;
     min-width: 44px;
@@ -1375,7 +1381,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   overflow: hidden;
   pointer-events: none;
   background:
-    url('./assets/galaxy-stars.svg?v=1.13.81-3f2b718b') center 12% / auto 800px repeat,
+    url('./assets/galaxy-stars.svg') center 12% / auto 800px repeat,
     radial-gradient(ellipse at 77% 27%, var(--color-glass-orbit-graphite), transparent 57%),
     radial-gradient(ellipse at 13% 54%, var(--color-glass-orbit-slate), transparent 64%),
     radial-gradient(ellipse at 94% 78%, var(--color-glass-orbit-silver), transparent 56%),
@@ -1417,7 +1423,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: url('./assets/planet-horizon.svg?v=1.13.81-3f2b718b') center 46% / cover no-repeat;
+  background: url('./assets/planet-horizon.svg') center 46% / cover no-repeat;
 }
 .planet-landscape + .room-playfield .galaxy-portal { top: 39%; left: 82%; }
 .dust-room .birth-glow {
@@ -1730,7 +1736,9 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   #modal .economy-table { min-inline-size: 100%; }
   #modal .economy-table th { min-inline-size: auto; }
   #modal .economy-table thead th { white-space: normal; }
-  #dustPopup .compact-name { flex-wrap: wrap; }
+  #dustPopup .compact-name { flex-wrap: nowrap; }
+  #dustPopup .compact-name > b { flex-shrink: 0; }
+  #dustPopup .compact-profile > div { min-width: 0; }
   #dustPopup .compact-name h2 { min-inline-size: 0; }
 }
 
@@ -2640,3 +2648,84 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
   }
   #dustPopup #goldTimerValue { font-variant-numeric: tabular-nums; }
 }
+#modal .modal-heading > div:has(.detail-rename) { display: flex; align-items: center; gap: 4px; min-width: 0; }
+#modal .detail-rename { flex: none; width: 44px; height: 44px; }
+#modal .detail-pet { display: grid; justify-items: center; gap: 8px; }
+#modal .detail-pet .dust-lift { position: relative; width: min(110px, 100%); }
+#modal .detail-pet .dust-art { width: 100%; display: block; }
+
+#modal .pet-portrait {
+  display: grid;
+  place-items: center;
+  width: min(110px, 100%);
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  cursor: grab;
+}
+#modal .pet-portrait:active { cursor: grabbing; }
+#modal .pet-portrait .dust-lift { display: block; width: 100%; pointer-events: none; }
+#modal .detail-pet small { color: var(--color-text-secondary); }
+#modal .pet-portrait :is(.pet-gaze, .pet-expression g) { transform: translate(var(--gaze-x, 0px), var(--gaze-y, 0px)); }
+
+/* Star detail uses the shared, scrollable reading dialog. */
+#modal .star-detail .pet-reward-hint {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px 8px;
+  font-size: var(--text-label);
+}
+#modal .star-detail :is(.preference-detail, .shared-story-entrance) {
+  text-align: start;
+  background: var(--color-glass-card);
+  border: 1px solid var(--color-glass-edge);
+  border-radius: var(--radius-card);
+  margin-block: 16px;
+  padding: 14px;
+}
+#modal .star-detail :is(.shared-story-entrance, .preference-detail) h3 { font-size: var(--text-body-large); }
+#modal .star-detail :is(.shared-story-entrance, .preference-detail) p { font-size: var(--text-body); line-height: 1.7; }
+#modal .star-detail :is(.shared-story-entrance, .preference-detail) small { font-size: var(--text-meta); }
+#modal .star-detail :is(.copy-row button, .text-button, .button, select) { min-height: var(--size-reading-target); }
+#modal .star-detail .copy-row .copy-store { min-width: var(--size-reading-target); }
+#modal .star-detail .copy-row .copy-story { width: var(--size-reading-target); }
+#modal .star-detail .detail-tags { flex-wrap: wrap; }
+#modal .star-detail .record-copy-label, #modal .star-detail #recordCopy { min-width: 0; max-width: 100%; }
+#modal .star-detail #modalTitle { min-width: 0; overflow-wrap: anywhere; }
+#modal .star-detail .modal-heading > .close { flex-shrink: 0; }
+#modal .star-detail .copy-row { display: flex; align-items: center; gap: 4px; }
+#modal .star-detail .copy-row > [data-copy] { min-width: 0; overflow-wrap: anywhere; }
+#modal .star-detail .copy-row > .copy-action { display: grid; place-items: center; flex: 0 0 var(--size-reading-target); width: var(--size-reading-target); padding: 0; margin: 0; border-radius: var(--radius-button); }
+#modal .star-detail .copy-row > .primary { background: var(--color-glass-action); color: var(--color-action-on-primary); }
+@media (prefers-reduced-transparency: reduce) {
+  #modal .star-detail :is(.preference-detail, .shared-story-entrance) { background: var(--color-surface-panel); }
+}
+
+/* Instructions accompany the action. Currency amounts remain one readable unit. */
+.app-shell .help-text, #modal .modal-card .help-text {
+  font-size: var(--text-label); font-weight: 400; line-height: 1.55;
+  color: var(--color-text-secondary); word-break: keep-all; overflow-wrap: anywhere;
+}
+.app-shell .reward-amount, #modal .modal-card .reward-amount {
+  display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px;
+  border: 0; border-radius: var(--radius-pill); background: var(--color-surface-tag);
+  color: var(--color-text-primary); font-size: var(--text-label); font-weight: 600;
+  line-height: 1.55; font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.app-shell .reward-amount[data-kind=sparkle], #modal .modal-card .reward-amount[data-kind=sparkle] { color: var(--color-currency-sparkle); }
+.reward-amount i, .reward-amount i svg { display: block; width: 16px; height: 16px; }
+#modal .star-detail .star-profile-summary { margin: 16px 0; }
+#modal .star-profile-summary .detail-tags { justify-content: center; margin: 0; }
+#modal .star-profile-summary .star-intro { margin: 8px 0 0; text-align: center; font-size: var(--text-body); line-height: 1.65; color: var(--color-text-primary); word-break: keep-all; overflow-wrap: anywhere; }
+
+#modal .star-detail .copy-identity { flex: 1; min-width: 0; display: grid; gap: 2px; overflow-wrap: anywhere; }
+#modal .star-detail .copy-identity small { margin: 0; }
+#modal .star-detail .copy-row > .copy-action { background: var(--color-glass-surface, var(--color-surface-inset)); color: var(--color-text-primary); }
+#modal .star-detail .copy-row > .primary { background: var(--color-glass-action); color: #fff; }

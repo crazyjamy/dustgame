@@ -10,26 +10,45 @@ export function trackRub(previous,sample,threshold=48){
 }
 
 // The gesture belongs to this mounted portrait and ends when the pointer lifts.
-export function bindPortraitPet(portrait, uid, onPet) {
+export function bindPortraitPet(portrait, uid, onPet, personality = null) {
  let pointer = null;
  let stroke = null;
+ let completed = false;
+ let followTouch = null;
+ let phase = '';
+ let timer;
+ const status = personality && portrait.parentElement.querySelector('[role="status"]');
+ const originalLabel = personality && portrait.getAttribute('aria-label');
+ function react(next) {
+  clearTimeout(timer);
+  phase = next;
+  portrait.dataset.response = next;
+  status.textContent = next ? personality[next] : '';
+  portrait.setAttribute('aria-label', next === 'invite' ? '한 번 더 만지기' : originalLabel);
+  if (next) timer = setTimeout(() => react(''), next === 'invite' ? 2600 : 850);
+  else {
+   portrait.style.removeProperty('--gaze-x');
+   portrait.style.removeProperty('--gaze-y');
+  }
+ }
 
  function sample(event) {
   const rect = portrait.getBoundingClientRect();
   const x = event.clientX, y = event.clientY;
   const inside = withinPetArea(rect, x, y);
-  if (inside && stroke) {
+  if (inside && stroke && (x !== stroke.x || y !== stroke.y)) {
    const clamp = value => Math.max(-1, Math.min(1, value));
    const dx = clamp((x - stroke.x) / 8) * .65 + clamp(2 * (x - rect.left) / rect.width - 1) * .35;
    const dy = clamp((y - stroke.y) / 8) * .65 + clamp(2 * (y - rect.top) / rect.height - 1) * .35;
    portrait.style.setProperty('--gaze-x', dx * 4 + 'px');
    portrait.style.setProperty('--gaze-y', dy * 3 + 'px');
-  } else {
+  } else if (!stroke) {
    portrait.style.removeProperty('--gaze-x');
    portrait.style.removeProperty('--gaze-y');
   }
   stroke = trackRub(stroke, { uid, pointerId: pointer, x, y, time: event.timeStamp, inside });
   if (stroke?.reached) {
+   completed = true;
    onPet();
    stroke.distance = 0;
   }
@@ -39,19 +58,42 @@ export function bindPortraitPet(portrait, uid, onPet) {
   if (!event.isPrimary || event.button !== 0 || pointer !== null) return;
   pointer = event.pointerId;
   portrait.setPointerCapture(pointer);
+  if (phase) {
+   followTouch = { x:event.clientX, y:event.clientY, tap:phase === 'invite' };
+   return;
+  }
+  completed = false;
   sample(event);
  });
  portrait.addEventListener('pointermove', event => {
-  if (event.pointerId === pointer) sample(event);
+  if (event.pointerId !== pointer) return;
+  if (followTouch) {
+   if (Math.hypot(event.clientX-followTouch.x,event.clientY-followTouch.y)>10) followTouch.tap=false;
+  } else sample(event);
  });
  function end(event) {
   if (event.pointerId !== pointer) return;
   pointer = null;
   stroke = null;
+  if (followTouch) {
+   const tap = followTouch.tap && phase === 'invite' && event.type === 'pointerup' && Math.hypot(event.clientX-followTouch.x,event.clientY-followTouch.y)<=10;
+   followTouch = null;
+   if (tap) react('reply');
+   return;
+  }
+  if (personality && completed && event.type === 'pointerup') {
+   completed = false;
+   react('invite');
+   return;
+  }
   portrait.style.removeProperty('--gaze-x');
   portrait.style.removeProperty('--gaze-y');
  }
  for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) portrait.addEventListener(type, end);
  // Keyboard and assistive-technology activation uses the same reward cooldown.
- portrait.addEventListener('click', event => { if (event.detail === 0 && !event.pointerType) onPet(); });
+ portrait.addEventListener('click', event => { if (event.detail !== 0 || event.pointerType || pointer !== null) return;
+  if (!phase) {
+   onPet();
+   if (personality) react('invite');
+  } else if (phase === 'invite') react('reply'); });
 }

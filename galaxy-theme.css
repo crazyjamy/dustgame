@@ -2737,3 +2737,21 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
 #modal .star-detail .star-header-status small {font-size:var(--text-caption);color:var(--color-text-secondary)}
 #modal .star-detail .star-header-status select {width:100%;min-width:0;max-width:100%}
 #modal .star-detail .star-header-tools .copy-row {flex:none}
+
+.portrait-status { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip-path:inset(50%); }
+.pet-portrait { --gaze-x: 0px; --gaze-y: 0px; }
+.pet-portrait[data-response] .dust-lift { --toward-x: calc(var(--gaze-x) * 2); --toward-y: calc(var(--gaze-y) * 2); }
+.pet-portrait[data-personality="cocoa"][data-response="invite"] .dust-lift { animation: portrait-peek 1.15s ease-in-out both; }
+.pet-portrait[data-personality="cocoa"][data-response="reply"] .dust-lift { animation:none; transform:translate(var(--toward-x),calc(var(--toward-y) + 3px)) scale(.96); }
+.pet-portrait[data-personality="cocoa"][data-response="reply"] .dust-eyes,
+.pet-portrait[data-personality="lemon"][data-response="reply"] .dust-eyes > :last-child { transform-box:fill-box; transform-origin:center; scale:1 .18; }
+.pet-portrait[data-personality="lemon"][data-response="invite"] .dust-lift { animation: portrait-look .32s ease-in-out, portrait-hop .52s .32s ease-out forwards; }
+.pet-portrait[data-personality="lemon"][data-response="reply"] .dust-lift { animation: portrait-hop .38s ease-out 2; }
+@keyframes portrait-peek { 0%,25% {transform:scale(.95)} 100% {transform:translate(var(--gaze-x),calc(var(--gaze-y) + 2px)) rotate(3deg)} }
+@keyframes portrait-look { 25% {transform:rotate(-6deg)} 75% {transform:rotate(6deg)} }
+@keyframes portrait-hop { 50% {transform:translate(var(--toward-x),calc(var(--toward-y) - 12px))} 100% {transform:translate(var(--gaze-x),var(--gaze-y))} }
+@media (prefers-reduced-motion:reduce) {
+ .pet-portrait[data-personality][data-response] .dust-lift {animation:none}
+ .pet-portrait[data-response="invite"] .dust-lift {transform:translate(var(--gaze-x),var(--gaze-y))}
+}
+

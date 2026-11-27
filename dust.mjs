@@ -167,7 +167,12 @@ document.addEventListener('focusin',e=>{
  if(e.target.matches('[data-tooltip]:focus-visible'))showTooltip(e.target);
 });
 document.addEventListener('focusout',e=>{if(e.target===tooltipTarget)hideTooltip();});
-document.addEventListener('pointerdown',hideTooltip);
+let keyboardInput = false;
+document.addEventListener('pointerdown', () => {
+ keyboardInput = false;
+ hideTooltip();
+}, true);
+document.addEventListener('keydown', () => { keyboardInput = true; }, true);
 document.addEventListener('scroll',hideTooltip,true);
 window.addEventListener('resize',hideTooltip);
 document.addEventListener('keydown',e=>{
@@ -425,7 +430,7 @@ function close(){storyEffects.reset();const wasOpen=!$('#modal').classList.conta
  const opener=lastFocus?.isConnected?lastFocus:lastFocus?.id?document.getElementById(lastFocus.id):null;
  lastFocus=null;
  if(opener?.matches('a[href],button:not(:disabled),input:not(:disabled),select:not(:disabled),summary,[tabindex]')&&opener.getClientRects().length)opener.focus({preventScroll:true});
- else $('.navigation .active')?.focus({preventScroll:true});
+ else if(keyboardInput) $('.navigation .active')?.focus({preventScroll:true});
  }}
 function makeHappy(uid){happyUid=uid;clearTimeout(happyTimer);render();happyTimer=setTimeout(()=>{happyUid=null;$('.room-dust.happy')?.classList.remove('happy')},1800)}
 function openMerge(uid){const d=state.dusts.find(d=>d.uid===uid);if(!d||d.stored||isAway(state,uid))return toast('은하계에 있는 별을 골라주세요.');const matches=mergeCandidates(state,uid),info=getDust(d.id);modal('온기를 모아, 한 뼘 더.',`<div class="merge-intro">${dustPortrait(d,journeyComplete(d))}<h3>${esc(dustName(d))} · Lv.${level(d.xp)}</h3><p>같은 종류 두 마리를 합치면 더 높은 쪽보다 한 레벨 올라요.<br>지금 고른 친구의 별명과 자리는 그대로 남아요.</p></div>${matches.length?`<h3 class="merge-list-title">함께 합칠 친구를 골라주세요</h3><div class="merge-options">${matches.map(x=>`<button class="merge-option" data-merge-preview="${uid}:${x.uid}">${dustPortrait(x)}<span><b>${esc(dustName(x))} · Lv.${level(x.xp)}</b><small>별 #${x.uid} · 이야기 ${x.readStories.length}편 읽음</small></span><i>선택 →</i></button>`).join('')}</div>`:`<p class="merge-empty">은하계에 같은 종류의 ${info.name} 친구가 한 마리 더 필요해요.<br>보관함에서 꺼내거나, 작은 빛에서 같은 친구를 만나보세요.<br>모험 중인 친구는 돌아온 뒤 합칠 수 있어요.</p><button class="button primary full" data-recipe="${d.id}">이 친구의 탄생 재료 고르기 →</button><button class="text-button" data-page="storage">보관함 살펴보기 →</button>`}<p class="merge-footnote help-text">합치면 두 마리가 한 마리가 돼요. 골드·반짝이 비용은 없어요.</p>`);}

@@ -614,6 +614,8 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline-color: var
   background: var(--color-surface-panel);
   border-bottom: 1px solid var(--color-border-subtle);
 }
+/* The dialog card receives initial focus; its controls show their own focus rings. */
+#modal .modal-card:focus { outline: none; }
 .modal-heading .close:focus-visible { outline-offset: -3px; }
 .collection-clue > summary > b { font-size: var(--text-body); }
 .collection-clue > summary > i::after { content: '＋'; font-size: var(--text-title-small); }

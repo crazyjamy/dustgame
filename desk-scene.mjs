@@ -3,7 +3,7 @@ import{DESK,DESK_ITEMS,deskBlocked,crateTile,canPushDesk,pickDesk,deskProgress}f
 import{DUSTS}from'./dust-data.mjs?v=1.13.81-3f2b718b';
 import{starLight,starFace,starLevelScale}from'./star-art.mjs?v=1.13.81-3f2b718b';
 const T=48,W=960,H=672;
-export function mountDeskScene({canvas,state,onUpdate,onSave,onExit,onPause,reduced,visuals,sound,bodyPath,growthStage=2,growthLevel=5}){
+export function mountDeskScene({translate = text => text,canvas,state,onUpdate,onSave,onExit,onPause,reduced,visuals,sound,bodyPath,growthStage=2,growthLevel=5}){
  const ctx=canvas.getContext('2d'),fog=document.createElement('canvas');fog.width=W;fog.height=H;const fc=fog.getContext('2d');
  let frame,last=0,lastSave=0,time=0,disposed=false,camera={x:0,y:0,w:864,h:540},seenKey='',message='지도에서 이동할 곳을 눌러요.',burst=[],trail=[],moving=false,heading=0,crateVisual=state.deskRun.pushed?11:10,pushUntil=0,drawWidth=0,drawHeight=0;
  const silhouette=new Path2D(bodyPath);
@@ -18,7 +18,7 @@ export function mountDeskScene({canvas,state,onUpdate,onSave,onExit,onPause,redu
  function home(){plan(DESK.start.x,DESK.start.y);say('귀환 포털로 이동할게요.');}
  function update(){const r=state.deskRun;if(!r)return;onUpdate({...deskProgress(r),canPush:canPushDesk(r),nearItem:DESK_ITEMS.some(i=>!r.picked.includes(i.id)&&(i.id!=='dew'||r.secret)&&Math.hypot(r.x-i.x,r.y-i.y)<1.1),message});}
  function round(x,y,w,h,rad,fill,stroke=null){ctx.beginPath();ctx.roundRect(x,y,w,h,rad);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke();}}
- function text(value,x,y,size=18,color='#f1e9ff',align='center'){ctx.font=`${size}px system-ui,sans-serif`;ctx.fillStyle=color;ctx.textAlign=align;ctx.fillText(value,x,y);}
+ function text(value,x,y,size=18,color='#f1e9ff',align='center'){ctx.font=`${size}px system-ui,sans-serif`;ctx.fillStyle=color;ctx.textAlign=align;ctx.fillText(translate(value),x,y);}
  function fogMask(r){const key=r.seen.length+':'+r.secret;if(key===seenKey)return;seenKey=key;fc.globalCompositeOperation='source-over';fc.clearRect(0,0,W,H);fc.fillStyle='#100d22f5';fc.fillRect(0,0,W,H);fc.globalCompositeOperation='destination-out';for(const cell of r.seen){const x=(cell%20+.5)*T,y=(Math.floor(cell/20)+.5)*T,g=fc.createRadialGradient(x,y,16,x,y,64);g.addColorStop(0,'#000');g.addColorStop(.58,'#000');g.addColorStop(1,'#0000');fc.fillStyle=g;fc.fillRect(x-64,y-64,128,128);}fc.globalCompositeOperation='source-over';}
  function floor(){
   const glow=ctx.createRadialGradient(W*.63,H*.44,0,W*.63,H*.44,W*.66);

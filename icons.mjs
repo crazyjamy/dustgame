@@ -1,11 +1,9 @@
-import {spaceItemArt} from './space-items.mjs?v=1.13.81-3f2b718b';
+import {spaceItemArt} from './space-items.mjs?v=64ae6460';
 const shapes={
- twig:'<path d="m9 39 12-14-1-12 3-2 2 11 11-13 4 1-11 15 10-3 2 3-15 5-13 14Z" fill="#d4ad87"/><path d="M31 15q-4-10 7-12 1 9-7 12Z" fill="#bdd19e"/>',
- glowShell:'<path d="M22 41 8 28q-4-7 2-10 0-7 7-7 4-7 10-3 7-4 11 3 7 0 7 8 5 5 0 11L30 41Z" fill="#b9dfe1"/><path d="m13 21 11 15m-5-20 6 18m3-20-1 20m11-18-9 20" stroke="#84aabf"/><path d="M21 40h11l-2 4h-8Z" fill="#e2c4d9"/>',
- moonstone:'<path d="m8 30 6-15 16-7 13 11 1 15-15 10-16-4Z" fill="#c6beda"/><path d="m14 15 11 9 18-5-13-11Z" fill="#e4def0"/><path d="m25 24 4 20 15-10-1-15Z" fill="#afa3c9"/><path d="m16 25 2 4 4 1-4 2-1 4-2-4-3-1 3-2Z" fill="#ffedbc" stroke="none"/>',
- dew:'<path d="M26 6C21 16 12 23 12 32A14 14 0 0 0 40 32C40 23 31 16 26 6Z" fill="#b6d9dc"/><path d="M18 31Q17 38 24 40" stroke="#edf8f4"/>',
- ember:'<path d="M27 5Q42 21 39 34Q37 47 25 46Q12 44 13 32Q14 23 21 18Q20 28 25 27Q30 21 27 5Z" fill="#e9b086"/><path d="M26 29Q34 38 27 42Q19 42 23 34Z" fill="#f3d799"/>',
- stardust:'<path d="M24 8L28 20L40 24L28 28L24 40L20 28L8 24L20 20Z" fill="#d4bfdc"/><path d="M42 34L44 40L50 42L44 44L42 50L40 44L34 42L40 40Z" fill="#e9d5a6"/><circle cx="40" cy="11" r="2" fill="#c4bed9"/>',
+
+
+
+
  bookshelf:'<rect x="7" y="6" width="38" height="41" rx="3" fill="#cbb697"/><path d="M11 25H41M11 42H41" stroke="#9b866d"/><path d="M14 12V24H20V12Z" fill="#a8bfad"/><path d="M24 15L28 13L33 24H28Z" fill="#e0c087"/><path d="M15 31H31V36H15Z" fill="#bea7bf"/>',
  teacup:'<ellipse cx="25" cy="43" rx="21" ry="4" fill="#ded5b8"/><path d="M9 21H37L34 39Q24 45 13 39Z" fill="#bad0bf"/><path d="M37 25Q49 22 45 32Q42 37 36 34"/><ellipse cx="23" cy="22" rx="14" ry="4" fill="#eddfb8"/><path d="M19 15Q14 10 20 5M29 15Q24 10 30 5" stroke="#b7c9ba"/>',
  basket:'<path d="M9 24H43L39 45H13Z" fill="#d7bd91"/><path d="M16 24Q13 4 26 5Q39 4 36 24M9 29H43M12 36H40M19 25L21 44M30 25L29 44" stroke="#ae956d"/><path d="M21 19Q17 9 11 14Q11 22 21 19Z" fill="#b4c599"/>',
@@ -16,15 +14,14 @@ const shapes={
  keeper:'<g class="fairy-wings" fill="#dceeff" stroke="#83add7"><path d="M17 22Q1 12 5 30Q10 35 18 28Z"/><path d="M35 22Q51 12 47 30Q42 35 34 28Z"/></g><path d="M17 27Q9 37 13 45Q26 49 39 45Q43 37 35 27Z" fill="#6b9bce" stroke="#477cae"/><ellipse cx="26" cy="23" rx="12" ry="12" fill="#e5d9b8" stroke="#8fa7bd"/><path d="M12 18Q16 3 35 9L41 17Q25 14 12 18Z" fill="#75a8db" stroke="#4c7eaf"/><path d="M28 10Q30 0 40 3Q39 11 28 10Z" fill="#b5dbff" stroke="#6597c8"/><g fill="#354c68" stroke="none"><circle cx="22" cy="23" r="1.5"/><circle cx="30" cy="23" r="1.5"/></g><path d="M24 28Q26 30 28 28M18 34L32 44" stroke="#5a758e"/><path d="M26 34L34 31L43 35V45L34 42L26 45Z" fill="#dcecff" stroke="#769abc"/><path d="M34 31V42M29 38L32 36L38 39L41 37" stroke="#7ba1c8"/>',
  catalog:'<rect x="11" y="7" width="30" height="38" rx="6" fill="#e3dfbf"/><path d="M19 7V45M25 18H34M25 25H34M25 32H31"/>',
  residents:'<path d="M7 24L26 8L45 24V44H7Z" fill="#d9cbea"/><path d="M21 44V30H32V44"/><path d="M7 24L26 8L45 24" stroke="#a589c3"/>',
- daily:'<path d="M10 31C5 21 13 11 23 15C26 6 39 9 40 20C50 23 47 38 36 38H18C11 39 6 35 10 31Z" fill="#e9dba1"/><path d="M22 28Q27 33 32 28"/>',
- pop:'<path d="M27 8C34 5 37 11 36 16C47 14 50 25 41 30C49 38 40 47 32 40C28 50 16 46 17 36C6 38 3 26 13 22C6 13 17 5 23 14Z" fill="#e7b0ce"/><circle cx="27" cy="27" r="6" fill="#f7e5a5"/>',
- dream:'<path d="M26 6L31 20L46 26L31 32L26 46L20 32L6 26L20 20Z" fill="#c5b6e1"/><path d="M41 5V13M37 9H45"/>',
- common:'<path d="M17 16H35L40 39H12Z" fill="#d8c8ea"/><path d="M20 16V11Q26 6 32 11V16"/><circle cx="26" cy="28" r="4" fill="#fbfaf7"/>',
- rare:'<path d="M14 17L26 8L38 17L36 40H16Z" fill="#bfd4db"/><path d="M26 18L29 24L36 25L31 30L32 36L26 33L20 36L21 30L16 25L23 24Z" fill="#fcf6da"/>',
- legend:'<path d="M12 18L19 9H33L40 18L26 42Z" fill="#d7b8d8"/><path d="M12 18H40M19 9L23 18L26 42L29 18L33 9M23 18H29"/>',
- leaf:'<path d="M12 36C8 17 27 8 42 10C44 28 31 43 12 36Z" fill="#b6c99c"/><path d="M10 42L33 20M19 33V24M25 27H34"/>',
- spark:'<circle cx="26" cy="26" r="10" fill="#f0d46c"/><path d="M26 5V10M26 42V47M5 26H10M42 26H47M11 11L15 15M37 37L41 41M11 41L15 37M37 15L41 11"/>',
- moon:'<path d="M35 8A19 19 0 1 0 43 37A20 20 0 0 1 35 8Z" fill="#c5c9e3"/><path d="M40 12V20M36 16H44"/>',
+
+
+
+
+
+
+
+
  coin:'<circle cx="26" cy="26" r="19" fill="#efd576"/><circle cx="26" cy="26" r="13" stroke="#c4a052"/><path d="M30 20H24Q19 20 19 26Q19 32 26 32H31V26H26"/>',
  rug:'<ellipse cx="26" cy="30" rx="23" ry="13" fill="#dfb0aa"/><ellipse cx="26" cy="30" rx="17" ry="8" stroke="#f8e3ce"/><path d="M8 37L5 41M16 41L14 45M35 41L37 45M43 37L47 41"/>',
  plant:'<path d="M18 31H36L33 46H21Z" fill="#d8b89a"/><path d="M27 32V16"/><path d="M27 23C12 26 11 12 13 10C24 9 30 15 27 23Z" fill="#aabd91"/><path d="M27 18C26 5 37 4 42 7C42 17 36 22 27 18Z" fill="#bdce9f"/>',
@@ -41,19 +38,41 @@ candle:'<ellipse cx="26" cy="44" rx="19" ry="5" fill="#d4c5ac"/><path d="M17 21h
 blanket:'<path d="M8 12q17-7 35 0l3 29q-18-6-36 2Z" fill="#c1d5c9"/><path d="M11 19q14-6 30 0M12 28q14-6 30 0M11 41v6M19 40v7M28 40v7M37 40v7M45 41v6"/><path d="M24 11l6 28" stroke="#e9edce"/>',
 terrarium:'<path d="M18 7h16v10l9 11v14q-17 8-34 0V28l9-11Z" fill="#d4e5d5"/><path d="M11 37q17-10 30 2M25 37V24"/><path d="M25 31q-13-1-10-10 11-1 10 10ZM25 28q0-12 12-9 0 11-12 9Z" fill="#a9c797"/><circle cx="31" cy="12" r="2" fill="#a7d6df"/>'
 };
-export function icon(id,cls=''){return `<svg class="material-icon ${cls}" viewBox="0 0 52 52" fill="none" stroke="#716281" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${shapes[id]||shapes.dream}</svg>`;}
+// A few silver facets stay readable both on shop cards and in 24px recipes.
+const shade = 'var(--furniture-shade, #aab5c00c)';
+const surface = 'var(--furniture-surface, #aab5c01b)';
+const highlight = 'var(--furniture-highlight, #aab5c029)';
+const outlineColor = 'var(--furniture-outline, #a4abb4)';
+
+const materialShapes = {
+ daily: `<path d="M13 37a8 8 0 0 1-1-16 10 10 0 0 1 17-5 8 8 0 0 1 13 7 7 7 0 0 1-2 14Z" fill="${shade}"/><path d="M12 26q2-5 7-4m5-5q4 0 6 4"/>`,
+ pop: `<path d="M25 13c2-9 14-7 12 3 9-2 13 9 4 13 6 8-3 15-10 10-3 10-15 7-14-2-9 2-14-8-6-13-6-7 3-15 10-10Z" fill="${shade}"/><circle cx="26" cy="26" r="5" fill="${highlight}"/>`,
+ dream: `<path d="m24 8 5 12 12 5-12 5-5 13-5-13-12-5 12-5Z" fill="${surface}"/><path d="M40 7v7m-3.5-3.5h7"/>`,
+ common: `<path d="m17 17-4 21q13 5 26 0l-4-21Z" fill="${shade}"/><path d="M20 17v-3a6 6 0 0 1 12 0v3m-17 4h22"/><circle cx="26" cy="30" r="3" fill="${highlight}"/>`,
+ rare: `<path d="m13 18 13-9 13 9-3 22H16Z" fill="${surface}"/><path d="m26 18 2.5 6 6.5 1-5 4.5 1 6-5-3-5 3 1-6-5-4.5 6.5-1Z" fill="${shade}"/>`,
+ legend: `<path d="m10 19 9-9h14l9 9-16 23Z" fill="${shade}"/><path d="m19 10 3 9 4 23 4-23 3-9m-23 9h32"/><path d="m22 19 4-9 4 9Z" fill="${highlight}"/>`,
+ leaf: `<path d="M12 36C8 19 24 9 41 10c1 17-11 31-29 26Z" fill="${shade}"/><path d="m9 42 25-24m-15 14-1-9m7 3h8"/>`,
+ spark: `<circle cx="26" cy="26" r="9" fill="${surface}"/><path d="M26 7v5m0 28v5M7 26h5m28 0h5M12 12l4 4m20 20 4 4m-28 0 4-4m20-20 4-4"/>`,
+ moon: `<path d="M33 9a18 18 0 1 0 9 27A20 20 0 0 1 33 9Z" fill="${surface}"/><path d="M40 12v6m-3-3h6"/>`,
+ dew: `<path d="M26 7c-5 10-14 18-14 26a14 14 0 0 0 28 0c0-8-9-16-14-26Z" fill="${shade}"/><path d="M18 31q-1 7 6 9"/>`,
+ ember: `<path d="M29 6q13 17 9 30c-3 12-24 13-25-2q-1-9 8-16-1 8 4 9 7-8 4-21Z" fill="${shade}"/><path d="M26 30q8 9 1 13-8-1-4-9Z" fill="${highlight}"/>`,
+ stardust: `<path d="m22 9 3.5 10.5L36 23l-10.5 3.5L22 38l-3.5-11.5L8 23l10.5-3.5Z" fill="${surface}"/><path d="m39 31 2 6 6 2-6 2-2 6-2-6-6-2 6-2Z"/><circle cx="39" cy="13" r="1.5" fill="${highlight}"/>`,
+ twig: `<path d="m10 40 12-14-2-12 3-2 3 10L37 9l3 2-11 15 10-3 1 3-15 5-12 12Z" fill="${shade}"/><path d="M29 15q-3-9 7-12 1 8-7 12Z" fill="${surface}"/>`,
+ glowShell: `<path d="M21 40 9 28q-5-6 0-10 0-7 7-7 3-7 10-4 7-4 11 3 7 0 7 8 5 5 0 11L31 40Z" fill="${shade}"/><path d="m14 22 9 13m-4-19 5 17m4-18-1 18m10-16-8 18"/><path d="M21 39h11l-2 5h-7Z" fill="${highlight}"/>`,
+ moonstone: `<path d="m8 30 6-15 16-7 13 11 1 15-15 10-16-4Z" fill="${shade}"/><path d="m14 15 11 9 18-5-13-11Z" fill="${highlight}"/><path d="m25 24 4 20 15-10-1-15Z" fill="${surface}"/><path d="m17 26 1.5 3.5L22 31l-3.5 1.5L17 36l-1.5-3.5L12 31l3.5-1.5Z" fill="${highlight}" stroke="none"/>`,
+};
+
+export function icon(id,cls=''){
+ const material = materialShapes[id];
+ const art = material || shapes[id] || materialShapes.dream;
+ const stroke = material ? outlineColor : '#716281';
+ return `<svg class="material-icon ${material?'supply-art ':''}${cls}" viewBox="0 0 52 52" fill="none" stroke="${stroke}" stroke-width="${material ? .8 : 1.6}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${art}</svg>`;
+}
 
 export function furnitureArt(id,level=1){
  const lv=Math.max(1,Math.min(10,level));
  const growth=(lv-1)/9;
- const base=spaceItemArt[id]||shapes.dream;
- const art=growth===0?base:base.replace(/(fill|stroke)="#([0-9a-f]{6})"/gi,(_,attr,hex)=>{
-  const original=[0,2,4].map(offset=>parseInt(hex.slice(offset,offset+2),16));
-  const target=attr==='fill'?[255,239,202]:[60,48,101];
-  const mix=growth*(attr==='fill'?.28:.22);
-  const channels=original.map((value,i)=>Math.round(value+(target[i]-value)*mix));
-  return `${attr}="rgb(${channels.join(',')})"`;
- });
- const outline=(1.65+growth*.55).toFixed(2);
- return `<svg class="material-icon furniture-art" viewBox="0 0 52 52" fill="none" stroke="#7761a0" stroke-width="${outline}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${art}</svg>`;
+ const art=spaceItemArt[id]||materialShapes.dream;
+ const strokeWidth=(.68+growth*.15).toFixed(2);
+ return `<svg class="material-icon furniture-art" viewBox="0 0 52 52" fill="none" stroke="${outlineColor}" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${art}</svg>`;
 }

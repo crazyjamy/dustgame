@@ -2029,7 +2029,7 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
 .collection-heading { margin: 8px 0 14px; }
 .collection-heading h1 { margin: 0; font-size: 22px; line-height: 1.4; }
 .collection-heading p { margin: 6px 0 0; color: var(--color-text-secondary); font-size: 14px; }
-.app-shell :is(.collection-switch, .collection-tabs[role="tablist"]) {
+:is(.app-shell, .quest-guide-dialog) :is(.collection-switch, .collection-tabs[role="tablist"]) {
   display: flex;
   justify-content: flex-start;
   align-items: stretch;
@@ -2045,7 +2045,7 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
   border-radius: 0;
   box-shadow: none;
 }
-.app-shell :is(.collection-switch, .collection-tabs[role="tablist"]) button[role="tab"] {
+:is(.app-shell, .quest-guide-dialog) :is(.collection-switch, .collection-tabs[role="tablist"]) button[role="tab"] {
   position: relative;
   display: inline-flex;
   flex: 0 0 auto;
@@ -2068,12 +2068,12 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
   box-shadow: none;
   transform: none;
 }
-.app-shell :is(.collection-switch, .collection-tabs[role="tablist"]) button[role="tab"][aria-selected="true"] {
+:is(.app-shell, .quest-guide-dialog) :is(.collection-switch, .collection-tabs[role="tablist"]) button[role="tab"][aria-selected="true"] {
   color: var(--color-text-primary);
   font-weight: 700;
   border-bottom-color: var(--color-accent-highlight);
 }
-.app-shell :is(.collection-switch, .collection-tabs[role="tablist"]) button[role="tab"] small {
+:is(.app-shell, .quest-guide-dialog) :is(.collection-switch, .collection-tabs[role="tablist"]) button[role="tab"] small {
   min-width: 0;
   padding: 0;
   background: none;
@@ -2083,10 +2083,10 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
   font-variant-numeric: tabular-nums;
 }
 @media (hover: hover) {
-  .app-shell :is(.collection-switch, .collection-tabs[role="tablist"]) button[role="tab"]:hover {
+  :is(.app-shell, .quest-guide-dialog) :is(.collection-switch, .collection-tabs[role="tablist"]) button[role="tab"]:hover {
     color: var(--color-text-primary);
   }
-  .app-shell :is(.collection-switch, .collection-tabs[role="tablist"]) button[role="tab"][aria-selected="false"]:hover {
+  :is(.app-shell, .quest-guide-dialog) :is(.collection-switch, .collection-tabs[role="tablist"]) button[role="tab"][aria-selected="false"]:hover {
     border-bottom-color: var(--color-border-control);
   }
 }
@@ -2179,7 +2179,7 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
 @media (max-width: 600px) {
   .collection-heading { margin-top: 4px; }
   .collection-heading h1 { font-size: 20px; }
-  .app-shell :is(.collection-switch, .collection-tabs[role="tablist"]) { gap: 17px; margin-bottom: 18px; }
+  :is(.app-shell, .quest-guide-dialog) :is(.collection-switch, .collection-tabs[role="tablist"]) { gap: 17px; margin-bottom: 18px; }
   .app-shell .collection-switch button[role="tab"] { gap: 5px; font-size: 13px; }
   .app-shell .collection-switch button[role="tab"] small { font-size: 11px; }
   .collection-switch .ui-icon { display: none; }
@@ -2563,13 +2563,23 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
   color: var(--color-text-secondary);
   font-size: var(--text-meta);
 }
-#modal .furniture-chapters button span { font-size: var(--text-body); }
+#modal .furniture-chapters button {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: center;
+}
+#modal .furniture-chapters button > span {
+  font-size: var(--text-body);
+  text-align: end;
+  overflow-wrap: anywhere;
+}
 #modal .furniture-chapters button[aria-current="true"] {
   background: var(--color-glass-control);
   border-color: var(--color-glass-edge);
   color: var(--color-text-primary);
 }
 #modal .furniture-chapters button i {
+  margin-inline: 0;
   min-width: 25px;
   padding: 2px 4px;
   border-radius: 5px;
@@ -2689,6 +2699,83 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
   }
   #dustPopup #goldTimerValue { font-variant-numeric: tabular-nums; }
 }
+.night-figure {
+  position: absolute;
+  top: 12%;
+  left: 35%;
+  width: clamp(64px, 18%, 110px);
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-accent-highlight);
+  cursor: pointer;
+  z-index: 2;
+}
+.night-figure svg, .sky-calendar svg { display: block; width: 100%; }
+.night-figure svg { filter: drop-shadow(0 0 5px #bfdcff85); }
+.night-figure line { stroke-width: 1.25; }
+.night-figure circle { opacity: .8; }
+.night-figure span { display: none; }
+.night-figure.is-complete { color: var(--color-currency-gold); }
+.night-figure.is-complete svg { filter: drop-shadow(0 0 7px #f1d397ae); }
+.night-figure.is-complete line { stroke-width: 1.8; }
+.night-figure.is-complete circle { opacity: 1; }
+@media (min-width: 701px) {
+  .night-figure span {
+    display: block;
+    width: max-content;
+    max-width: 150%;
+    margin: 3px auto 0;
+    padding: 3px 6px;
+    border-radius: var(--radius-glass-pill);
+    background: var(--color-surface-tag);
+    color: var(--color-text-primary);
+    font-size: var(--text-meta);
+  }
+  .night-figure.is-complete span { color: var(--color-currency-gold); }
+}
+.sky-calendar>svg{width:90px;color:#75639e}.sky-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;text-align:center;margin:12px 0}.sky-days button{padding:5px 0;border:0;border-radius:8px;background:transparent;color:inherit}.sky-days button[aria-pressed=true]{background:#e3d8f4;color:#372b48}.sky-calendar input{font:inherit}
+
+.quest-guide-dialog .mission-section > summary,
+.quest-guide-dialog .nari-note > summary {cursor:pointer;min-height:44px;line-height:1.5;align-content:center;overflow-wrap:anywhere}
+.quest-guide-dialog .mission-section > summary small {font-weight:500;margin-inline-start:.4em}
+.quest-guide-dialog .nari-note {margin-top:8px}
+.quest-guide-dialog .nari-note > summary {font-size:var(--text-label)}
+.quest-guide-dialog details.mission-section:not([open]) {display:block}
+.quest-guide-dialog .nari-clue-art {display:inline-flex;width:24px;height:24px;vertical-align:middle;margin-inline-end:6px}
+.quest-guide-dialog .nari-clue-art > * {width:100%;height:100%}
+#modal .quest-guide-dialog details.mission-section {margin-block-start:8px;padding:0 12px}
+#modal .quest-guide-dialog details.mission-section[open] {padding-bottom:12px}
+
+/* Reward availability sits beside the label inside the shared underline tab. */
+.quest-guide-dialog .nari-reward-dot {
+  flex: 0 0 5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-currency-gold);
+}
+#modal .quest-guide-dialog summary .nari-quest-meta {font-size:var(--text-meta);font-weight:400}
+#modal .quest-guide-dialog .nari-rewards {margin-top:0}
+
+#modal .quest-guide-dialog .mission-section:not(#missionCollection) {
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+#modal .quest-guide-dialog .mission-section .daily-wish {
+  background: transparent;
+  border: 0;
+  padding-inline: 0;
+}
+#modal .quest-guide-dialog .mission-section h3 small {
+  margin-inline-start: .4em;
+  font-size: var(--text-meta);
+  font-weight: 400;
+  color: var(--color-text-secondary);
+}
+
 #modal .detail-rename { flex: none; width: 44px; height: 44px; }
 #modal .detail-pet { display: grid; justify-items: center; gap: 8px; }
 #modal .detail-pet .dust-lift { position: relative; width: min(110px, 100%); }
@@ -2770,6 +2857,23 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
 #modal .star-detail .copy-row > .copy-action { background: var(--color-glass-surface, var(--color-surface-inset)); color: var(--color-text-primary); }
 #modal .star-detail .copy-row > .primary { background: var(--color-glass-action); color: #fff; }
 
+.portrait-status { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip-path:inset(50%); }
+.pet-portrait { --gaze-x: 0px; --gaze-y: 0px; }
+.pet-portrait[data-response] .dust-lift { --toward-x: calc(var(--gaze-x) * 2); --toward-y: calc(var(--gaze-y) * 2); }
+.pet-portrait[data-personality="lean"][data-response="invite"] .dust-lift { animation: portrait-peek 1.15s ease-in-out both; }
+.pet-portrait[data-personality="lean"][data-response="reply"] .dust-lift { animation:none; transform:translate(var(--toward-x),calc(var(--toward-y) + 3px)) scale(.96); }
+.pet-portrait[data-personality="lean"][data-response="reply"] .dust-eyes,
+.pet-portrait[data-personality="hop"][data-response="reply"] .dust-eyes > :last-child { transform-box:fill-box; transform-origin:center; scale:1 .18; }
+.pet-portrait[data-personality="hop"][data-response="invite"] .dust-lift { animation: portrait-look .32s ease-in-out, portrait-hop .52s .32s ease-out forwards; }
+.pet-portrait[data-personality="hop"][data-response="reply"] .dust-lift { animation: portrait-hop .38s ease-out 2; }
+@keyframes portrait-peek { 0%,25% {transform:scale(.95)} 100% {transform:translate(var(--gaze-x),calc(var(--gaze-y) + 2px)) rotate(3deg)} }
+@keyframes portrait-look { 25% {transform:rotate(-6deg)} 75% {transform:rotate(6deg)} }
+@keyframes portrait-hop { 50% {transform:translate(var(--toward-x),calc(var(--toward-y) - 12px))} 100% {transform:translate(var(--gaze-x),var(--gaze-y))} }
+@media (prefers-reduced-motion:reduce) {
+ .pet-portrait[data-personality][data-response] .dust-lift {animation:none}
+ .pet-portrait[data-response="invite"] .dust-lift {transform:translate(var(--gaze-x),var(--gaze-y))}
+}
+
 .star-identity { min-width: 0; }
 :is(#modal .star-detail, #dustPopup) .star-identity h2 {
   min-width: 0;
@@ -2801,24 +2905,6 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
   :is(#modal .star-detail, #dustPopup) .star-identity h2 { font-size: var(--text-body-large); }
   #modal .star-detail .modal-heading:has(.star-header-tools) > .star-identity { flex: 1 1 92px; }
   #modal .star-detail #recordCopy { order: 1; flex: 0 0 100%; }
-}
-
-
-.portrait-status { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip-path:inset(50%); }
-.pet-portrait { --gaze-x: 0px; --gaze-y: 0px; }
-.pet-portrait[data-response] .dust-lift { --toward-x: calc(var(--gaze-x) * 2); --toward-y: calc(var(--gaze-y) * 2); }
-.pet-portrait[data-personality="lean"][data-response="invite"] .dust-lift { animation: portrait-peek 1.15s ease-in-out both; }
-.pet-portrait[data-personality="lean"][data-response="reply"] .dust-lift { animation:none; transform:translate(var(--toward-x),calc(var(--toward-y) + 3px)) scale(.96); }
-.pet-portrait[data-personality="lean"][data-response="reply"] .dust-eyes,
-.pet-portrait[data-personality="hop"][data-response="reply"] .dust-eyes > :last-child { transform-box:fill-box; transform-origin:center; scale:1 .18; }
-.pet-portrait[data-personality="hop"][data-response="invite"] .dust-lift { animation: portrait-look .32s ease-in-out, portrait-hop .52s .32s ease-out forwards; }
-.pet-portrait[data-personality="hop"][data-response="reply"] .dust-lift { animation: portrait-hop .38s ease-out 2; }
-@keyframes portrait-peek { 0%,25% {transform:scale(.95)} 100% {transform:translate(var(--gaze-x),calc(var(--gaze-y) + 2px)) rotate(3deg)} }
-@keyframes portrait-look { 25% {transform:rotate(-6deg)} 75% {transform:rotate(6deg)} }
-@keyframes portrait-hop { 50% {transform:translate(var(--toward-x),calc(var(--toward-y) - 12px))} 100% {transform:translate(var(--gaze-x),var(--gaze-y))} }
-@media (prefers-reduced-motion:reduce) {
- .pet-portrait[data-personality][data-response] .dust-lift {animation:none}
- .pet-portrait[data-response="invite"] .dust-lift {transform:translate(var(--gaze-x),var(--gaze-y))}
 }
 
 
@@ -2861,3 +2947,46 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
 .life-dialog .journal-reward { padding: 1rem; margin-bottom: 1.25rem; border-radius: .9rem; background: var(--color-surface-raised); }
 .life-dialog .journal-sparkles { display: inline-flex; align-items: center; gap: .3rem; }
 .life-dialog .journal-sparkles svg { width: 1rem; height: 1rem; color: var(--color-sparkle-fill); }
+#modal .trip-blueprint header h3,#modal .trip-blueprint header .recipe-material {font-size:14px;margin:0;}
+
+#modal .settings-dialog .language-setting {
+  display: grid;
+  grid-template-columns: minmax(max-content, 1fr) minmax(0, max-content);
+  align-items: center;
+  padding-block: 0;
+}
+#modal .language-setting label { white-space: nowrap; }
+#modal .language-setting .select-field { min-width: 0; inline-size: 7.5rem; max-inline-size: 100%; }
+#modal .settings-dialog #restoreBackup[hidden] { display: none; }
+#modal .settings-dialog #restoreBackup { min-width: 44px; min-height: 44px; }
+#modal .settings-dialog #reset { justify-self: center; margin-inline: auto; text-align: center; }
+#modal .life-dialog .journal-history-title { text-align: left; justify-content: flex-start; }
+
+/* Match the glass and silver ink of the starlight window, at every object size. */
+.furniture-art, .supply-art {
+  --furniture-outline: var(--color-text-secondary);
+  --furniture-detail: #939da5;
+  --furniture-shade: #aab5c00c;
+  --furniture-surface: #aab5c01b;
+  --furniture-highlight: #aab5c029;
+  opacity: .65;
+}
+:is(.furniture-art, .supply-art) :is(path, circle, ellipse, rect, line, polygon, polyline) {
+  vector-effect: non-scaling-stroke;
+}
+.room-decor .decor .furniture-art,
+.furniture-card.placed .furniture-art,
+:is(.furniture-picture, .furniture-story-art) .furniture-art { filter: none; }
+.room-decor .decor.favorite-decor { filter: none; }
+.room-decor .favorite-decor .furniture-art { --furniture-outline: #b4bbc1; }
+#modal .language-setting #gameLanguage {
+  min-block-size: 44px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-field);
+  font-weight: 600;
+}
+#modal .language-setting #gameLanguage:focus-visible { outline: 2px solid currentColor; outline-offset: -3px; }
+@media (hover:hover) {
+  #modal .language-setting #gameLanguage:hover { background: var(--color-surface-hover); }
+}

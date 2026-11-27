@@ -6,13 +6,16 @@ export function storySentences(body) {
   return text.match(/[^.!?。！？]*[.!?。！？]+[”’"')\]]*\s*|[^.!?。！？]+$/gu) || (text ? [text] : []);
 }
 const escapeText = text => String(text).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let formatStory = text => text;
+export function setStoryFormatter(format) { formatStory = format; }
+
 export function sentenceMarkup(body){
-  return storySentences(body).map((sentence, index) => `<span class="story-sentence" style="--sentence-index:${index}">${escapeText(sentence)}</span>`).join('');
+  return storySentences(formatStory(body)).map((sentence, index) => `<span class="story-sentence" style="--sentence-index:${index}">${escapeText(sentence)}</span>`).join('');
 }
 export function storyParagraph(body, firstRead=false, className='') {
   const classes = [className, firstRead ? 'story-shimmer' : ''].filter(Boolean).join(' ');
   const content = firstRead
     ? sentenceMarkup(body)
-    : escapeText(body);
+    : escapeText(formatStory(body));
   return `<p${classes ? ` class="${escapeText(classes)}"` : ''}>${content}</p>`;
 }

@@ -157,12 +157,14 @@
     <circle cx="388" cy="88" r="0.48" opacity="0.40"/>
     <circle cx="713" cy="124" r="0.68" opacity="0.25"/>
   </g>
+  <!-- decorative-constellations:start -->
   <g fill="none" stroke="#a6bfdc" stroke-width=".65" stroke-linecap="round" opacity=".21">
     <path d="M149 207 194 166 229 175m-35-9 7-37 24-15m-24 15-16-17m9 54 29 30 31 8m-31-8 8 25m-82-14-27-13-9-23m9 23-22 12"/>
     <path d="M608 273 659 228 712 244 748 217m-36 27 21 30 32-3m-106-43-13-37 17-23m-17 23-27-10m-11 92-32 12-24-14m24 14-12 24"/>
     <path d="M883 475 927 527 979 508 1002 469m-23 39 36 20 23-10m-111 9 3 39-24 19m24-19 22 15m-69-106-21-18-25 11m25-11 2-22"/>
     <path d="M361 655 403 617 447 641 478 623m-31 18 2 26 23 14m-69-64-7-29-22-16m22 16 21-18"/>
   </g>
+  <!-- decorative-constellations:end -->
   <g fill="#d9edff" opacity=".51">
     <circle cx="149" cy="207" r="1.4"/><circle cx="201" cy="129" r="1.15"/><circle cx="223" cy="196" r="1.05"/><circle cx="122" cy="194" r=".9"/>
     <circle cx="608" cy="273" r="1.1"/><circle cx="712" cy="244" r="1.35"/><circle cx="646" cy="191" r="1.1"/><circle cx="576" cy="285" r=".8"/><circle cx="733" cy="274" r=".65"/>

@@ -34,3 +34,9 @@ await Promise.all([
     target: ['safari15', 'chrome109'],
   }),
 ]);
+
+if (process.argv.includes('--ios')) {
+  const background = new URL('assets/galaxy-stars.svg', output);
+  const svg = await readFile(background, 'utf8');
+  await writeFile(background, svg.replace(/^[ \t]*<!-- decorative-constellations:start -->[\s\S]*?<!-- decorative-constellations:end -->\r?\n/m, ''));
+}

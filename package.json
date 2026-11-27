@@ -6,7 +6,7 @@
   },
   "scripts": {
     "build:mobile": "node mobile/build.mjs",
-    "ios:sync": "npm run build:mobile && node mobile/build-ios-icons.mjs && cap sync ios",
+    "ios:sync": "npm run build:mobile -- --ios && node mobile/build-ios-icons.mjs && cap sync ios",
     "ios:open": "cap open ios"
   },
   "dependencies": {

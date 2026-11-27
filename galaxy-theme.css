@@ -13,6 +13,12 @@ html:not(.room-open, .desk-open) .app-shell {
   padding-inline: var(--shell-gutter);
   padding-top: env(safe-area-inset-top, 0px);
 }
+/* Keep iOS selection and callouts from interrupting galaxy gestures. */
+html.room-open .app-shell {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
 .app-shell > .topbar {
   display: flex;
   flex-wrap: nowrap;

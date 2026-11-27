@@ -1,0 +1,15 @@
+App/build
+App/Pods
+App/output
+App/App/public
+App/App/Assets.xcassets/GameTab-*.imageset/
+DerivedData
+xcuserdata
+/Signing.local.xcconfig
+
+# Cordova plugins for Capacitor
+capacitor-cordova-ios-plugins
+
+# Generated Config files
+App/App/capacitor.config.json
+App/App/config.xml

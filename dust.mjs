@@ -43,6 +43,8 @@ const KEY='tiny-dust-club-v1',$=s=>document.querySelector(s),esc=s=>String(s).re
 let userPrefs=loadPreferences(readLocal(PREFS_KEY),!!readLocal(KEY)),introOpen=false;
 protectPlayerNames(() => state.dusts.map(d => d.nickname).filter(Boolean));
 setStoryFormatter(displayCopy);
+const isNativeApp = globalThis.Capacitor?.isNativePlatform();
+const saveLocation = isNativeApp ? '이 앱' : '이 브라우저';
 const sounds=createSound(()=>userPrefs,window.AudioContext||window.webkitAudioContext);
 let offlineReturn=Date.now()-state.life.lastSeen>=60000,goalHTML='',lastShownReturn=null;
 resumeLife(state);
@@ -88,7 +90,7 @@ function dustArt(id, s=0, extra='', rank=[1,2,4][s]){
  <g ${moon?'transform="translate(-8 8)"':''}><g class="pet-gaze"><g class="dust-eyes" fill="${face}">${eyes}</g>${expression}</g></g>`}</g></g></svg></span>`;
 }
 function dustPortrait(d,settled=false){return dustArt(d.id,stage(d.xp),settled?'story-finished':'',level(d.xp));}
-function save(){if(saveBlocked){$('#saveStatus').textContent='기존 기록 보호 중 · 작은 기록을 열어주세요';return;}syncCollection(state);syncRoomMemory(state);state.life.lastSeen=Date.now();try{localStorage.setItem(KEY,JSON.stringify(state));$('#saveStatus').textContent='● 이 브라우저에 저장했어요';return true}catch{$('#saveStatus').textContent='저장 공간을 확인해주세요'}}
+function save(){if(saveBlocked){$('#saveStatus').textContent='기존 기록 보호 중 · 작은 기록을 열어주세요';return;}syncCollection(state);syncRoomMemory(state);state.life.lastSeen=Date.now();try{localStorage.setItem(KEY,JSON.stringify(state));$('#saveStatus').textContent=`● ${saveLocation}에 저장했어요`;return true}catch{$('#saveStatus').textContent='저장 공간을 확인해주세요'}}
 const toastCard=$('#toast'),toastClose=$('#toastDismiss');
 let toastReturnFocus=null;
 function dismissToast(){
@@ -448,6 +450,11 @@ function previewMerge(uid,otherUid){
 function confirmMerge(uid,otherUid){
  const r=mergeDust(state,uid,otherUid);
  if(!r.ok){toast(r.message);return openMerge(uid);}
+ if (globalThis.Capacitor?.getPlatform() === 'ios') {
+  void import('./native-merge-haptics.mjs')
+   .then(({ playMergeHaptic }) => playMergeHaptic())
+   .catch(() => {});
+ }
  sounds.play('birth');save();render();makeHappy(uid);
  const chapter=STORIES[r.dust.id][r.chapter];
  modal('Lv.'+level(r.dust.xp)+' · 새 이야기가 열렸어요.',`<div class="merge-complete">
@@ -532,7 +539,7 @@ function settingsSwitch(id,label,description,checked){
 function furnitureEffectsGuide(){
  return `<details class="player-options furniture-effects-guide"><summary>설치물 효과와 중첩 규칙 보기</summary><p>같은 설치물은 한 개씩, 다른 설치물 효과는 함께 적용돼요. 골드는 설치물에만 사용해요. 하루 반짝이 수량은 생성할 때 정해져요. 유리병은 은하계를 보는 동안만 자동으로 주워요. 새 엽서와 오늘 첫 수확 보상은 한 번만 받아요.</p>${economyTable(['설치물','Lv.1','Lv.10'],FURNITURE.map(f=>[f.name,furnitureEffect({...state,ownedFurniture:[f.id],furnitureLevels:{[f.id]:1}},f.id),furnitureEffect({...state,ownedFurniture:[f.id],furnitureLevels:{[f.id]:10}},f.id)]))}</details>`;
 }
-function settings(){modal('작은 기록과 설정',`${saveBlocked?'<p class="save-error">기존 기록을 읽지 못해 덮어쓰기를 멈췄어요. 원본을 먼저 내보내주세요.</p>':''}<button class="record-help" data-refresh-game><span>${uiIcon('reload')}</span><b>게임 새로고침</b></button><button class="record-help" data-quick-start><span>${uiIcon('heart')}</span><b>처음 안내 다시 보기</b><i>${uiIcon('arrow')}</i></button><details class="player-options"><summary>소리와 화면 효과</summary>${settingsSwitch('soundEnabled','효과음 켜기','음악 없이 작은 반응 소리만 나요.',userPrefs.sound)}<label for="soundVolume">효과음 음량 <b id="volumeValue">${userPrefs.volume}%</b></label><input id="soundVolume" type="range" min="0" max="100" step="1" value="${userPrefs.volume}"><button class="button secondary" id="testSound">소리 들어보기</button>${settingsSwitch('reduceMotion','움직임 줄이기','기기에서 줄이도록 설정한 경우에도 적용돼요.',userPrefs.motionReduced)}${settingsSwitch('visualEffects','반짝이 장식 효과','꺼도 획득량과 선택 표시는 유지돼요.',userPrefs.visualEffects)}<p id="optionsStatus" role="status">설정은 이 브라우저에 저장돼요.</p></details><div class="language-setting player-options"><label for="gameLanguage">언어 · Language</label><div class="select-field"><select id="gameLanguage"><option value="ko" lang="ko" translate="no">한국어</option><option value="en" lang="en">English</option></select></div></div><span id="languageStatus" role="status"></span>${furnitureEffectsGuide()}<button class="record-help" data-economy><span>${uiIcon('gold')}</span><b>성장과 골드 안내</b><i>${uiIcon('arrow')}</i></button><button class="record-help" id="guide"><span>${uiIcon('help')}</span><b>자세한 게임 설명</b><i>${uiIcon('arrow')}</i></button><section class="save-transfer"><h3>나의 별 기록</h3><p>내보내기에는 성장·수집·설치물·엽서·별명과 설정이 포함돼요.<br>불러오기·초기화 전 기록은 최근 한 개만 복구용으로 보관해요.</p><div class="save-buttons"><button class="button secondary" id="export">기록 내보내기</button><label class="button secondary" tabindex="0" role="button" id="importLabel">기록 불러오기<input id="import" type="file" accept=".json,application/json"></label></div><button class="text-button" id="restoreBackup" aria-label="불러오기·초기화 전 기록 복구" title="불러오기·초기화 전 기록 복구" ${readLocal(BACKUP_KEY)?'':'hidden disabled'}>${uiIcon('reload')}</button>${damagedRaw?'<button class="text-button" id="exportOriginal">읽지 못한 원본 내보내기</button>':''}</section><button class="text-button reset" id="reset">새로운 은하계에서 시작</button><small class="release-version">게임 버전 ${APP_VERSION}</small>`,()=>{
+function settings(){modal('작은 기록과 설정',`${saveBlocked?'<p class="save-error">기존 기록을 읽지 못해 덮어쓰기를 멈췄어요. 원본을 먼저 내보내주세요.</p>':''}<button class="record-help" data-refresh-game><span>${uiIcon('reload')}</span><b>게임 새로고침</b></button><button class="record-help" data-quick-start><span>${uiIcon('heart')}</span><b>처음 안내 다시 보기</b><i>${uiIcon('arrow')}</i></button><details class="player-options"><summary>소리와 화면 효과</summary>${settingsSwitch('soundEnabled','효과음 켜기','음악 없이 작은 반응 소리만 나요.',userPrefs.sound)}<label for="soundVolume">효과음 음량 <b id="volumeValue">${userPrefs.volume}%</b></label><input id="soundVolume" type="range" min="0" max="100" step="1" value="${userPrefs.volume}"><button class="button secondary" id="testSound">소리 들어보기</button>${settingsSwitch('reduceMotion','움직임 줄이기','기기에서 줄이도록 설정한 경우에도 적용돼요.',userPrefs.motionReduced)}${settingsSwitch('visualEffects','반짝이 장식 효과','꺼도 획득량과 선택 표시는 유지돼요.',userPrefs.visualEffects)}<p id="optionsStatus" role="status">설정은 ${saveLocation}에 저장돼요.</p></details><div class="language-setting player-options"><label for="gameLanguage">언어 · Language</label><div class="select-field"><select id="gameLanguage"><option value="ko" lang="ko" translate="no">한국어</option><option value="en" lang="en">English</option></select></div></div><span id="languageStatus" role="status"></span>${furnitureEffectsGuide()}<button class="record-help" data-economy><span>${uiIcon('gold')}</span><b>성장과 골드 안내</b><i>${uiIcon('arrow')}</i></button><button class="record-help" id="guide"><span>${uiIcon('help')}</span><b>자세한 게임 설명</b><i>${uiIcon('arrow')}</i></button><section class="save-transfer"><h3>나의 별 기록</h3><p>내보내기에는 성장·수집·설치물·엽서·별명과 설정이 포함돼요.<br>불러오기·초기화 전 기록은 최근 한 개만 복구용으로 보관해요.</p><div class="save-buttons"><button class="button secondary" id="export">기록 내보내기</button><label class="button secondary" tabindex="0" role="button" id="importLabel">기록 불러오기<input id="import" type="file" accept=".json,application/json"></label></div><button class="text-button" id="restoreBackup" aria-label="불러오기·초기화 전 기록 복구" title="불러오기·초기화 전 기록 복구" ${readLocal(BACKUP_KEY)?'':'hidden disabled'}>${uiIcon('reload')}</button>${damagedRaw?'<button class="text-button" id="exportOriginal">읽지 못한 원본 내보내기</button>':''}</section><button class="text-button reset" id="reset">새로운 은하계에서 시작</button><small class="release-version">게임 버전 ${APP_VERSION}</small>`,()=>{
  $('.modal-card').classList.add('settings-dialog');
  const languageSelect = $('#gameLanguage');
  languageSelect.value = userPrefs.language;
@@ -543,7 +550,7 @@ function settings(){modal('작은 기록과 설정',`${saveBlocked?'<p class="sa
    render();
    $('#languageStatus').textContent = saved ? '' : userPrefs.language === 'en' ? 'Could not save. Language applies to this session only.' : '언어를 저장하지 못해 이번 접속에만 적용돼요.';
  };
- $('#export').onclick=()=>{downloadText(encodeSave(state,userPrefs),'my-little-dusts.json');toast('기록 파일을 내보냈어요.','journal');};
+ $('#export').onclick=()=>downloadText(encodeSave(state,userPrefs),'my-little-dusts.json',true);
  $('#import').onchange=e=>previewImportFile(e.target.files[0]);
  $('#importLabel').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('#import').click();}};
  $('#restoreBackup').onclick=()=>previewImportText(readLocal(BACKUP_KEY),'이전 기록 복구');
@@ -1307,7 +1314,25 @@ function themeDecorations(){return `<div class="theme-room-decor" aria-label="�
 function readLocal(key){try{return localStorage.getItem(key);}catch{return null;}}
 function persistPreferences(){try{localStorage.setItem(PREFS_KEY,JSON.stringify(userPrefs));if($('#optionsStatus'))$('#optionsStatus').textContent='설정을 저장했어요.';return true;}catch{if($('#optionsStatus'))$('#optionsStatus').textContent='설정 저장이 어려워요. 이 화면에서만 적용돼요.';return false;}}
 function applyPreferences(){applyLanguage(userPrefs.language);document.documentElement.classList.toggle('reduce-motion',reduced.matches);document.documentElement.classList.toggle('simple-effects',!userPrefs.visualEffects);document.querySelectorAll('svg').forEach(svg=>{try{if(reduced.matches)svg.pauseAnimations?.();else svg.unpauseAnimations?.();}catch{}});}
-function downloadText(text,name){const url=URL.createObjectURL(new Blob([text],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+async function downloadText(text, name, notify = false) {
+ const showExported = () => toast('기록 파일을 내보냈어요.', 'journal');
+ if (isNativeApp) {
+  try {
+   const { shareSave } = await import('./native-share-save.mjs');
+   if (await shareSave(text, name)) showExported();
+  } catch {
+   toast('기록 파일을 내보내지 못했어요. 다시 시도해주세요.');
+  }
+  return;
+ }
+ const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+ const link = document.createElement('a');
+ link.href = url;
+ link.download = name;
+ link.click();
+ setTimeout(() => URL.revokeObjectURL(url), 1000);
+ if (notify) showExported();
+}
 function quickStart(){
  modal('별과 함께하는 첫날',`
   <div class="first-day">
@@ -1330,7 +1355,7 @@ function quickStart(){
      <summary>골드 · 반짝이 · 저장</summary>
      <p><b>골드</b>는 별 머리 위 동전을 눌러 받아요. 최대 30분까지 쌓여요.</p>
      <p><b>반짝이</b>는 별이 매일 기본 1개씩 바닥에 흘려요. 한국 시간 자정에 갱신되고, 태양광 집광기로 개수를 늘릴 수 있어요.</p>
-     <p><b>기록</b>은 이 브라우저에 저장돼요. 기기를 옮기기 전에 ‘작은 기록’에서 내보내 주세요.</p>
+     <p><b>기록</b>은 ${saveLocation}에 저장돼요. 기기를 옮기기 전에 ‘작은 기록’에서 내보내 주세요.</p>
     </details>
    </section>
    <section class="first-day-guide" data-first-day-page hidden>

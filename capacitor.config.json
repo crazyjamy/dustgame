@@ -1,0 +1,11 @@
+{
+  "appId": "io.github.crazyjamy.dustgame",
+  "appName": "별이 머무는 곳",
+  "webDir": "www",
+  "backgroundColor": "#101216",
+  "server": {
+    "hostname": "localhost",
+    "iosScheme": "capacitor",
+    "androidScheme": "https"
+  }
+}

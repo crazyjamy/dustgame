@@ -249,10 +249,12 @@ function storyList(uid){const d=state.dusts.find(x=>x.uid===uid);if(!d)return;co
 function unreadAfterwords(d){return (state.life.afterwords||[]).filter(e=>e.uid===d.uid&&!e.read).length;}
 function journeyCue(d){
  const clue=nextStoryClue(state,d);
- const text=clue.action==='book'
-  ? unlockedStories(d)?'별 상세에서 열린 이야기를 읽어보세요.':'같은 종류의 별을 합쳐 첫 이야기를 열어보세요.'
-  : clue.label;
- return renderStoryCue(text);
+ if(clue.action!=='book')return renderStoryCue(clue.label);
+ const open=unlockedStories(d);
+ if(!open)return renderStoryCue('같은 종류의 별을 합쳐 첫 이야기를 열어보세요.');
+ if(d.readStories.length<open)return renderStoryCue('별 상세에서 열린 이야기를 읽어보세요.');
+ if(open<STORIES[d.id].length)return renderStoryCue('같은 종류의 별 두 마리를 합쳐 키워주세요.');
+ return renderStoryCue(clue.label);
 }
 function renderStoryCue(text){
  return `<p class="journey-cue"><span>다음 단서</span><strong class="journey-cue-text story-shimmer">${sentenceMarkup(text)}</strong></p>`;

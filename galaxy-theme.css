@@ -1096,9 +1096,6 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   background-image: var(--glass-edge-light);
   box-shadow: var(--glass-edge-shadow), var(--glass-floating-shadow);
 }
-@media (min-width: 701px) {
-  .app-shell > .navigation { border-radius: var(--radius-popup); }
-}
 #modal .modal-heading {
   background: transparent;
   border: 0;
@@ -1891,14 +1888,16 @@ html {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--nav-gap);
-  border-radius: 999px;
+  --radius-glass-panel: var(--radius-card);
+  --nav-inner-radius: calc(var(--radius-glass-panel) - var(--nav-padding));
+  border-radius: var(--radius-glass-panel);
   z-index: 80;
 }
 .app-shell > .navigation button {
   position: relative;
   isolation: isolate;
   min-width: 0;
-  border-radius: 999px;
+  border-radius: var(--nav-inner-radius);
 }
 .app-shell > .navigation button.active {
   background: transparent;
@@ -1916,7 +1915,7 @@ html {
   inset: var(--nav-padding) auto var(--nav-padding) var(--nav-padding);
   width: calc((100% - 2 * var(--nav-padding) - 3 * var(--nav-gap)) / 4);
   transform: translateX(calc(var(--nav-index) * (100% + var(--nav-gap))));
-  border-radius: inherit;
+  border-radius: var(--nav-inner-radius);
   pointer-events: none;
   background: var(--glass-selection);
   box-shadow: var(--glass-rim);

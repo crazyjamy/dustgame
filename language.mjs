@@ -1,4 +1,4 @@
-import { english } from './english.mjs?v=64ae6460';
+import { english } from './english.mjs?v=720e20cb';
 
 const attributes = ['aria-label', 'title', 'placeholder', 'data-tooltip', 'data-short'];
 let language = 'ko';

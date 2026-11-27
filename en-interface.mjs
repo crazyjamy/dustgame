@@ -1,5 +1,9 @@
 // Interface copy, including fragments used by older save records.
 export default [
+  ["별 단서","Star clues"],
+  ["은하계 성장","Galaxy growth"],
+  ["새 별을 만날 재료가 모였어요.","You have the materials to meet a new star."],
+  ["별 단서 보기","View star clues"],
   ["오늘의 부탁","Daily wishes"],
   ["새 부탁","New wishes"],
   ["다음에 만날 별","Your next star"],
@@ -430,6 +434,7 @@ export default [
   ["좋아하는 설치물 찾기", "Find favorite furniture"],
   ["좋아하는 설치물 ·", "Favorite furniture ·"],
   ["곁에서", "near"],
+  ["가까이 두면 특별한 반응을 보여요. 이 설치물을 Lv.3으로 키우면 함께한 추억도 열려요.", "Place it nearby for a special reaction. Raise this item to Lv.3 to unlock a shared memory."],
   ["가까이 두면 특별한 반응을 보여요.", "Place it nearby for a special reaction."],
   ["이 설치물을 Lv.3으로 키우면 함께한 추억도 열려요.", "Raise this item to Lv.3 to unlock a shared memory."],
   ["고마움 받기", "Collect thanks"],
@@ -792,6 +797,7 @@ export default [
   ["골드와", "gold and"],
   ["의 탐험", "’s expedition"],
   ["탐험할 별이 필요해요", "Choose a star to explore"],
+  ["갈 수 있는 별에서 임무를 하나 발견해요. 가끔 돌아오는 길에 엽서도 보내요.", "Discover a mission at an available destination. Your star may send a postcard on the way home."],
   ["· 갈 수 있는 별에서 임무를 하나 발견해요. 가끔 돌아오는 길에 엽서도 보내요.", "· Discover a mission at an accessible destination. Travelers sometimes send a postcard on the way home."],
   ["보관함에서 별을 은하계로 데려와 주세요.", "Bring a star from storage into your galaxy."],
   ["랜덤 탐험 떠나기", "Start a random expedition"],

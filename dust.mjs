@@ -1,9 +1,9 @@
-import { applyLanguage, displayCopy, protectPlayerNames } from './language.mjs?v=64ae6460';
+import { applyLanguage, displayCopy, protectPlayerNames } from './language.mjs?v=720e20cb';
 import {portraitReaction} from './portrait-reactions.mjs';
 import {bindPortraitPet} from './petting.mjs?v=europa-pose';
 import {today,sky,art,light} from './constellation.mjs';
 import {creditReturn, selectStory, status as monthStatus} from './monthly-sky.mjs';
-import {monthlyViews} from './monthly-sky-view.mjs?v=c9675d35';
+import {monthlyViews} from './monthly-sky-view.mjs?v=720e20cb';
 import{destinations,recipeQuantity,journal,depart,tripSeconds,collectTrip,tripGold,tripUpgradePrice,workshop}from'./star-trips.mjs?v=1.13.81-3f2b718b';
 import{journeyFor,hasJourney,journeyComplete,journeyHint}from'./story-journey.mjs?v=1.13.81-3f2b718b';
 import{AFTERWORD_KINDS,AFTERWORD_LABELS,STORY_ROUTES,aftermathFor,afterwordRecord,afterwordScene,readAfterword,roomStoryReaction}from'./story-aftermath.mjs?v=1.13.81-3f2b718b';
@@ -206,7 +206,7 @@ function refreshMix(focusId=null){if(!mixDialogOpen||!$('#mixContent'))return;co
 function renderMix(){return renderRoom();}
 function renderCollection(){
  const tabs=[['dust','collection','모은 별'],['recipes','recipe','조합 기록',state.collectionBook.discovered.length],['postcards','mail','모험 엽서',state.life.postcards.length+'/150'],['themes','sparkle','테마 수집',state.collectionBook.claimed.length+'/'+THEMES.length]];
- return `<header class="collection-heading"><h1>모은 기록</h1><p>별들과 함께 남긴 발견을 모아요.</p></header><div class="collection-switch collection-four" role="tablist" aria-label="모은 기록">${tabs.map(([id,glyph,label,count])=>`<button id="collection-tab-${id}" role="tab" data-collection-tab="${id}" aria-selected="${collectionTab===id}" aria-controls="collectionPanel" tabindex="${collectionTab===id?0:-1}" class="${collectionTab===id?'active':''}">${uiIcon(glyph)}<span class="tab-label">${label}</span>${id==='dust'?'':`<small>${count}</small>`}</button>`).join('')}</div><section id="collectionPanel" role="tabpanel" tabindex="0" aria-labelledby="collection-tab-${collectionTab}">${collectionTab==='dust'?renderDustCollection():collectionTab==='recipes'?renderRecipeJournal():collectionTab==='themes'?renderThemes():renderPostcards()}</section>`;
+ return `<div class="collection-switch collection-four" role="tablist" aria-label="모은 기록">${tabs.map(([id,glyph,label,count])=>`<button id="collection-tab-${id}" role="tab" data-collection-tab="${id}" aria-selected="${collectionTab===id}" aria-controls="collectionPanel" tabindex="${collectionTab===id?0:-1}" class="${collectionTab===id?'active':''}">${uiIcon(glyph)}<span class="tab-label">${label}</span>${id==='dust'?'':`<small>${count}</small>`}</button>`).join('')}</div><section id="collectionPanel" role="tabpanel" tabindex="0" aria-labelledby="collection-tab-${collectionTab}">${collectionTab==='dust'?renderDustCollection():collectionTab==='recipes'?renderRecipeJournal():collectionTab==='themes'?renderThemes():renderPostcards()}</section>`;
 }
 
 function renderDustCollection(){
@@ -217,7 +217,7 @@ function renderDustCollection(){
   ['missing','미발견',DUSTS.length-c.types],
   ['grown','성장',grownTypes.size],
  ];
- return `<div class="collection-filters dust-filters selection-filters" role="group" aria-label="별 도감 필터">${filters.map(([id,name,count])=>`<button type="button" class="filter-choice" aria-controls="dustFilterResults" data-dust-filter="${id}" aria-pressed="${dustFilter===id}"><span>${name}</span><small>${count}</small></button>`).join('')}</div><p class="dust-owned-summary">보유 <b>${c.total}마리</b> · Lv.4 이상 <b>${c.grown}마리</b></p><div id="dustFilterResults">${renderDustFilterResults(grownTypes)}</div>`;
+ return `<div class="collection-filters dust-filters selection-filters" role="group" aria-label="별 도감 필터">${filters.map(([id,name,count])=>`<button type="button" class="filter-choice" aria-controls="dustFilterResults" data-dust-filter="${id}" aria-pressed="${dustFilter===id}"><span>${name}</span><small>${count}</small></button>`).join('')}</div><div id="dustFilterResults">${renderDustFilterResults(grownTypes)}</div>`;
 }
 
 function renderDustFilterResults(grownTypes=new Set(state.dusts.filter(d=>stage(d.xp)===2).map(d=>d.id))){
@@ -285,7 +285,7 @@ function journeyExtra(d,compact=false){
  const canPlace=started&&!d.stored&&!isAway(state,d.uid);
  const content=`<section class="journey-afterword afterword-collection" aria-label="함께 남긴 후일담"><header><h3>함께 남긴 후일담</h3><small>열린 장면 ${entries.length} / 4</small></header>${!started?'<p>첫 이야기를 읽으면 플레이한 일이 작은 후일담으로 이어져요.</p>':''}<div class="afterword-rows">${AFTERWORD_KINDS.map(kind=>{
   const e=afterwordRecord(state,d,kind);
-  return e?`<button class="afterword-row ${e.read?'is-read':'is-new'}" data-afterword="${d.uid}:${kind}"><span><b>${AFTERWORD_LABELS[kind]}</b><small>${esc(afterwordScene(d,e,p.favorite).title)}</small></span><em>${e.read?'다시 읽기':'새 장면'}</em></button>`:`<div class="afterword-row is-locked"><span><b>${AFTERWORD_LABELS[kind]}</b><small>${esc(started?hints[kind]:'첫 이야기 뒤에 이어져요')}</small></span>${uiIcon('lock')}${canPlace&&kind==='favorite'?`<button class="text-button" data-cozy-place="${d.uid}">${state.decorations.includes(p.favorite.id)?'곁에 놓기':'설치물 찾기'}</button>`:canPlace&&kind==='route'?`<button class="text-button" data-story-route="${d.uid}">${routeUnlocked(state,profile.route)?'랜덤 탐험 수첩 열기':'은하계 Lv.'+routeUnlockLevel(profile.route)}</button>`:canPlace&&kind==='friend'?`<button class="text-button" data-story-friend="${d.uid}">곁에 놓기</button>`:''}</div>`;
+  return e?`<button class="afterword-row ${e.read?'is-read':'is-new'}" data-afterword="${d.uid}:${kind}"><span><b>${AFTERWORD_LABELS[kind]}</b><small>${esc(afterwordScene(d,e,p.favorite).title)}</small></span><em>${e.read?'다시 읽기':'새 장면'}</em></button>`:`<div class="afterword-row is-locked"><span><b>${AFTERWORD_LABELS[kind]}</b><small>${esc(started?hints[kind]:'첫 이야기 뒤에 이어져요')}</small></span>${uiIcon('lock')}${canPlace&&kind==='favorite'?`<button class="button secondary full" data-cozy-place="${d.uid}">${state.decorations.includes(p.favorite.id)?'곁에 놓기':'설치물 찾기'}</button>`:canPlace&&kind==='route'?`<button class="text-button" data-story-route="${d.uid}">${routeUnlocked(state,profile.route)?'랜덤 탐험 수첩 열기':'은하계 Lv.'+routeUnlockLevel(profile.route)}</button>`:canPlace&&kind==='friend'?`<button class="text-button" data-story-friend="${d.uid}">곁에 놓기</button>`:''}</div>`;
  }).join('')}</div><p class="afterword-footnote help-text">읽은 후일담은 은하계의 말과 작은 반응으로 남아요.</p></section>`;
  return compact?`<details class="journey-afterword afterword-disclosure"><summary>함께 남긴 후일담 <small>${entries.length} / 4${unreadAfterwords(d)?` · 새 장면 ${unreadAfterwords(d)}`:''}</small></summary>${content}</details>`:content;
 }
@@ -922,8 +922,8 @@ function storyKeepsake(d){return `<span class="story-keepsake" data-story-keepsa
 function lifeBubble(d){return `<span class="life-bubble" data-life-bubble="${d.uid}" aria-hidden="true">${esc(lifeLabel(d))}</span>`;}
 function preferenceDetails(id,resident){
  const p=personality(id),pair=resident&&companionship(state,resident);
- const action=resident?`<button class="text-button" data-cozy-place="${resident.uid}">${state.decorations.includes(p.favorite.id)?'좋아하는 설치물 곁에 놓기':'좋아하는 설치물 찾기'} →</button>`:'';
- return `<div class="preference-detail"><span>${p.mood.name}</span><h3>${uiIcon('heart')} 좋아하는 설치물 · ${p.favorite.name}</h3><p>${resident&&nearFavorite(state,resident)?p.favorite.action:`“${p.favorite.words}”`}</p>${pair?`<small>${esc(dustName(pair.other))} 곁에서 ${pair.label}</small>`: ''}<small>가까이 두면 특별한 반응을 보여요.<br>이 설치물을 Lv.3으로 키우면 함께한 추억도 열려요.</small>${action}</div>`;
+ const action=resident?`<button class="button secondary full" data-cozy-place="${resident.uid}">${state.decorations.includes(p.favorite.id)?'좋아하는 설치물 곁에 놓기':'좋아하는 설치물 찾기'}</button>`:'';
+ return `<div class="preference-detail"><span>${p.mood.name}</span><h3>${uiIcon('heart')} 좋아하는 설치물 · ${p.favorite.name}</h3><p>${resident&&nearFavorite(state,resident)?p.favorite.action:`“${p.favorite.words}”`}</p>${pair?`<small>${esc(dustName(pair.other))} 곁에서 ${pair.label}</small>`: ''}${renderStoryCue('가까이 두면 특별한 반응을 보여요. 이 설치물을 Lv.3으로 키우면 함께한 추억도 열려요.')}${action}</div>`;
 }
 function dailyWishesContent(all=false){
  const wishes=roomResidents(state).map(d=>({d,w:smallWish(state,d)}));
@@ -1080,10 +1080,9 @@ function questGuide(){
  ${missionFairyArt()}<span>별빛 임무지기 나리</span>${count?`<i class="quest-reward-count" aria-hidden="true">${count}</i>`: ''}</button>`;
 }
 function openQuestGuide(focusSection){
- const ready=readyMissionRewards();
  goalHTML=goalPanelContent();
- const keys=['today','wishes','growth'];
- const active=!focusSection||focusSection==='today'?'today':focusSection.startsWith('wishes')?'wishes':'growth';
+ const keys=['today','wishes','furniture','progress','growth'];
+ const active=!focusSection||focusSection==='today'?'today':focusSection.startsWith('wishes')?'wishes':focusSection.startsWith('furniture')||focusSection==='quests-all'?'furniture':focusSection==='progress'?'progress':'growth';
  const wishes=roomResidents(state).map(d=>({uid:d.uid,...smallWish(state,d)}));
  const day=wishes[0]?.day;
  const seenKey='nari-wishes-seen-v1';
@@ -1095,57 +1094,49 @@ function openQuestGuide(focusSection){
   wishes.forEach(w=>viewed.add(w.uid));
   try {localStorage.setItem(seenKey,JSON.stringify({day,ids:[...viewed]}));} catch {}
  }
- const chapters=ready.chapters;
  const quests=FURNITURE.map(f=>furnitureQuest(state,f.id));
  const rewards=quests.filter(q=>q.ready&&!q.owned);
  const tabs=keys.map(key=>{
   const selected=key===active;
-  const notice=key==='growth'&&rewards.length?'받을 설치물 보상 있음':key==='wishes'&&!selected&&fresh?'새 부탁':'';
-  const label={today:'오늘 할 일',wishes:'오늘의 부탁',growth:'수집과 성장'}[key];
-  return `<button type="button" role="tab" id="nari-tab-${key}" aria-controls="nari-panel-${key}" aria-selected="${selected}" tabindex="${selected?0:-1}" data-quest-guide="${key}" aria-label="${label}${notice?' · '+notice:''}" class="${selected?'active':''}">${label}${notice?'<i class="nari-reward-dot" aria-hidden="true"></i>':''}</button>`;
+  const notice=key==='furniture'&&rewards.length?'받을 설치물 보상 있음':key==='wishes'&&!selected&&fresh?'새 부탁':'';
+  const shortLabel=userPrefs.language==='en'
+   ? {today:'Tasks',wishes:'Wishes',furniture:'Items',progress:'Growth',growth:'Clues'}[key]
+   : {today:'할 일',wishes:'부탁',furniture:'설치물',progress:'성장',growth:'별 단서'}[key];
+  const label={today:'오늘 할 일',wishes:'오늘의 부탁',furniture:'설치물 퀘스트',progress:'은하계 성장',growth:'별 단서'}[key];
+  return `<button type="button" role="tab" id="nari-tab-${key}" aria-controls="nari-panel-${key}" aria-selected="${selected}" tabindex="${selected?0:-1}" data-quest-guide="${key}" aria-label="${label}${notice?' · '+notice:''}" class="${selected?'active':''}">${shortLabel}${notice?'<i class="nari-reward-dot" aria-hidden="true"></i>':''}</button>`;
  }).join('');
- const furnitureId=focusSection?.startsWith('furniture:')?focusSection.split(':')[1]:null;
- if(focusSection==='quests-all'||(furnitureId&&!rewards.some(q=>q.f.id===furnitureId))){
-  const pending=quests.filter(q=>!q.owned&&!q.ready);
-  modal('설치물 퀘스트',`<button class="text-button" data-quest-guide="growth">수집과 성장으로 돌아가기</button><div class="furniture-missions">${pending.map(furnitureMissionRow).join('')}</div>`);
-  if(furnitureId)document.getElementById('furniture-mission-'+furnitureId)?.focus();
-  return;
- }
  modal('별빛 임무지기 나리',`<div class="collection-tabs nari-tabs" role="tablist" aria-label="별빛 임무">${tabs}</div>
  <div role="tabpanel" id="nari-panel-today" aria-labelledby="nari-tab-today" ${active==='today'?'':'hidden'}><section class="growth-journey" id="goalPanel" aria-label="지금 할 일">${goalHTML}</section>
  </div><div role="tabpanel" id="nari-panel-wishes" aria-labelledby="nari-tab-wishes" ${active==='wishes'?'':'hidden'}><section class="mission-section" id="dailyWishes" data-all tabindex="-1">${dailyWishesContent(true)}</section></div>
  <div role="tabpanel" id="nari-panel-growth" aria-labelledby="nari-tab-growth" ${active==='growth'?'':'hidden'}>
- ${rewards.length?`<section class="mission-section nari-rewards"><h3>받을 수 있는 설치물 보상</h3>${rewards.map(q=>furnitureMissionRow(q)).join('')}</section>`:''}
- ${chapters.length?`<button class="text-button" data-room-chapter="${chapters[0].level}">은하계 기록 보상 ${chapters.length}개</button>`:''}
  <section class="mission-section" id="missionCollection" tabindex="-1"><h3>다음에 만날 별</h3><p>추천한 별의 단서를 보고, 어떤 재료를 조합할지 찾아보세요.</p>${collectionTargetContent()}</section>
- ${furnitureMissions(quests,rewards.length)}
- ${missionProgress()}</div>`);
+ </div><div role="tabpanel" id="nari-panel-furniture" aria-labelledby="nari-tab-furniture" ${active==='furniture'?'':'hidden'}>${active==='furniture'?furnitureMissions(quests):''}</div>
+ <div role="tabpanel" id="nari-panel-progress" aria-labelledby="nari-tab-progress" ${active==='progress'?'':'hidden'}>${active==='progress'?missionProgress():''}</div>`);
  $('.modal-card').classList.add('quest-guide-dialog');
+ if(active==='progress'){roomDialogOpen=true;$('.modal-card').classList.add('rooms-dialog');}
  updateGoalUI();
  if(keys.includes(focusSection))document.getElementById('nari-tab-'+focusSection).focus();
  $('.nari-tabs').onkeydown=e=>{
   if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;
   e.preventDefault();
-  openQuestGuide(e.key==='Home'?'today':e.key==='End'?'growth':keys[(keys.indexOf(active)+(e.key==='ArrowRight'?1:2))%3]);
+  openQuestGuide(e.key==='Home'?'today':e.key==='End'?'growth':keys[(keys.indexOf(active)+(e.key==='ArrowRight'?1:keys.length-1))%keys.length]);
  };
- if(focusSection==='collection'||focusSection==='progress'){
+ if(focusSection==='collection'){
   const section=$(focusSection==='collection'?'#missionCollection':'#missionProgress');
   section.focus();
  }
- if(focusSection?.startsWith('furniture')){
+ if(focusSection?.startsWith('furniture:')){
   const id=focusSection.split(':')[1];
   (id?document.getElementById('furniture-mission-'+id):$('#furnitureMissions'))?.focus();
  }
 }
-function furnitureMissionRow({f,condition,ready}){
- return `<article id="furniture-mission-${f.id}" tabindex="-1" class="daily-wish">${furnitureArt(f.id)}<div><b>${f.name}</b><p>${condition}</p>${f.id==='rug'?'<p>나리의 부탁 · 별들이 나란히 앉도록 행성 고리를 펴 주세요.</p>':''}</div>${ready?`<button class="button primary" data-claim-furniture="${f.id}">받기</button>`:'<small>진행 중</small>'}</article>`;
+function furnitureMissionRow({f,condition,ready,owned}){
+ return `<article id="furniture-mission-${f.id}" tabindex="-1" class="daily-wish">${furnitureArt(f.id)}<div><b>${f.name}</b><p>${condition}</p>${f.id==='rug'?'<p>나리의 부탁 · 별들이 나란히 앉도록 행성 고리를 펴 주세요.</p>':''}</div>${owned?'<small>보유</small>':ready?`<button class="button primary" data-claim-furniture="${f.id}">받기</button>`:'<small>진행 중</small>'}</article>`;
 }
-function furnitureMissions(quests,ready){
+function furnitureMissions(quests){
  const owned=quests.filter(q=>q.owned).length;
- const pending=quests.filter(q=>!q.owned&&!q.ready);
- return `<section class="mission-section" id="furnitureMissions" tabindex="-1"><h3>설치물 퀘스트 <small>보유 ${owned}/${quests.length}</small></h3>
- ${pending.length?furnitureMissionRow(pending[0]):ready?'<p>준비된 설치물은 위에서 받을 수 있어요.</p>':'<p>모든 설치물 보상을 받았어요.</p>'}
- ${pending.length>1?'<button class="text-button" data-quest-guide="quests-all">퀘스트 전체 보기</button>':''}</section>`;
+ const ordered=[...quests.filter(q=>q.ready&&!q.owned),...quests.filter(q=>!q.ready&&!q.owned),...quests.filter(q=>q.owned)];
+ return `<section class="mission-section" id="furnitureMissions"><h3>설치물 퀘스트 <small>보유 ${owned}/${quests.length}</small></h3>${ordered.map(furnitureMissionRow).join('')}</section>`;
 }
 function receiveFurniture(id){
  const reward=claimFurnitureQuest(state,id);
@@ -1153,7 +1144,7 @@ function receiveFurniture(id){
  if(id==='rug')toggleFurniture(state,id);
  save();render();
  if(id==='rug')readFurnitureChapter(id,0);
- else openQuestGuide('growth');
+ else openQuestGuide('furniture');
  toast(reward.furniture.name+'을 받았어요.','check');
 }
 function goalPanelContent(){
@@ -1161,12 +1152,15 @@ function goalPanelContent(){
  const first=steps.some(step=>!step.done);
  const unit=goal.currency==='sparkles'?'반짝이':goal.currency==='gold'?'골드':'';
  const note=questPage(goal);
+ const target=targetDust(state);
+ const clueReady=target&&!knownDust(state,target.id)&&materialNeeds(state,target.id).every(n=>n.missing===0);
  return `<div class="journey-top"><span class="journey-eyebrow">지금 할 일</span></div>
  ${first?`<ol class="journey-steps">${steps.map((step,i)=>`<li class="${step.done?'complete':step.id===goal.id?'current':''}"><span>${step.done?'✓':i+1}</span>${['첫 별','첫 이야기','첫 설치물'][i]}</li>`).join('')}</ol>`:''}
  <div class="journey-content" data-shimmer-region><div><h2>${esc(goal.title)}</h2>${storyParagraph(goal.description,true)}
  <div class="journey-reward"><span>다음 보상</span><b>${esc(goal.reward)}</b></div></div>
  <div class="journey-action">${unit?`<div class="goal-cost">${unit} · 보유 ${goal.have} / 필요 ${goal.cost}</div>`:''}
  <button class="button primary" data-next-goal ${goal.action==='birth'&&state.pending?'disabled':''}>${esc(goal.cta)}</button></div></div>
+ ${clueReady?'<div class="nari-ready-clue"><span>새 별을 만날 재료가 모였어요.</span><button class="text-button" data-quest-guide="growth">별 단서 보기</button></div>':''}
  ${note?`<details class="nari-note"><summary>나리의 노트</summary>${fieldPage(note)}</details>`:''}`;
 }
 function updateGoalUI(){
@@ -1263,12 +1257,18 @@ function economyBook(){
  $('.modal-card').classList.add('economy-dialog');
 }
 
+function memoryChapterList(index,progress){
+ const m=state.roomMemory;
+ return `<ol class="memory-chapters">${ROOM_MEMORY.map((c,i)=>{const read=m.read.includes(i),open=read||i===progress.next&&progress.canRead;return `<li><button data-memory-chapter="${i+1}"${index===i?' aria-current="true"':''} ${open?'':'disabled'}><span>${i===0?'시작':i===4?'완성':'0'+i}</span><div><b>${c.title}</b><small>${read?'읽음 · 다시 읽기':open?i===4?'마지막 기억 읽고 장식 받기':'새 기억 읽기':i<4&&m.unlocked.includes(i)?'행동 완료 · 앞의 기억을 먼저 읽어요':c.condition}</small></div><i>${uiIcon(open?'arrow':'lock')}</i></button></li>`;}).join('')}</ol>`;
+}
 function missionProgress(){
  const memory=memoryProgress(state);
  return `<section class="mission-section mission-progress" id="missionProgress" tabindex="-1">
   <h3>은하계 진행도</h3>
   <button type="button" class="mission-entry" data-room-memory>${uiIcon('story')}<b>작은 쉼터의 기억</b><small>${memory.complete?'복원 완료':`기억 ${memory.pieces}/3`}</small></button>
+  ${memoryChapterList(null,memory)}
   <button type="button" class="mission-entry" data-open-rooms>${uiIcon('planet')}<b>은하계 성장 지도</b><small>Lv.${state.roomLevel} / 100</small></button>
+  <div id="roomList">${roomListContent()}</div>
  </section>`;
 }
 function memoryDecor(){return state.roomMemory.claimed&&state.roomMemory.placed?`<div class="memory-mobile" role="img" aria-label="기억 복원 보상 · 귀가의 별모빌"><svg viewBox="0 0 110 100" aria-hidden="true"><path d="M55 0V22M23 33Q55 10 87 33M23 33V55M55 22V70M87 33V52" fill="none" stroke="#b6a66e" stroke-width="2"/><g fill="#edce64" stroke="#beaa60"><path d="m23 48 3 7 8 1-6 5 2 8-7-4-7 4 2-8-6-5 8-1Z"/><path d="m55 62 4 9 10 1-7 7 2 10-9-5-9 5 2-10-7-7 10-1Z"/><path d="m87 46 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z"/></g></svg><small>귀가의 별모빌</small></div>`:'';}
@@ -1276,7 +1276,7 @@ function openRoomMemory(index=null){
  const firstRead=index!==null&&!state.roomMemory.read.includes(index);let chapter=null,result=null;
  if(index!==null){result=readRoomMemory(state,index);if(!result.ok)return toast('앞의 기억을 읽고 표시된 행동을 완료해주세요.');chapter=result.chapter;save();render();}
  const m=state.roomMemory,progress=memoryProgress(state);
- modal('작은 쉼터의 기억',`<button class="text-button mission-return" data-quest-guide="progress">← 별빛 임무</button><div class="memory-book"><p class="memory-intro">자라는 온기, 남겨둔 자리, 돌아오는 바람.<br>세 조각을 모아 루미의 별지도를 함께 완성해요.</p><div class="memory-progress"><b>기억 조각 ${progress.pieces} / 3</b><span>읽은 이야기 ${m.read.length} / 5 · ${m.claimed?'복원 완료':'복원 중'}</span></div>${chapter?`<article class="memory-chapter"><small>${index===0?'프롤로그':index===4?'마지막 기억':'기억 '+index}</small><h3>${esc(chapter.title)}</h3>${storyParagraph(chapter.body,firstRead)}${observationNote(memoryPage(index)[2],memoryPage(index)[3],true)}${result.reward?'<b>✧ 귀가의 별모빌을 받았어요. 은하계에 걸어두었어요.</b>':''}</article>`:''}<ol class="memory-chapters">${ROOM_MEMORY.map((c,i)=>{const read=m.read.includes(i),open=read||i===progress.next&&progress.canRead;return `<li><button data-memory-chapter="${i+1}"${index===i?' aria-current="true"':''} ${open?'':'disabled'}><span>${i===0?'시작':i===4?'완성':'0'+i}</span><div><b>${c.title}</b><small>${read?'읽음 · 다시 읽기':open?i===4?'마지막 기억 읽고 장식 받기':'새 기억 읽기':i<4&&m.unlocked.includes(i)?'행동 완료 · 앞의 기억을 먼저 읽어요':c.condition}</small></div><i>${uiIcon(open?'arrow':'lock')}</i></button></li>`;}).join('')}</ol>${chapter?'<button class="text-button" data-room-memory>기억 목록 보기</button>':''}<div class="memory-reward"><b>완성 보상 · 귀가의 별모빌</b><p>이 은하계로 돌아오는 친구를 맞이하는 특별 장식이에요. 생산 효과는 없으며, 한 번만 받아요. 은하계를 바꿔도 기억과 장식은 남아요.</p>${m.claimed?`<button class="button secondary full" data-memory-decor>${m.placed?'별모빌 잠시 넣어두기':'별모빌 은하계에 걸기'}</button>`:'<small>별 Lv.2 · 설치물 Lv.2 · 모험 귀환 보상 수령 후, 다섯 이야기를 차례로 읽으면 받아요.</small>'}</div>${!progress.complete&&!progress.canRead?`<button class="button primary full" ${progress.next===2?'data-page="shop"':progress.next===3?'data-open-adventure':'data-page="room"'}>${progress.next===2?'상점에서 설치물 업그레이드':progress.next===3?'루미에게 모험 알아보기':'은하계에서 별 키우기'} →</button>`:''}</div>`);
+ modal('작은 쉼터의 기억',`<button class="text-button mission-return" data-quest-guide="progress">← 별빛 임무</button><div class="memory-book"><p class="memory-intro">자라는 온기, 남겨둔 자리, 돌아오는 바람.<br>세 조각을 모아 루미의 별지도를 함께 완성해요.</p><div class="memory-progress"><b>기억 조각 ${progress.pieces} / 3</b><span>읽은 이야기 ${m.read.length} / 5 · ${m.claimed?'복원 완료':'복원 중'}</span></div>${chapter?`<article class="memory-chapter"><small>${index===0?'프롤로그':index===4?'마지막 기억':'기억 '+index}</small><h3>${esc(chapter.title)}</h3>${storyParagraph(chapter.body,firstRead)}${observationNote(memoryPage(index)[2],memoryPage(index)[3],true)}${result.reward?'<b>✧ 귀가의 별모빌을 받았어요. 은하계에 걸어두었어요.</b>':''}</article>`:''}${memoryChapterList(index,progress)}${chapter?'<button class="text-button" data-room-memory>기억 목록 보기</button>':''}<div class="memory-reward"><b>완성 보상 · 귀가의 별모빌</b><p>이 은하계로 돌아오는 친구를 맞이하는 특별 장식이에요. 생산 효과는 없으며, 한 번만 받아요. 은하계를 바꿔도 기억과 장식은 남아요.</p>${m.claimed?`<button class="button secondary full" data-memory-decor>${m.placed?'별모빌 잠시 넣어두기':'별모빌 은하계에 걸기'}</button>`:'<small>별 Lv.2 · 설치물 Lv.2 · 모험 귀환 보상 수령 후, 다섯 이야기를 차례로 읽으면 받아요.</small>'}</div>${!progress.complete&&!progress.canRead?`<button class="button primary full" ${progress.next===2?'data-page="shop"':progress.next===3?'data-open-adventure':'data-page="room"'}>${progress.next===2?'상점에서 설치물 업그레이드':progress.next===3?'루미에게 모험 알아보기':'은하계에서 별 키우기'} →</button>`:''}</div>`);
  $('.modal-card').classList.add('memory-dialog');
 }
 
@@ -1311,9 +1311,6 @@ function downloadText(text,name){const url=URL.createObjectURL(new Blob([text],{
 function quickStart(){
  modal('별과 함께하는 첫날',`
   <div class="first-day">
-   <div class="first-day-progress" role="img" aria-label="첫날 안내 1 / 3">
-    <i class="is-current"></i><i></i><i></i>
-   </div>
    <section class="first-day-welcome" data-first-day-page>
     <div class="first-day-art" aria-hidden="true">${dustArt('crumb',0)}</div>
     <h3 tabindex="-1">솔라에게 인사해요</h3>
@@ -1326,12 +1323,14 @@ function quickStart(){
      <li><span aria-hidden="true">↔</span><div><b>합치기와 이동</b><p>별을 길게 눌러 같은 종류 위로 끌면 합쳐져요. 빈 곳에 놓으면 이동해요.</p></div></li>
      <li><span aria-hidden="true">✧</span><div><b>새 별 만나기</b><p>은하계의 작은 빛을 눌러 무료로 새 별을 만날 수 있어요.</p></div></li>
     </ul>
-    <details class="first-day-details">
-     <summary>골드 · 반짝이 · 저장</summary>
-     <p><b>골드</b>는 별 머리 위 동전을 눌러 받아요. 최대 30분까지 쌓여요.</p>
-     <p><b>반짝이</b>는 별이 매일 기본 1개씩 바닥에 흘려요. 한국 시간 자정에 갱신되고, 태양광 집광기로 개수를 늘릴 수 있어요.</p>
-     <p><b>기록</b>은 이 브라우저에 저장돼요. 기기를 옮기기 전에 ‘작은 기록’에서 내보내 주세요.</p>
-    </details>
+   </section>
+   <section class="first-day-guide" data-first-day-page hidden>
+    <h3 tabindex="-1">골드 · 반짝이 · 저장</h3>
+    <ul class="first-day-list first-day-resources">
+     <li><span aria-hidden="true">${icon('coin')}</span><p><b>골드</b>는 별 머리 위 동전을 눌러 받아요. 최대 30분까지 쌓여요.</p></li>
+     <li><span aria-hidden="true">${uiIcon('sparkle')}</span><p><b>반짝이</b>는 별이 매일 기본 1개씩 바닥에 흘려요. 한국 시간 자정에 갱신되고, 태양광 집광기로 개수를 늘릴 수 있어요.</p></li>
+     <li><span aria-hidden="true">${uiIcon('journal')}</span><p><b>기록</b>은 이 브라우저에 저장돼요. 기기를 옮기기 전에 ‘작은 기록’에서 내보내 주세요.</p></li>
+    </ul>
    </section>
    <section class="first-day-guide" data-first-day-page hidden>
     <h3 tabindex="-1">은하계의 요정들</h3>
@@ -1346,6 +1345,9 @@ function quickStart(){
     <button type="button" class="button primary" id="firstDayContinue" hidden>요정 만나기</button>
     <button type="button" class="text-button" id="firstDayExplore">조작과 요정 둘러보기</button>
     <button type="button" class="text-button" id="firstDayBack" hidden>이전</button>
+   </div>
+   <div class="first-day-progress" role="img" aria-label="첫날 안내 1 / 4">
+    <i class="is-current"></i><i></i><i></i><i></i>
    </div>
   </div>`,()=>{
    const pages=[...document.querySelectorAll('[data-first-day-page]')];
@@ -1389,8 +1391,9 @@ function quickStart(){
     pages.forEach((page,i)=>{page.hidden=i!==index;});
     [...progress.children].forEach((dot,i)=>dot.classList.toggle('is-current',i===index));
     progress.setAttribute('aria-label',`첫날 안내 ${index+1} / ${pages.length}`);
-    $('#beginPlaying').hidden=index===1;
-    $('#firstDayContinue').hidden=index!==1;
+    $('#beginPlaying').hidden=index>0&&index<pages.length-1;
+    $('#firstDayContinue').hidden=index===0||index===pages.length-1;
+    $('#firstDayContinue').textContent=index===1?'다음':'요정 만나기';
     $('#firstDayExplore').hidden=index!==0;
     $('#firstDayBack').hidden=index===0;
     pages[index].scrollTop=0;
@@ -1402,7 +1405,7 @@ function quickStart(){
     if(page!=='room')go('room');
    };
    $('#firstDayExplore').onclick=()=>showPage(1);
-   $('#firstDayContinue').onclick=()=>showPage(2);
+   $('#firstDayContinue').onclick=()=>showPage(index+1);
    $('#firstDayBack').onclick=()=>showPage(index-1);
   });
  introOpen=true;
@@ -1414,7 +1417,7 @@ function previewImportText(raw,title){let imported;try{imported=decodeSave(raw);
 systemReduced.addEventListener?.('change',()=>{applyPreferences();render();});
 
 function openSurvey(){openTrips('survey');}
-function deskEntryCard(){const available=inRoom(state),uid=selected()?.uid;return `<section class="desk-entry"><header class="desk-entry-head"><div class="desk-entry-art" aria-hidden="true"><span>⌁</span><i>✧</i></div><div><span class="kicker">직접 탐사 · 첫 구역</span><h3>외곽 관측소</h3></div></header><div class="desk-entry-body"><p>관측소 잔해 사이를 탐사하고 화물 상자 뒤의 숨은 통로를 찾아요.</p>${state.deskRun?`<p class="desk-resume-note">${esc(dustName(state.dusts.find(d=>d.uid===state.deskRun.uid)))}의 위치와 발견을 저장했어요.</p><button class="button primary full" data-desk-resume>외곽 관측소 탐사 이어가기 →</button>`:`<label class="desk-select-label" for="deskDust">함께 갈 별</label><div class="select-field desk-select"><select id="deskDust" ${available.length?'':'disabled'}>${available.length?'':'<option>선택할 별이 없어요</option>'}${available.map(d=>`<option value="${d.uid}" ${d.uid===uid?'selected':''}>${esc(dustName(d))} · Lv.${level(d.xp)}</option>`).join('')}</select></div><button class="button primary full" data-desk-start ${available.length?'':'disabled'}>${available.length?'이 별과 탐사 시작 →':'은하계에 별을 먼저 데려와 주세요'}</button>`}<button class="text-button" data-desk-history>외곽 관측소 귀환 기록 · ${state.deskArchive.clears}회 완주 ↗</button></div></section>`;}
+function deskEntryCard(){const available=inRoom(state),uid=selected()?.uid;return `<section class="desk-entry expedition-entry"><header class="expedition-heading"><span class="expedition-icon">${uiIcon('survey')}</span><div><span class="kicker">직접 탐사 · 첫 구역</span><h3>외곽 관측소</h3></div></header><div class="desk-entry-body"><p>관측소 잔해 사이를 탐사하고 화물 상자 뒤의 숨은 통로를 찾아요.</p>${state.deskRun?`<p class="desk-resume-note">${esc(dustName(state.dusts.find(d=>d.uid===state.deskRun.uid)))}의 위치와 발견을 저장했어요.</p><button class="button primary full" data-desk-resume>외곽 관측소 탐사 이어가기 →</button>`:`<label class="desk-select-label" for="deskDust">함께 갈 별</label><div class="select-field desk-select"><select id="deskDust" ${available.length?'':'disabled'}>${available.length?'':'<option>선택할 별이 없어요</option>'}${available.map(d=>`<option value="${d.uid}" ${d.uid===uid?'selected':''}>${esc(dustName(d))} · Lv.${level(d.xp)}</option>`).join('')}</select></div><button class="button primary full" data-desk-start ${available.length?'':'disabled'}>${available.length?'이 별과 탐사 시작 →':'은하계에 별을 먼저 데려와 주세요'}</button>`}<button class="text-button" data-desk-history>외곽 관측소 귀환 기록 · ${state.deskArchive.clears}회 완주 ↗</button></div></section>`;}
 function beginDesk(){const r=startDesk(state,Number($('#deskDust')?.value));if(!r.ok)return toast(r.message);save();go('explore');}
 function pauseDesk(){save();go('room');toast('탐사 위치와 시료를 저장했어요. 루미의 탐험 수첩에서 이어갈 수 있어요.');}
 function renderDesk(){const r=state.deskRun,d=state.dusts.find(d=>d.uid===r.uid);return `<section class="desk-page"><header class="desk-heading"><div><span class="kicker">탐사 구역 01</span><h1>외곽 관측소 <small>${esc(dustName(d))}와 함께</small></h1></div><button class="button secondary" data-desk-pause>나중에 계속</button></header><div class="desk-objectives" aria-label="탐사 진행"><span id="deskGoalPush">○ 화물 상자 밀기</span><span id="deskGoalSecret">○ 숨은 통로 발견</span><span id="deskGoalItems">재료 0 / 3</span><small id="deskSeen">지도 탐사율</small></div><div class="desk-frame"><canvas id="deskCanvas" tabindex="0" aria-label="외곽 관측소 탐사 지도. 클릭하거나 터치한 바닥으로 이동합니다. 방향키로도 이동하고, E키로 화물 상자 밀기, 스페이스 키로 재료 줍기가 가능합니다."></canvas></div><p id="deskMessage" class="desk-message" role="status" aria-live="polite">지도에서 이동할 곳을 눌러요.</p><div class="desk-controls"><button class="button secondary" id="deskPush">화물 상자 밀러 가기</button><button class="button secondary" id="deskPick" disabled>가까운 재료 줍기</button><button class="button secondary" id="deskHome">귀환 지점으로 걷기</button><button class="button primary" id="deskExit">은하계로 귀환</button></div><div class="desk-pouch"><span>수집한 시료 <small>귀환하면 재료 가방에 넣어요</small></span><div id="deskPouch"></div></div><p class="desk-input-note help-text">클릭·터치로 이동 · 반짝이는 재료에 다가가면 주워요 · 화물 상자를 누르면 다가가서 밀어요<br>키보드: 방향키 이동 / E 밀기 / Space 줍기 · ‘나중에 계속’으로 중단해도 이어갈 수 있어요.</p></section>`;}
@@ -1534,9 +1537,14 @@ function openTrips(tab='trip'){
   const seconds=Math.max(0,Math.ceil(((t.end??0)-Date.now())/1000));
   body=`<section class="trip-report"><div class="trip-heading">${traveler?`<span class="trip-avatar ${seconds?'':'trip-homecoming'}">${dustPortrait(traveler)}</span>`:''}<div><small>${traveler?esc(dustName(traveler)):'별'} · ${seconds?'탐험 중':'귀환 완료'}</small><h3>${d.name}</h3></div></div><p>${d.quests[t.q%2]}</p>${seconds?`${tripOrbit(Math.floor(t.q/2),t.end,traveler)}<progress aria-label="탐험 진행률" max="${t.duration??tripSeconds[Math.floor(t.q/2)]}" value="${(t.duration??tripSeconds[Math.floor(t.q/2)])-seconds}"></progress><small id="tripClock">${seconds}초 뒤 돌아와요</small>`:`<p>${d.material} 1개를 찾아왔어요.</p>${tripButton(tripGold(state,Math.floor(t.q/2))+' 골드와 '+d.material+' 받기','data-trip-collect')}`}</section>`;
  }else{
-  body=`<section><h3>${pet?esc(dustName(pet))+'의 탐험':'탐험할 별이 필요해요'}</h3><p>${pet?'Lv.'+level(pet.xp)+' · 갈 수 있는 별에서 임무를 하나 발견해요. 가끔 돌아오는 길에 엽서도 보내요.':'보관함에서 별을 은하계로 데려와 주세요.'}</p>${tripButton('랜덤 탐험 떠나기','data-trip-start',!!pet)}</section>`;
+  body=`<section class="expedition-entry">
+   <header class="expedition-heading"><span class="expedition-icon">${pet?dustPortrait(pet):uiIcon('planet')}</span>
+    <div>${pet?`<small>Lv.${level(pet.xp)}</small>`:''}<h3>${pet?esc(dustName(pet))+'의 탐험':'탐험할 별이 필요해요'}</h3></div>
+   </header><p>${pet?'갈 수 있는 별에서 임무를 하나 발견해요. 가끔 돌아오는 길에 엽서도 보내요.':'보관함에서 별을 은하계로 데려와 주세요.'}</p>
+   <button class="button primary full" data-trip-start ${pet?'':'disabled'}>랜덤 탐험 떠나기</button></section>`;
  }
- modal('루미의 탐험 수첩',`<div class="trip-book"><nav aria-label="탐험 수첩 보기">${tabs}</nav>${body}${tab==='trip'&&state.adventures.length?legacyTravelers():''}${tab==='log'?tripButton(uiIcon('mail')+' 받은 모험 엽서 '+state.life.postcards.length,'data-postcards'):''}</div>`);
+ modal('루미의 탐험 수첩',`<div class="trip-book"><nav aria-label="탐험 수첩 보기">${tabs}</nav><div class="trip-book-content">${body}${tab==='trip'&&state.adventures.length?legacyTravelers():''}${tab==='log'?tripButton(uiIcon('mail')+' 받은 모험 엽서 '+state.life.postcards.length,'data-postcards'):''}</div></div>`);
+ $('.modal-card').classList.add('trip-book-dialog');
  if(tab==='trip'&&state.adventures.length){adventureDialogOpen=true;updateAdventureUI();}
 }
 document.addEventListener('click',e=>{

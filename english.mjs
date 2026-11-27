@@ -1,5 +1,5 @@
 import {DUSTS} from './dust-data.mjs';
-import interfaceCopy from './en-interface.mjs?v=64ae6460';
+import interfaceCopy from './en-interface.mjs?v=720e20cb';
 import skyA from './en-sky-a.mjs?v=64ae6460';
 import skyB from './en-sky-b.mjs?v=64ae6460';
 import skyC from './en-sky-c.mjs?v=64ae6460';

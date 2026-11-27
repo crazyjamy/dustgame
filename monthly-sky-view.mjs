@@ -43,7 +43,7 @@ export function monthlyViews({esc, notePanel}) {
     const attr='data-month-read';
     const steps=[index>0?'<button class="button secondary" '+attr+'="'+id+'-'+(index-1)+'">이전 편</button>':'',index+1<limit?'<button class="button primary" '+attr+'="'+id+'-'+(index+1)+'">다음 편</button>':''].join('');
     const card=index===4?'<button class="button primary full" '+'data-month-card'+'="'+id+'">완성 엽서 펼치기</button>':'';
-    return {title,html:'<article class="month-reader"><small>'+esc(s.name)+' · '+releaseDays[index]+'일'+'</small>'+storyParagraph(body,firstRead,'story-body')+notePanel('루미의 관측 노트',storyParagraph(note,true,'observation-copy'))+'<div class="month-nav">'+steps+'</div>'+card+'</article>'};
+    return {title,html:'<article class="month-reader"><small>'+esc(s.name)+' · '+releaseDays[index]+'일'+'</small>'+storyParagraph(body,firstRead,'story-body')+notePanel('루미의 관측 노트',storyParagraph(note,true,'observation-copy'),true)+'<div class="month-nav">'+steps+'</div>'+card+'</article>'};
   }
   return {byId,panel,reader,postcard};
 }

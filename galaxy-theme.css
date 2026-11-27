@@ -796,7 +796,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
 #modal .first-day .first-day-welcome { align-content: center; }
 .first-day-progress, .first-day-actions { flex-shrink: 0; }
 #modal .first-day [hidden] { display: none; }
-.first-day-progress { display: flex; justify-content: center; align-items: center; gap: 6px; margin-block: 2px 16px; }
+.first-day-progress { display: flex; justify-content: center; align-items: center; gap: 6px; margin-block: 12px 2px; }
 .first-day-progress i { width: 6px; height: 6px; border-radius: 8px; background: var(--color-border-control); }
 .first-day-progress .is-current { width: 18px; background: var(--color-link); }
 .first-day-welcome { padding-block: 2px 8px; }
@@ -1888,8 +1888,7 @@ html {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--nav-gap);
-  --radius-glass-panel: var(--radius-card);
-  --nav-inner-radius: calc(var(--radius-glass-panel) - var(--nav-padding));
+  --radius-glass-panel: var(--radius-pill);
   border-radius: var(--radius-glass-panel);
   z-index: 80;
 }
@@ -1897,7 +1896,8 @@ html {
   position: relative;
   isolation: isolate;
   min-width: 0;
-  border-radius: var(--nav-inner-radius);
+  min-height: 0;
+  border-radius: var(--radius-pill);
 }
 .app-shell > .navigation button.active {
   background: transparent;
@@ -1915,7 +1915,7 @@ html {
   inset: var(--nav-padding) auto var(--nav-padding) var(--nav-padding);
   width: calc((100% - 2 * var(--nav-padding) - 3 * var(--nav-gap)) / 4);
   transform: translateX(calc(var(--nav-index) * (100% + var(--nav-gap))));
-  border-radius: var(--nav-inner-radius);
+  border-radius: var(--radius-pill);
   pointer-events: none;
   background: var(--glass-selection);
   box-shadow: var(--glass-rim);
@@ -2959,7 +2959,7 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
 #modal .settings-dialog #restoreBackup[hidden] { display: none; }
 #modal .settings-dialog #restoreBackup { min-width: 44px; min-height: 44px; }
 #modal .settings-dialog #reset { justify-self: center; margin-inline: auto; text-align: center; }
-#modal .life-dialog .journal-history-title { text-align: left; justify-content: flex-start; }
+#modal .life-dialog .journal-section > h3 { text-align: left; justify-content: flex-start; }
 
 /* Match the glass and silver ink of the starlight window, at every object size. */
 .furniture-art, .supply-art {
@@ -2988,4 +2988,96 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
 #modal .language-setting #gameLanguage:focus-visible { outline: 2px solid currentColor; outline-offset: -3px; }
 @media (hover:hover) {
   #modal .language-setting #gameLanguage:hover { background: var(--color-surface-hover); }
+}
+
+.target-portrait .dust-art.silhouette { filter: brightness(0) invert(.59); opacity: .82; }
+#modal .nari-tabs[role="tablist"] {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+  overflow: visible;
+}
+#modal .nari-tabs > button[role="tab"] {
+  min-width: 0;
+  padding-inline: 0;
+  gap: 3px;
+}
+
+#modal .modal-card:is(.quest-guide-dialog, .trip-book-dialog) {
+  width: 100%;
+  max-width: 500px;
+  height: min(700px, 100%);
+}
+#modal :is(.quest-guide-dialog, .trip-book-dialog) > .modal-body {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  scrollbar-gutter: auto;
+}
+.quest-guide-dialog .modal-body > :not([role="tabpanel"]) { flex: none; }
+.trip-book-dialog .trip-book { display: flex; flex-direction: column; row-gap: 16px; flex: 1; min-height: 0; }
+.trip-book-dialog .trip-book > nav, .trip-book-dialog .modal-body > :not(.trip-book) { flex: none; }
+.trip-book-dialog .trip-book-content,
+.quest-guide-dialog [role="tabpanel"]:not([hidden]) {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+.nari-ready-clue {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-top: 12px;
+}
+
+.first-day-resources li > span svg { width: 24px; height: 24px; }
+
+/* Lumi's notebook uses the same departure card for both expedition modes. */
+#modal .trip-book .expedition-entry {
+  display: grid;
+  grid-template-columns: minmax(0,1fr);
+  gap: 16px;
+  padding: clamp(16px,4vw,22px);
+  margin: 0;
+  text-align: start;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 16px;
+  background: var(--color-surface-raised);
+}
+#modal .expedition-heading { display: flex; gap: 12px; align-items: center; }
+#modal .expedition-heading h3 { margin: 0; text-align: start; }
+#modal .expedition-heading :is(small,.kicker) { color: var(--color-text-secondary); }
+#modal .expedition-icon {
+  width: 48px; height: 48px; flex: none; display: grid; place-items: center;
+  border: 1px solid var(--color-border-subtle); border-radius: 50%;
+  color: var(--color-text-secondary); background: var(--color-surface-panel);
+}
+#modal .expedition-icon .dust-art { width: 36px; height: 36px; }
+#modal .expedition-entry p { margin: 0; text-align: start; line-height: 1.7; }
+#modal .expedition-entry .button { margin: 0; width: 100%; min-height: 44px; }
+#modal .desk-entry-body .text-button { justify-self: center; min-height: 44px; }
+#modal .story-chapters.month-chapters { border-inline-start: 0; padding-inline-start: 0; }
+#modal .month-chapters button.month-episode {
+  display: grid; grid-template-columns: auto 5px minmax(0,1fr) auto; gap: 8px;
+}
+#modal .month-chapters .month-episode::before {
+  content: ''; grid-area: 1 / 2; width: 3px; height: 3px;
+  border-radius: 50%; background: var(--color-text-secondary);
+}
+#modal .month-episode > span { grid-area: 1 / 1; }
+#modal .month-episode > b { grid-area: 1 / 3; }
+#modal .month-episode > small { grid-area: 1 / 4; margin: 0; }
+@media (max-width: 700px) {
+  .app-shell > .topbar .header-utilities .wallet { column-gap: 8px; }
+  .app-shell > .topbar .wallet :is(.gold-wallet,.sparkle-wallet) { padding-inline: 0; justify-self: center; }
+}
+
+#modal .preference-detail .journey-cue { display: grid; gap: 6px; margin-block: 12px; }
+#modal .preference-detail .journey-cue > span {
+  justify-self: start; padding: 2px 7px; border-radius: 99px;
+  color: var(--color-link); background: var(--color-surface-raised);
 }

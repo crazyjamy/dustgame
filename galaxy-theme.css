@@ -171,22 +171,6 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline-color: var
   background: var(--color-action-primary-pressed);
   border-color: var(--color-action-primary-pressed);
 }
-#fairyCollect.button:not(:disabled) {
-  background: #c6974d36;
-  border-color: var(--color-currency-gold);
-  color: var(--color-currency-gold);
-}
-#fairyCollect.button:not(:disabled):is(:hover, :focus-visible) {
-  background: var(--color-currency-gold-hover);
-  border-color: var(--color-currency-gold-hover);
-  color: var(--color-currency-on-gold);
-}
-#fairyCollect.button:not(:disabled):active {
-  background: var(--color-currency-gold-pressed);
-  border-color: var(--color-currency-gold-pressed);
-  color: var(--color-currency-on-gold);
-}
-
 .modal { background: var(--color-scrim); }
 .modal-card .close { background: var(--color-surface-raised); color: var(--color-text-primary); }
 .compact-name > b { background: var(--color-surface-tag); color: var(--color-text-primary); }
@@ -291,8 +275,8 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline-color: var
   min-width: 19px;
   padding: 1px 4px;
   border-radius: 12px;
-  background: #ffe3a0;
-  color: #2b2517;
+  background: var(--color-reward);
+  color: var(--color-on-reward);
   font-size: 11px;
   line-height: 17px;
   font-style: normal;
@@ -2194,36 +2178,25 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
 }
 
 /* Small story keepsakes stay in the room; the reading UI stays quiet. */
-.story-keepsake { display: none; }
-.room-dust.story-traveler .story-keepsake {
-  position: absolute;
-  inset: 8% 0 auto auto;
-  display: grid;
-  place-items: center;
-  width: 24px;
-  height: 24px;
-  border: 1px solid #c6d8ff66;
-  border-radius: 50%;
-  background: #202b3ded;
-  color: #d4e3ff;
-  box-shadow: 0 0 12px #adcbff26;
-  pointer-events: none;
-}
-.story-keepsake .ui-icon { width: 14px; height: 14px; }
 .story-settled .dust-art { filter: drop-shadow(0 0 8px #f1dfae30); }
 .story-settled.character-active .character-face { display: none; }
 .story-settled.character-active .character-performance :is(.dust-eyes, .dust-mouth) { opacity: 1; }
 .story-settled .dust-eyes { animation: none; }
-.app-shell .room-dust.story-speaking.selected .life-bubble {
+/* Keep long dialogue inside the playfield at either edge. */
+.room-playfield { container-type: inline-size; }
+.app-shell .room-dust.story-speaking.selected .life-bubble:not(:empty) {
+  --speech-width: min(248px, 72cqw);
   display: block !important;
-  white-space: normal;
-  min-width: 128px;
-  max-width: 184px;
-  padding: 7px 10px;
-  bottom: -36px;
-  font-size: 13px;
-  line-height: 1.6;
-  text-align: center;
+  box-sizing: border-box; width: var(--speech-width); min-width: 0; max-width: none;
+  left: calc(50% + clamp(12px - var(--room-x), 0px - var(--speech-width) / 2, 100cqw - var(--room-x) - var(--speech-width) - 12px));
+  translate: 0 0; top: auto; bottom: calc(100% + 5px);
+  color: var(--color-text-primary); background: var(--color-surface-raised);
+  border: 0; border-radius: 12px; box-shadow: 0 3px 12px #0006;
+  padding: 9px 13px; opacity: 1; font-size: 15px; line-height: 1.55;
+  text-align: start; white-space: normal; word-break: keep-all; overflow-wrap: anywhere;
+}
+.app-shell .room-dust.story-speaking.selected[data-speech-below="true"] .life-bubble:not(:empty) {
+  top: calc(100% + 5px); bottom: auto;
 }
 #modal .afterword-collection { gap: 12px; }
 .afterword-collection > header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
@@ -2249,7 +2222,8 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
 .afterword-row em { flex: 0 0 auto; font-size: 12px; font-style: normal; color: var(--color-accent-highlight); }
 .afterword-row.is-locked { color: var(--color-text-secondary); background: transparent; border-style: dashed; flex-wrap: wrap; }
 .afterword-row.is-locked > .text-button { min-height: 36px; padding: 4px 0 4px 8px; font-size: 13px; margin: 0; }
-.afterword-row.is-new { border-color: #adcaff60; }
+.afterword-row.is-new { border-color: var(--color-reward-border); }
+.afterword-row.is-new em { color: var(--color-reward); }
 .afterword-row:is(:hover, :focus-visible):not(.is-locked) { background: #c8d9f313; }
 .afterword-footnote { color: var(--color-text-secondary); font-size: 12px; line-height: 1.7; }
 #modal .story-reader-footer > .afterword-disclosure { display: block; }
@@ -2262,7 +2236,7 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
 .afterword-change p { margin: 8px 0 0; color: var(--color-text-secondary); font-size: 14px; line-height: 1.8; }
 .afterword-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .afterword-actions .button { min-height: 44px; font-size: 14px; }
-.return-afterword { padding: 18px; margin: 18px 0; border: 1px solid #adcaff50; border-radius: 14px; }
+.return-afterword { padding: 18px; margin: 18px 0; border: 1px solid var(--color-reward-border); border-radius: 14px; }
 .return-afterword b { font-size: 14px; }
 .return-afterword p { font-size: 16px; line-height: 1.8; }
 @media (max-width: 600px) {
@@ -2303,7 +2277,7 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
   color: var(--color-currency-gold);
   font-variant-numeric: tabular-nums;
 }
-#dustPopup .journey-cue {
+:is(#dustPopup, #storagePanel, #main .furniture-card) .journey-cue {
   display: flex;
   align-items: baseline;
   gap: 8px;
@@ -2355,7 +2329,7 @@ body.modal-open #dustPopup { visibility: hidden; pointer-events: none; }
 .shared-record-row > span { flex: 1; min-width: 0; display: grid; gap: 6px; }
 .shared-record-row b { font-size: 14px; line-height: 1.6; font-weight: 500; }
 .shared-record-row small { color: var(--color-text-secondary); font-size: 12px; line-height: 1.6; }
-.shared-record-row.is-unread small { color: var(--color-accent-highlight); }
+.shared-record-row.is-unread small { color: var(--color-reward); }
 .shared-record-row em { color: var(--color-accent-highlight); font-size: 12px; font-style: normal; white-space: nowrap; }
 .shared-record-row > .ui-icon { flex: 0 0 16px; width: 16px; height: 16px; opacity: .65; }
 .shared-record-row.is-locked { color: var(--color-text-secondary); }
@@ -2567,7 +2541,7 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
 #modal .trip-return h3 { font-size: var(--text-body-large); }
 #modal .trip-return-card p { margin: 0; color: var(--color-text-secondary); }
 #modal .trip-return-rewards { display: flex; flex-wrap: wrap; gap: 6px; }
-#modal .trip-return .reward-amount[data-kind="gold"] { color: var(--color-currency-gold); }
+
 #modal .trip-return-blueprint { display: flex; align-items: center; gap: 6px; font-size: var(--text-label); }
 #modal .trip-return-blueprint svg { width: 16px; height: 16px; flex: none; }
 #modal .trip-return-progress > div { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 4px 12px; }
@@ -2589,31 +2563,6 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
   gap: 6px 10px;
   color: var(--color-text-secondary);
   font-size: var(--text-meta);
-}
-#modal .furniture-chapters button {
-  display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
-  align-items: center;
-}
-#modal .furniture-chapters button > span {
-  font-size: var(--text-body);
-  text-align: end;
-  overflow-wrap: anywhere;
-}
-#modal .furniture-chapters button[aria-current="true"] {
-  background: var(--color-glass-control);
-  border-color: var(--color-glass-edge);
-  color: var(--color-text-primary);
-}
-#modal .furniture-chapters button i {
-  margin-inline: 0;
-  min-width: 25px;
-  padding: 2px 4px;
-  border-radius: 5px;
-  background: var(--color-surface-tag);
-  color: var(--color-text-secondary);
-  font-size: var(--text-meta);
-  text-align: center;
 }
 #modal .life-return-note {
   display: flex;
@@ -2781,7 +2730,7 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: var(--color-currency-gold);
+  background: var(--color-reward);
 }
 #modal .quest-guide-dialog summary .nari-quest-meta {font-size:var(--text-meta);font-weight:400}
 #modal .quest-guide-dialog .nari-rewards {margin-top:0}
@@ -2869,11 +2818,11 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
 }
 .app-shell .reward-amount, #modal .modal-card .reward-amount {
   display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px;
-  border: 0; border-radius: var(--radius-pill); background: var(--color-surface-tag);
-  color: var(--color-text-primary); font-size: var(--text-label); font-weight: 600;
+  border: 0; border-radius: var(--radius-pill); background: var(--color-reward-surface);
+  color: var(--color-reward); font-size: var(--text-label); font-weight: 600;
   line-height: 1.55; font-variant-numeric: tabular-nums; white-space: nowrap;
 }
-.app-shell .reward-amount[data-kind=sparkle], #modal .modal-card .reward-amount[data-kind=sparkle] { color: var(--color-currency-sparkle); }
+.reward-amount[data-kind=sparkle] i { color: var(--color-currency-sparkle); }
 .reward-amount i, .reward-amount i svg { display: block; width: 16px; height: 16px; }
 #modal .star-detail .star-profile-summary { margin: 16px 0; }
 #modal .star-profile-summary .detail-tags { justify-content: center; margin: 0; }
@@ -3072,7 +3021,7 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
   padding: clamp(16px,4vw,22px);
   margin: 0;
   text-align: start;
-  border: 1px solid var(--color-border-subtle);
+  border: 0;
   border-radius: 16px;
   background: var(--color-surface-raised);
 }
@@ -3109,3 +3058,191 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
   justify-self: start; padding: 2px 7px; border-radius: 99px;
   color: var(--color-link); background: var(--color-surface-raised);
 }
+
+/* Interaction and discovery share the same roles across book, mission and trip screens. */
+:is(.app-shell, #modal) .button.reward:not(:disabled) {
+  background: var(--color-reward);
+  color: var(--color-on-reward);
+  border: 1px solid transparent;
+  box-shadow: var(--glass-rim);
+}
+@media (hover: hover) {
+  :is(.app-shell, #modal) .button.reward:not(:disabled):hover { background: var(--color-reward-hover); }
+}
+:is(.app-shell, #modal) .button.reward:not(:disabled):active { background: var(--color-reward-pressed); }
+.button.reward:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+#modal .trip-report [data-trip-collect] { width: 100%; min-height: var(--size-reading-target); }
+#modal .modal-card .new-badge.is-new, #modal .trip-return-blueprint, #lifeUnread:not(:empty) {
+  color: var(--color-reward); background: var(--color-reward-surface);
+}
+#modal .trip-return-blueprint { width: fit-content; padding: 4px 8px; border-radius: var(--radius-field); }
+#modal .modal-card .merge-result-preview {
+  text-align: start; padding: 16px; border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-card); background: var(--color-surface-raised);
+}
+#modal .merge-result-preview > b { font-size: var(--text-body-large); color: var(--color-text-primary); }
+#modal .merge-result-preview > p { color: var(--color-text-secondary); margin-top: 8px; }
+#modal .furniture-record-list { text-align: start; margin-block: 16px 0; }
+#modal .furniture-record-list .shared-record-row:disabled {
+  opacity: 1; color: var(--color-text-secondary); background: transparent; cursor: default;
+}
+#modal .furniture-record-list [aria-current="true"] { background: var(--color-glass-control); }
+#goalPanel .goal-card {
+  display: grid; grid-template-columns: minmax(0,1fr); gap: 16px;
+  padding: clamp(14px, 3vw, 20px); margin-block: 12px;
+  text-align: start; background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-subtle); border-radius: var(--radius-card);
+}
+#goalPanel .goal-card h2 { margin: 0; font-size: var(--text-title-small); line-height: 1.45; }
+#goalPanel .goal-card header p { margin: 6px 0 0; color: var(--color-text-secondary); line-height: 1.65; }
+#goalPanel .goal-funds { display: grid; gap: 8px; }
+#goalPanel .goal-funds label { display: flex; align-items: center; gap: 6px; font-size: var(--text-label); }
+#goalPanel .goal-funds label svg { width: 16px; height: 16px; color: var(--color-currency-sparkle); }
+#goalPanel .goal-funds label b { margin-inline-start: auto; font-variant-numeric: tabular-nums; }
+#goalPanel .goal-funds progress {
+  display: block; width: 100%; height: 6px; border: 0; border-radius: var(--radius-pill);
+  overflow: hidden; appearance: none; background: var(--color-surface-hover); color: var(--color-action-primary);
+}
+.goal-funds progress::-webkit-progress-bar { background: var(--color-surface-hover); }
+.goal-funds progress::-webkit-progress-value { background: var(--color-action-primary); }
+.goal-funds progress::-moz-progress-bar { background: var(--color-action-primary); }
+#goalPanel .goal-outcome {
+  display: flex; align-items: flex-start; gap: 10px; padding: 12px;
+  border-radius: var(--radius-field); background: var(--color-reward-surface);
+}
+#goalPanel .goal-outcome svg { width: 18px; height: 18px; flex: none; color: var(--color-reward); }
+#goalPanel .goal-outcome div { display: grid; gap: 4px; }
+#goalPanel .goal-outcome small { color: var(--color-reward); font-size: var(--text-meta); }
+#goalPanel .goal-outcome b { color: var(--color-text-primary); font-size: var(--text-body); line-height: 1.6; }
+#goalPanel .goal-card .journey-action { display: block; padding: 0; border: 0; background: transparent; }
+#goalPanel .goal-card .button { width: 100%; min-height: var(--size-reading-target); margin: 0; }
+
+#modal .story-chapters .is-unread small, #modal .room-unclaimed > b, #modal .return-afterword > b,
+#modal .postcard-paper.is-new .postcard-heading i { color: var(--color-reward); }
+#modal .postcard-paper.is-new .postcard-heading i { background: var(--color-reward-surface); }
+
+/* Nari's milestone surface is shared by unread stories and pending rewards. */
+:is(#modal, #main) .needs-review,
+#modal .quest-guide-dialog .mission-section .daily-wish.needs-review,
+#modal .trip-book .trip-report.needs-review {
+  background: var(--color-reward-surface);
+  border-radius: var(--radius-field);
+  padding: 12px; text-align: start;
+}
+#modal .shared-record-row.is-unread, #modal .afterword-row.is-new {
+  padding-inline: 12px; background: var(--color-reward-surface); border-radius: var(--radius-field);
+}
+:is(#modal, #main) .shared-record-row.needs-review small,
+#modal .needs-review .trip-heading small { color: var(--color-reward); }
+:is(#modal, #main) .shared-record-row.needs-review + .shared-record-row { margin-top: 4px; }
+.dust-room .adventure-keeper[data-badge]:not([data-badge=""])::after {
+  content: attr(data-badge); display: grid; place-items: center;
+  position: absolute; inset: -3px -3px auto auto; z-index: 2;
+  min-width: 19px; height: 19px; padding: 0 4px; box-sizing: border-box;
+  border-radius: var(--radius-pill); background: var(--color-reward); color: var(--color-on-reward);
+  font-size: 12px; font-weight: 700; line-height: 1; pointer-events: none;
+}
+#modal .quest-guide-dialog :is(#goalPanel, #missionCollection) {
+  border: 0; border-radius: 0; background: transparent; box-shadow: none; padding: 0;
+}
+#modal #goalPanel .goal-card { border: 0; padding: 0; background: transparent; }
+#goalPanel > .observation-disclosure { margin-block-start: 16px; }
+#modal #missionCollection .target-resource {
+  justify-content: start; gap: 7px; margin: 0; color: var(--color-text-primary);
+}
+.target-resource > i, .target-resource > i svg { display: block; width: 24px; height: 24px; flex: none; }
+.app-shell .collection-record-tabs {
+  display: flex; overflow-x: auto; scrollbar-width: thin; justify-content: start; flex-wrap: nowrap;
+}
+.app-shell .collection-record-tabs [role=tab] { flex: 1 0 auto; white-space: nowrap; }
+.sky-collection { display: grid; gap: 4px; text-align: start; }
+.sky-collection > .button { justify-self: start; margin-block-start: 12px; }
+#modal .sky-day-stories { margin: 14px 0 18px; text-align: start; }
+#modal .sky-day-stories > h3 { margin: 0 0 8px; }
+#modal .sky-day-stories > .text-button { min-height: 44px; }
+.sky-calendar .sky-days button { position: relative; }
+.sky-calendar .sky-days button.has-story::after {
+  content: ''; position: absolute; bottom: 1px; inset-inline-start: calc(50% - 2px);
+  width: 4px; height: 4px; border-radius: 50%; background: var(--color-reward);
+}
+.sky-calendar .sky-days button.has-story[aria-pressed=true]::after { background: currentColor; }
+
+/* The dialog is the enclosing surface. Keep controls and reading groups distinct. */
+#mixContent .popup-mix { padding: 0; border: 0; background: transparent; box-shadow: none; }
+#mixContent .mix-tools { justify-content: flex-end; gap: 8px; }
+#mixContent .mix-tools .text-button {
+  display: inline-grid; place-items: center; margin: 0; padding: 0;
+  width: var(--size-reading-target); height: var(--size-reading-target);
+  color: var(--color-text-secondary); background: var(--color-glass-control);
+}
+#mixContent .mix-tools .text-button:disabled { opacity: .45; }
+#modal .star-detail .pet-reward-hint .reward-amount {
+  color: var(--color-currency-sparkle); background: transparent; padding: 0;
+}
+#modal .star-detail .pet-reward-hint svg { color: var(--color-currency-sparkle); }
+#modal .star-detail .modal-heading:has(.star-header-tools) { column-gap: 8px; row-gap: 6px; }
+#modal .star-detail .star-header-tools .copy-row { gap: 4px; }
+#modal .merge-intro { margin-block-end: 16px; }
+
+/* Group passive content by surface. Interactive controls keep their own boundaries. */
+#modal .trip-book-content > :is(.expedition-entry,.trip-report,.trip-blueprint,.trip-discoveries,.desk-history,.travelers),
+#main :is(.theme-card,.route-collection-card,.furniture-card,.material-card,.storage-card,.upgrade-card,.fairy-shop-card),
+#modal .modal-card :is(.merge-result-preview,.trip-return-card) {
+  border: 0; box-shadow: none; background: var(--color-surface-raised);
+}
+#modal .trip-book-content > .trip-report.needs-review, #main .theme-card.needs-review {
+  background: var(--color-reward-surface);
+}
+#main .theme-prize { border: 0; padding-top: 0; align-items: start; }
+#modal .related-themes { margin: 20px 0 0; text-align: start; }
+#modal .related-themes h3 { margin: 0 0 8px; }
+#modal .theme-clue-link {
+  width: 100%; min-height: 44px; padding: 8px 12px; margin: 0 0 6px;
+  display: flex; gap: 10px; align-items: center; border: 0;
+  border-radius: var(--radius-field); background: var(--color-surface-raised);
+  color: var(--color-text-primary); text-align: start;
+}
+#modal .theme-clue-link svg { width: 30px; height: 30px; }
+#modal .theme-clue-link small { margin-inline-start: auto; color: var(--color-text-secondary); }
+#modal .related-themes .text-button { min-height: 44px; }
+
+#modal .life-dialog .life-entry, #main .recipe-journal > article {
+  border: 0;
+  box-shadow: none;
+  background: var(--color-surface-raised);
+}
+#modal .life-dialog .needs-review .life-entry { background: transparent; }
+#dustFilterResults .dust-card { align-content: start; }
+.dust-card .catalog-meta {
+  display: flex;
+  align-items: baseline;
+  gap: .5rem;
+  white-space: nowrap;
+}
+.catalog-meta .card-count { position: static; }
+#modal .theme-clue-link small { display: block; margin: 0; }
+#modal .theme-clue-progress { margin-inline-start: auto; text-align: end; font-variant-numeric: tabular-nums; }
+.theme-members .theme-recommend-label { display: block; color: var(--color-brand-primary); }
+
+/* Passive effects use a shared chip across the shop, storage and item details. */
+:is(#main, #modal, #dustPopup) .effect-badge {
+  display: inline-block;
+  width: fit-content;
+  max-width: 100%;
+  padding: 4px 9px;
+  border: 0;
+  border-radius: var(--radius-glass-pill);
+  background: var(--color-benefit-surface);
+  color: var(--color-benefit);
+  font-size: var(--text-meta);
+  line-height: 1.5;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+#main :is(.upgrade-card, .fairy-shop-card, #shopPanel .furniture-card, #shopPanel .material-card) {
+  background: var(--color-surface-panel);
+  box-shadow: none;
+}
+#main .upgrade-card .room-capacity { color: var(--color-text-primary); }
+#main .upgrade-card .effect-badge { margin-bottom: 6px; }
+#main .upgrade-card small { display: block; }

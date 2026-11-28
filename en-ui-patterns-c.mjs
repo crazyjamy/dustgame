@@ -83,6 +83,7 @@ export default [
   [/^(.+) · 귀환 완료$/, '$1 · Back home'],
   [/^(\d+)초 뒤 돌아와요$/, (_, n) => `Returns in ${n} ${plural(n, 'second')}`],
   [/^(.+) 1개를 찾아왔어요\.$/, 'Found 1 × $1.'],
+  [/^([\d,]+) 골드와 (.+) 1개 받기$/, 'Collect $1 gold and 1 $2'],
   [/^([\d,]+) 골드와 (.+) 받기$/, 'Collect $1 gold and $2'],
   [/^(.+)의 탐험$/, 'Expedition with $1'],
   [/^Lv\.(\d+) · 갈 수 있는 별에서 임무를 하나 발견해요\. 가끔 돌아오는 길에 엽서도 보내요\.$/, 'Lv.$1 · Discover a mission at an available destination. Your star may send a postcard on the way home.'],

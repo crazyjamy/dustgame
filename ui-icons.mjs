@@ -3,6 +3,7 @@ const paths = {
  upgrade: '<path d="M12 19V5m-7 7 7-7 7 7M5 21h14"/>',
  home: '<path d="m3 11 9-8 9 8M5 10v11h14V10M10 21v-7h4v7"/>',
  collection: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+ bag: '<path d="M6 8h12l2 12H4L6 8ZM9 8V6a3 3 0 0 1 6 0v2"/>',
  storage: '<path d="M4 8h16v13H4ZM3 3h18v5H3ZM9 12h6"/>',
  shop: '<path d="M4 12v9h16v-9M2 10l3-7h14l3 7q-2.5 4-6 0-4 4-8 0-3.5 4-6 0ZM10 21v-6h4v6"/>',
  journal: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v18m3-13h4m-4 4h4m-4 4h2"/>',

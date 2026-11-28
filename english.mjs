@@ -1,5 +1,5 @@
 import {DUSTS} from './dust-data.mjs';
-import interfaceCopy from './en-interface.mjs?v=720e20cb';
+import interfaceCopy from './en-interface.mjs?v=cf833ec7';
 import skyA from './en-sky-a.mjs?v=64ae6460';
 import skyB from './en-sky-b.mjs?v=64ae6460';
 import skyC from './en-sky-c.mjs?v=64ae6460';
@@ -7,8 +7,8 @@ import stars from './en-stars.mjs?v=64ae6460';
 import * as memories from './en-memories.mjs?v=64ae6460';
 import * as world from './en-world.mjs?v=64ae6460';
 import controlsA from './en-ui-patterns-a.mjs?v=64ae6460';
-import controlsB from './en-ui-patterns-b.mjs?v=64ae6460';
-import controlsC from './en-ui-patterns-c.mjs?v=64ae6460';
+import controlsB from './en-ui-patterns-b.mjs?v=cf833ec7';
+import controlsC from './en-ui-patterns-c.mjs?v=cf833ec7';
 // Player-facing copy. Source text and save identifiers remain in their original language.
 const copy = new Map(`
 별이 머무는 곳|Where Stars Stay

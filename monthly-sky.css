@@ -171,3 +171,10 @@
 }
 #modal .month-latest small { color: var(--color-text-secondary); }
 #modal .month-latest h4 { margin: 0.35rem 0; }
+
+#modal :is(.sky-calendar, .monthly-book, .month-latest) {
+  border: 0;
+  box-shadow: none;
+  background: var(--color-surface-raised);
+}
+#modal .month-latest { background: var(--color-surface-panel); }

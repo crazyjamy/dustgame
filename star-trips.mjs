@@ -40,6 +40,10 @@ export function depart(s,pet,lv,essence,random=Math.random,now=Date.now()){
  const duration=tripSeconds[i]*(1-activeLevel(s,'windchime')*.05);
  j.trip={q,uid:pet.uid,end:now+Math.round(duration*1000),duration,postcardStop:postcardStop(s,pet,random)};return true;
 }
+export function pendingReturns(state, now=Date.now()) {
+ const trip=state.starTrips?.trip;
+ return state.adventures.filter(q=>q.end<=now).length + Number(Boolean(trip && (trip.end??0)<=now));
+}
 export function tripGold(s,i){
  const j=journal(s);
  return destinations[i].gold+(j.placed[i]?Math.max(0,j.levels[i]-1):0);

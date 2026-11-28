@@ -42,7 +42,12 @@ export function nextGoal(s,now=Date.now()){
  }
  if(s.adventureCount===0)return {id:'adventure',title:'루미와 첫 랜덤 탐험 떠나기',description:'루미의 수첩에서 별을 보내요. 돌아오는 길에 엽서가 도착할 수도 있어요.',reward:'골드 · 탐험 재료',action:'adventure',cta:'탐험 수첩 열기',currency:'free',cost:0,have:0,missing:0};
  if(s.roomLevel>=2&&!s.fairyOwned)return sparkleGoal({id:'fairy',title:'골드 모으는 요정 모아 만나기',description:'은하계에 찾아온 모아를 누르면 준비된 골드를 한 번에 받아요.',reward:'요정 모아 · 골드 모두 받기',action:'shop',cta:s.sparkles>=FAIRY_PRICE?'작은 상점으로':'반짝이 모으러 가기'},FAIRY_PRICE);
- if(s.roomLevel<ROOMS.length){const next=ROOMS[s.roomLevel],chapter=ROOM_CHAPTERS.find(c=>c.level>s.roomLevel);return sparkleGoal({id:'room',title:`은하계 Lv.${next.level} · ${next.capacity}마리의 자리`,description:`두 자리를 더 내어줘요. ${chapter?'Lv.'+chapter.level+'에 '+chapter.name+'의 이야기가 열려요.':'마지막 은하계를 완성해요.'}`,reward:`방 +2자리 · ${chapter?chapter.reward:'200자리 완성'}`,action:'room',cta:s.sparkles>=next.cost?'다음 방 살펴보기':'반짝이 모으러 가기'},next.cost);}
+ if(s.roomLevel<ROOMS.length){
+  const next=ROOMS[s.roomLevel],chapter=ROOM_CHAPTERS.find(c=>c.level>s.roomLevel);
+  return sparkleGoal({id:'room',title:`은하계 Lv.${next.level} · ${next.capacity}마리의 자리`,
+   description:'별이 머물 자리가 두 곳 늘어나요.',milestone:chapter,
+   action:'room',cta:s.sparkles>=next.cost?'다음 방 살펴보기':'반짝이 모으러 가기'},next.cost);
+ }
  if(!s.fairyOwned)return sparkleGoal({id:'fairy',title:'골드 모으는 요정 모아 만나기',description:'은하계에 찾아온 모아를 누르면 준비된 골드를 한 번에 받아요.',reward:'요정 모아 · 골드 모두 받기',action:'shop',cta:s.sparkles>=FAIRY_PRICE?'작은 상점으로':'반짝이 모으러 가기'},FAIRY_PRICE);
  return {id:'collection',title:'아직 모르는 친구의 단서 찾기',description:'모은 별에서 실루엣과 조합 힌트를 살펴보세요. 무료 랜덤 탄생도 계속할 수 있어요.',reward:'별 50종 · 각자의 이야기와 모험 엽서',action:'collection',cta:'모은 별 보기',currency:'free',cost:0,have:0,missing:0};
 }

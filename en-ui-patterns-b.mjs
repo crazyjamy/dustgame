@@ -1,6 +1,11 @@
 // Live counters, rewards and notices on the galaxy, shop and journal screens.
 const stars = n => n === '1' ? '1 star' : n + ' stars';
 export default [
+  [/^루미 · 확인할 귀환 (\d+)건$/, (_,n)=>'Lumi · '+n+' expedition return'+(n==='1'?'':'s')+' to collect'],
+  [/^반짝이 (\d+)개를 더 모으면 돼요\.$/, 'Collect $1 more sparkles.'],
+  [/^(\d+)화$/, 'Chapter $1'],
+  [/^(\d{4}-\d{2}-\d{2}) · 별자리 이야기$/, '$1 · Constellation stories'],
+  [/^보유 (\d+) \/ 필요 (\d+)$/, '$1 owned / $2 needed'],
   [/^(.+)을 받아 은하계에 놓았어요\.$/, 'You received $1 and placed it in your galaxy.'],
   [/^고마워! 반짝이 ([\d,]+)개를 나눴어요\.$/, 'Thank you! Your star shared $1 sparkles.'],
   [/^Lv\.(\d+) · 설치물의 새 이야기가 열렸어요\.$/, 'Lv.$1 · A new furniture story is ready.'],
@@ -15,6 +20,7 @@ export default [
   [/^(골드|반짝이) ([\d,]+) 획득$/, 'Collected $2 $1'],
   [/^작은 보답, ([\d,]+) 골드와 반짝이 ([\d,]+)개를 받았어요\.$/, 'A little thank-you gift of $1 gold and $2 sparkles.'],
   [/^작은 보답, ([\d,]+) 골드를 받았어요\.$/, 'A little thank-you gift of $1 gold.'],
+  [/^은하계 (\d+)자리 · 보관함 (\d+)자리$/, '$1 galaxy spaces · $2 storage spaces'],
   [/^골드 \+([\d,]+)% · 은하계 (\d+)자리 · 보관함 (\d+)자리$/, 'Gold +$1% · $2 galaxy spaces · $3 storage spaces'],
   [/^다음 은하계 · (.+) · 골드 보상 \+([\d,]+)%$/, 'Next galaxy · $1 · Gold bonus +$2%'],
   [/^보유 ([\d,]+)개$/, '$1 owned'],

@@ -17,6 +17,12 @@
   --text-symbol-large: 3.75rem;
   --text-symbol-display: 4.25rem;
 
+  --type-view-title: clamp(var(--text-title), 1.12rem + 0.65vw, var(--text-title-large));
+  --type-section-title: var(--text-title-small);
+  --type-item-title: var(--text-body-large);
+  --type-reading: var(--text-body-large);
+  --type-metadata: var(--text-meta);
+
   --color-brand-primary: #8dbdff;
   --color-brand-secondary: #f1d397;
 
@@ -29,6 +35,9 @@
   --color-surface-pressed: #313840;
   --color-surface-disabled: #20252b;
   --color-text-primary: #eef5fb;
+  --color-text-reading: #d0d8e0;
+  --color-progress-track: #636f7c;
+  --color-progress-fill: var(--color-action-primary-hover);
   --color-text-secondary: #a4abb4;
   --color-text-disabled: #8b939d;
   --color-border-subtle: #363c43;
@@ -80,6 +89,12 @@
   --color-glass-orbit-graphite: #383e467b;
   --color-glass-orbit-slate: #30384260;
   --color-glass-orbit-silver: #41485250;
+
+  --space-caption: .25rem;
+  --space-related: .5rem;
+  --space-action: .75rem;
+  --space-panel: 1rem;
+  --space-section: 1.5rem;
 
   --radius-tab: 0px;
   --radius-button: 12px;

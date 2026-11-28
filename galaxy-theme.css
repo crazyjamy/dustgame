@@ -668,7 +668,7 @@ a:focus-visible, button:focus-visible, select:focus-visible { outline-color: var
   border-radius: 12px;
 }
 #modal .modal-card .life-entry > div { min-width: 0; border: 0; padding: 0; }
-.life-entry h3 { margin: 3px 0 6px; }
+.life-entry h4 { margin: 3px 0 6px; }
 .character-gallery .character-stage {
   background: radial-gradient(ellipse, #323942 0%, transparent 68%);
 }
@@ -1368,7 +1368,7 @@ html.desk-open .app-shell > :is(.topbar, .navigation, footer) { display: none; }
   overflow: hidden;
   pointer-events: none;
   background:
-    url('./assets/galaxy-stars.svg?v=98fb0f3c') center 12% / auto 800px repeat,
+    url('./assets/galaxy-stars.svg') center 12% / auto 800px repeat,
     radial-gradient(ellipse at 77% 27%, var(--color-glass-orbit-graphite), transparent 57%),
     radial-gradient(ellipse at 13% 54%, var(--color-glass-orbit-slate), transparent 64%),
     radial-gradient(ellipse at 94% 78%, var(--color-glass-orbit-silver), transparent 56%),
@@ -2914,13 +2914,14 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
  .pet-portrait[data-personality]:is([data-response="invite"],[data-response="reply"]) .pet-pose {animation:none;transform:scale(1.03)}
 }
 
-.life-dialog .journal-section > h3, .life-dialog .journal-reward h3 { font-size: 1rem; margin: 0 0 .65rem; }
-.life-dialog .journal-section + .journal-section { margin-top: 1.5rem; }
+.life-dialog :is(.journal-section,.journal-reward) > h3 { font-size: 1rem; margin: 0 0 var(--space-related); }
+.life-dialog .journal-section + .journal-section { margin-top: var(--space-section); }
+.life-dialog .life-timeline { margin: 0; gap: var(--space-action); }
 .life-dialog .journal-section .life-entry { display: block; }
-.life-dialog .journal-line { display: flex; align-items: flex-start; gap: .45rem; margin: .4rem 0; }
+.life-dialog .journal-line { display: flex; align-items: flex-start; gap: var(--space-related); margin: var(--space-related) 0 0; }
 .life-dialog .journal-stars { display: inline-flex; flex: none; align-items: center; }
 .life-dialog .journal-stars svg { display: block; width: 1.5rem; height: 1.5rem; }
-.life-dialog .journal-reward { padding: 1rem; margin-bottom: 1.25rem; border-radius: .9rem; background: var(--color-surface-raised); }
+.life-dialog .journal-reward { padding: var(--space-panel); margin-bottom: var(--space-section); border-radius: .9rem; background: var(--color-surface-raised); }
 .life-dialog .journal-sparkles { display: inline-flex; align-items: center; gap: .3rem; }
 .life-dialog .journal-sparkles svg { width: 1rem; height: 1rem; color: var(--color-sparkle-fill); }
 #modal .trip-blueprint header h3,#modal .trip-blueprint header .recipe-material {font-size:14px;margin:0;}
@@ -3093,19 +3094,12 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
   text-align: start; background: var(--color-surface-raised);
   border: 1px solid var(--color-border-subtle); border-radius: var(--radius-card);
 }
-#goalPanel .goal-card h2 { margin: 0; font-size: var(--text-title-small); line-height: 1.45; }
-#goalPanel .goal-card header p { margin: 6px 0 0; color: var(--color-text-secondary); line-height: 1.65; }
+#goalPanel .goal-title { margin: 0; font-size: var(--text-title-small); line-height: 1.45; }
+#goalPanel .goal-card header p { margin: var(--space-related) 0 0; color: var(--color-text-secondary); line-height: 1.65; }
 #goalPanel .goal-funds { display: grid; gap: 8px; }
 #goalPanel .goal-funds label { display: flex; align-items: center; gap: 6px; font-size: var(--text-label); }
 #goalPanel .goal-funds label svg { width: 16px; height: 16px; color: var(--color-currency-sparkle); }
 #goalPanel .goal-funds label b { margin-inline-start: auto; font-variant-numeric: tabular-nums; }
-#goalPanel .goal-funds progress {
-  display: block; width: 100%; height: 6px; border: 0; border-radius: var(--radius-pill);
-  overflow: hidden; appearance: none; background: var(--color-surface-hover); color: var(--color-action-primary);
-}
-.goal-funds progress::-webkit-progress-bar { background: var(--color-surface-hover); }
-.goal-funds progress::-webkit-progress-value { background: var(--color-action-primary); }
-.goal-funds progress::-moz-progress-bar { background: var(--color-action-primary); }
 #goalPanel .goal-outcome {
   display: flex; align-items: flex-start; gap: 10px; padding: 12px;
   border-radius: var(--radius-field); background: var(--color-reward-surface);
@@ -3146,7 +3140,7 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
   border: 0; border-radius: 0; background: transparent; box-shadow: none; padding: 0;
 }
 #modal #goalPanel .goal-card { border: 0; padding: 0; background: transparent; }
-#goalPanel > .observation-disclosure { margin-block-start: 16px; }
+#goalPanel > .observation-disclosure { margin-block-start: var(--space-section); }
 #modal #missionCollection .target-resource {
   justify-content: start; gap: 7px; margin: 0; color: var(--color-text-primary);
 }
@@ -3246,3 +3240,74 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
 #main .upgrade-card .room-capacity { color: var(--color-text-primary); }
 #main .upgrade-card .effect-badge { margin-bottom: 6px; }
 #main .upgrade-card small { display: block; }
+
+/* Use a role within the current view, independent of its HTML heading level. */
+#modal #modalTitle, #main .desk-heading h1 {
+  font-size: var(--type-view-title);
+  font-weight: 700;
+  line-height: 1.35;
+}
+#modal :is(.mission-section > h3, .related-themes > h3, .journal-section > h3, .journal-reward > h3,
+  .expedition-heading h3, .trip-heading h3, .goal-title), #main .route-postcards > h2 {
+  font-size: var(--type-section-title);
+  font-weight: 650;
+  line-height: 1.45;
+}
+#main :is(.dust-card, .storage-card, .material-card, .furniture-info, .fairy-shop-card,
+  .upgrade-card, .recipe-journal-title, .theme-card-title) h2,
+#modal :is(.life-entry h4, .target-intro h4), :is(#modal,#main) .shared-record-row b {
+  font-size: var(--type-item-title);
+  font-weight: 650;
+  line-height: 1.45;
+}
+#main :is(.furniture-info, .fairy-shop-card) h2 { margin: 0 0 var(--space-related); }
+#modal .life-entry h4 { margin: 0 0 var(--space-caption); }
+#modal .life-entry small, #main .catalog-meta :is(.card-num,.card-count),
+#modal .target-catalog, #modal .trip-heading small {
+  font-size: var(--type-metadata);
+  line-height: 1.5;
+}
+#modal .life-entry .journal-line, #modal .story-body {
+  font-size: var(--type-reading);
+  line-height: 1.75;
+}
+
+/* Use the same lightness for a narrative across the diary and story readers. */
+#modal .modal-card :is(.life-entry .journal-line, p.story-body) {
+  color: var(--color-text-reading);
+}
+#modal .life-dialog .journal-section > h3 { margin-bottom: var(--space-related); }
+#main .furniture-info .furniture-toolbar {
+  margin-top: var(--space-action);
+  gap: var(--space-related);
+}
+#main .furniture-info .furniture-toolbar > button {
+  min-height: var(--size-reading-target);
+}
+#modal .first-day-actions, #modal .trip-return-actions { gap: var(--space-related); }
+#modal .star-detail :is(.preference-detail, .shared-story-entrance) {
+  margin-block: var(--space-section);
+  padding: var(--space-panel);
+}
+
+/* The track, fill and numerical value are visible even at low progress. */
+#modal :is(.goal-funds, .trip-return-progress, .room-level-next) progress {
+  display: block;
+  width: 100%;
+  height: 6px;
+  overflow: hidden;
+  appearance: none;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--color-progress-track);
+  color: var(--color-progress-fill);
+}
+#modal :is(.goal-funds, .trip-return-progress, .room-level-next) progress::-webkit-progress-bar {
+  background: var(--color-progress-track);
+}
+#modal :is(.goal-funds, .trip-return-progress, .room-level-next) progress::-webkit-progress-value {
+  background: var(--color-progress-fill);
+}
+#modal :is(.goal-funds, .trip-return-progress, .room-level-next) progress::-moz-progress-bar {
+  background: var(--color-progress-fill);
+}

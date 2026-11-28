@@ -1,4 +1,4 @@
-import{level}from'./dust-engine.mjs?v=1.13.81-3f2b718b';
+import{level}from'./dust-engine.mjs?v=cf4d2669';
 import{routeUnlocked,routeUnlockLevel}from'./rooms.mjs?v=1.13.81-3f2b718b';
 import{initDesk}from'./desk-exploration.mjs?v=1.13.81-3f2b718b';
 import{pauseGoldClock}from'./gold-clock.mjs?v=1.13.81-3f2b718b';

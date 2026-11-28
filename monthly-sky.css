@@ -105,8 +105,8 @@
 .monthly-book .select-field { margin: .35rem 0 .7rem; }
 
 #modal .monthly-book {
-  margin: .75rem 0 1rem;
-  padding: 14px;
+  margin: var(--space-section) 0 var(--space-panel);
+  padding: var(--space-panel);
   border-radius: var(--radius-card);
 }
 #modal .monthly-book > h2 {
@@ -163,14 +163,21 @@
 #modal .month-reader-icon line { stroke-width: 1.5; }
 
 #modal .month-latest {
-  margin: 0.85rem 0;
-  padding: 0.85rem;
+  display: grid;
+  gap: var(--space-caption);
+  margin: var(--space-panel) 0;
+  padding: var(--space-panel);
   border: 1px solid var(--color-border-subtle);
   border-radius: 0.75rem;
   background: var(--color-glass-card);
 }
 #modal .month-latest small { color: var(--color-text-secondary); }
-#modal .month-latest h4 { margin: 0.35rem 0; }
+#modal .month-latest > :is(h4,p) { margin: 0; }
+#modal .month-latest > p { color: var(--color-text-reading); }
+#modal .month-latest > .button {
+  min-height: var(--size-reading-target);
+  margin: var(--space-related) 0 0;
+}
 
 #modal :is(.sky-calendar, .monthly-book, .month-latest) {
   border: 0;
@@ -178,3 +185,11 @@
   background: var(--color-surface-raised);
 }
 #modal .month-latest { background: var(--color-surface-panel); }
+
+#modal .monthly-book > h2 { font-size: var(--type-section-title); line-height: 1.45; }
+#modal :is(.monthly-book > h3, .month-latest h4, .sky-day-stories h3, .sky-calendar > h3) {
+  font-size: var(--type-item-title);
+  font-weight: 650;
+  line-height: 1.45;
+}
+#modal :is(.month-count, .month-latest small) { font-size: var(--type-metadata); }

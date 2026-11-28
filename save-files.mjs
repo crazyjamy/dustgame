@@ -1,4 +1,4 @@
-import{restore}from'./dust-engine.mjs?v=1.13.81-3f2b718b';
+import{restore}from'./dust-engine.mjs?v=cf4d2669';
 import{APP_VERSION,validatePreferences,PREFS_KEY,BACKUP_KEY}from'./player-settings.mjs?v=1.13.81-3f2b718b';
 export const MAX_SAVE_BYTES=5*1024*1024;
 export function encodeSave(state,preferences,now=Date.now()){return JSON.stringify({format:'tiny-dust-save',schemaVersion:3,appVersion:APP_VERSION,exportedAt:new Date(now).toISOString(),data:state,preferences:validatePreferences(preferences)},null,2);}

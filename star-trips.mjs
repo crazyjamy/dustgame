@@ -1,4 +1,4 @@
-import {QUESTS} from './adventures.mjs?v=1.13.81-3f2b718b';
+import {QUESTS} from './adventures.mjs?v=cf4d2669';
 import {routeUnlocked} from './rooms.mjs?v=1.13.81-3f2b718b';
 import {keepPostcard,recordAfterwordReturn} from './dust-life.mjs?v=1.13.81-3f2b718b';
 import {activeLevel,basketEssenceBonus} from './furniture.mjs?v=1.13.81-3f2b718b';

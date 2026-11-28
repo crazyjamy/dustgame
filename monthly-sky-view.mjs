@@ -26,11 +26,17 @@ export function monthlyViews({esc, notePanel}) {
       const p = status(state,s,day), target = activeStory(state,day);
       const options = released.slice().reverse().map(t=>'<option value="'+t.id+'" '+(t===s?'selected':'')+'>'+fmt(t.id)+' · '+esc(t.name)+'</option>').join('');
       const last = p.opened ? s.episodes[p.opened-1] : null;
-      const progress = p.opened === 5 ? '마지막 이야기까지 열렸어요.'
-        : !p.credits ? '랜덤 탐험을 다녀와 별빛을 모으면 첫 이야기가 열려요.'
-        : p.opened < p.due ? '다음 탐험을 다녀와 별빛을 모으면 이야기가 한 편 더 열려요.'
-        : '다음 이야기는 '+releaseDays[p.opened]+'일에 공개돼요.';
-      const latest = last ? '<div class="month-latest"><small>최근에 열린 이야기</small><h4>'+esc(last[0])+'</h4><p>'+esc(last[1].split(/(?<=요\.|다\.|[!?])\s+/)[0])+'</p><button class="button secondary full" data-month-read="'+s.id+'-'+(p.opened-1)+'">이야기 읽기</button></div>' : '';
+      let progress;
+      if(p.opened===5)progress='마지막 이야기까지 열렸어요.';
+      else if(!p.credits)progress='루미에게서 랜덤 탐험 보상을 받으면 첫 이야기가 열려요.';
+      else if(p.opened===p.due){
+        const dayNumber=releaseDays[p.opened];
+        progress=p.credits>p.opened
+          ? `별빛을 모아 뒀어요. ${dayNumber}일에 다음 이야기가 열려요.`
+          : `다음 이야기는 ${dayNumber}일에 공개돼요. 그전에 귀환 보상을 받아 별빛을 모아 두세요.`;
+      }else if(target?.id!==s.id)progress='이 별자리를 선택한 뒤 랜덤 탐험 보상을 받으면 다음 이야기가 열려요.';
+      else progress='다음 탐험을 다녀와 루미에게 보상을 받으면 한 편 더 열려요.';
+      const latest = last ? '<div class="month-latest"><small>최근에 열린 이야기</small><h4>'+esc(last[0])+'</h4><p>'+esc(last[1].split(/(?<=요\.|다\.|[!?])\s+/)[0])+'</p><button class="button primary full" data-month-read="'+s.id+'-'+(p.opened-1)+'">이야기 읽기</button></div>' : '';
       const actions = !p.credits
         ? '<button class="button primary full" data-month-trip="'+s.id+'">탐험 갔다오기</button>'
         : p.credits < 5 && target?.id !== s.id

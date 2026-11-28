@@ -4,6 +4,8 @@ const monthNames = ['January','February','March','April','May','June','July','Au
 const plural = (count, singular, multiple = singular + 's') => Number(count) === 1 ? singular : multiple;
 
 export default [
+  [/^별빛을 모아 뒀어요\. (\d+)일에 다음 이야기가 열려요\.$/, 'Your starlight is saved. The next chapter opens on day $1 of the month.'],
+  [/^다음 이야기는 (\d+)일에 공개돼요\. 그전에 귀환 보상을 받아 별빛을 모아 두세요\.$/, 'The next chapter is released on day $1 of the month. Collect a return reward to save starlight in advance.'],
   [/^별빛 (\d+)\/5$/, 'Starlight $1/5'],
   [/^(\d+) 골드 · (.+) 1개$/, '$1 gold · 1 × $2'],
   [/^반짝이 (\d+)개 받기$/, 'Collect sparkles · $1'],

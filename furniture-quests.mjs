@@ -1,4 +1,4 @@
-import {FURNITURE} from './economy.mjs?v=1.13.81-3f2b718b';
+import {FURNITURE, installed, toggleFurniture} from './economy.mjs?v=1.13.81-3f2b718b';
 
 const missions = {
  rug: ['첫 별의 이야기 읽기', s => s.dusts.some(d => d.readStories.length > 0)],
@@ -31,12 +31,13 @@ export function furnitureQuest(s, id) {
  return {f, condition, owned, ready: !owned && meetsCondition(s)};
 }
 
-export function claimFurnitureQuest(s, id) {
+export function claimFurnitureQuest(s, id, now=Date.now()) {
  const quest = furnitureQuest(s, id);
  if (!quest) return {ok:false, message:'설치물을 확인해주세요.'};
  if (quest.owned) return {ok:false, message:'이미 보유한 설치물이에요.'};
  if (!quest.ready) return {ok:false, message:'별빛 임무에 표시된 조건을 먼저 달성해주세요.'};
  s.ownedFurniture.push(id);
  s.furnitureLevels[id] = 1;
+ if (!installed(s,id)) toggleFurniture(s,id,now);
  return {ok:true, furniture:quest.f};
 }

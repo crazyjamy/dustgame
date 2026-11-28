@@ -45,7 +45,12 @@ export function creditReturn(state, name, day) {
   if (old.credits >= 5) return null;
   const book = state.monthlySky ??= {};
   book.entries ??= {};
-  book.entries[story.id] = {travelers:[...old.travelers, name], cardSeen:false};
+  book.entries[story.id] = {travelers:[...old.travelers, name], cardSeen:false, ...(old.credits === 4 ? {finalPending:true} : {})};
   if (old.credits === 4 && book.target === story.id) delete book.target;
   return {story, opened:Math.min(old.due,old.credits+1) > old.opened};
+}
+
+export function pendingFinalStory(state, day) {
+  return editions.find(story => state.monthlySky?.entries?.[story.id]?.finalPending === true
+    && status(state,story,day).opened === 5) || null;
 }

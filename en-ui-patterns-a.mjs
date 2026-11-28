@@ -7,6 +7,7 @@ const archiveOptions = months.map((month, index) => [
 ]);
 
 export default [
+  [/^은하계에 놓았어요 · (.+)$/, 'Placed in your galaxy · $1'],
   ...archiveOptions,
   [/^(.+) · (\d+)일 · 테스트 미리보기$/, '$1 · Day $2 · Test preview'],
   [/^(.+) · (\d+)일$/, '$1 · Day $2'],

@@ -4,6 +4,12 @@ const monthNames = ['January','February','March','April','May','June','July','Au
 const plural = (count, singular, multiple = singular + 's') => Number(count) === 1 ? singular : multiple;
 
 export default [
+  [/^별빛 (\d+)\/5$/, 'Starlight $1/5'],
+  [/^(\d+) 골드 · (.+) 1개$/, '$1 gold · 1 × $2'],
+  [/^반짝이 (\d+)개 받기$/, 'Collect sparkles · $1'],
+  [/^(.+) · (\d+)회$/, '$1 · $2 times'],
+  [/^(.+?)[은는] (.+) 곁에서 새로 생긴 자리를 한참 살펴봤어요\.$/, '$1 spent a while exploring the new spot beside the $2.'],
+
   [/^(.+)를 은하계로 데려오려면 자리가 하나 필요해요\. 보관함에서 잠시 쉴 별을 골라주세요\.$/, 'To bring $1 into your galaxy, make room by choosing a star to rest in storage.'],
   [/^(.+)와 같은 별을 맞이하려면 자리가 하나 필요해요\. 보관함에서 잠시 쉴 별을 골라주세요\.$/, 'To welcome another star like $1, choose a star to rest in storage and free up a spot.'],
   [/^(.+) 보관함으로 옮기기$/, 'Move $1 to storage'],
@@ -100,4 +106,5 @@ export default [
   [/^(.+) · 첫 엽서 귀환$/, '$1 · Returning with a first postcard'],
   [/^(.+) · 이미 받은 엽서 귀환$/, '$1 · Returning with a duplicate postcard'],
   [/^안녕, (.+)!$/, 'Hello, $1!'],
+  [/^도안 발견 · (.+)$/, 'Blueprint found · $1'],
 ];

@@ -28,7 +28,7 @@ const favoriteOrder=[0,3,1,7,4,8,5,5,2,2,3,1,6,9,2,4,6,5,8,9];
 export function personality(id){const i=DUSTS.findIndex(d=>d.id===id);if(i<0)throw Error('unknown dust');const favorite=FAVORITES[favoriteOrder[i]??((i*7+3)%10)],mood=MOODS[(i*3)%5];const c=characterProfile(id);return {favorite:c?{...favorite,action:c.action,words:c.words}:favorite,mood,index:i};}
 export const DEFAULT_SPOTS=[[45,40],[22,52],[66,54],[36,62],[58,23],[15,26],[76,29],[49,65],[72,68]];
 export const FURNITURE_SPOTS={rug:{x:50,y:66},plant:{x:9,y:52},lamp:{x:89,y:45},cushion:{x:80,y:84},bookshelf:{x:20,y:27},teacup:{x:28,y:78},basket:{x:84,y:60},windchime:{x:45,y:18},hourglass:{x:76,y:40},musicbox:{x:65,y:86}};
-const residents=s=>s.dusts.filter(d=>!d.stored&&!s.adventures.some(q=>q.uid===d.uid)&&s.deskRun?.uid!==d.uid);
+const residents=s=>s.dusts.filter(d=>!d.stored&&!s.adventures.some(q=>q.uid===d.uid)&&s.deskRun?.uid!==d.uid&&s.starTrips?.trip?.uid!==d.uid);
 const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
 const lookup=id=>DUSTS.find(d=>d.id===id);
 const topic=id=>{const name=lookup(id).name;return name+((name.charCodeAt(name.length-1)-44032)%28?'은':'는');};
@@ -110,9 +110,25 @@ export function keepPostcard(s,d,route,now=Date.now()){
 }
 export function resumeLife(s,now=Date.now()){
  initLife(s,now);const gap=now-s.life.lastSeen;s.life.lastSeen=now;if(gap<60000)return null;
- const friends=residents(s).slice(0,3),parts=friends.map(d=>{const p=personality(d.id),pair=companionship(s,d);return topic(d.id)+(pair?` ${lookup(pair.other.id).name} 곁에서 ${pair.kind==='nap'?'나란히 잠을 잤어요.':'그림자 놀이를 했어요.'}`:nearFavorite(s,d)?` ${p.favorite.action}`:` ${p.mood.idle}`);});
- if(!parts.length)parts.push(s.adventures.length?'루미가 작은 지도를 펴고 모험을 떠난 친구들의 귀갓길을 살폈어요.':'보관함의 친구들이 각자의 꿈을 꾸며 다음 만남을 기다렸어요.');
- const entry=record(s,'offline','네가 없는 동안에도',parts.join('\n'),now);s.life.welcome=entry.id;return entry;
+ const home=residents(s),placed=s.decorations||[];
+ const known=Array.isArray(s.life.notedDecorations)?s.life.notedDecorations:[];
+ const fresh=FAVORITES.find(f=>placed.includes(f.id)&&!known.includes(f.id));
+ // Keep the prior snapshot when no star is home to experience the new object.
+ if(home.length)s.life.notedDecorations=[...new Set([...known,...placed])];
+ const visitor=fresh&&(home.find(d=>personality(d.id).favorite.id===fresh.id)||home[0]);
+ const friends=visitor?[visitor]:home.slice(0,3);
+ const parts=friends.map(d=>{
+  if(fresh?.id==='rug'&&d.id==='crumb')return '솔라가 행성 고리에 앉아 루미가 두고 간 성운 사진을 펼쳐 봤어요.';
+  if(fresh)return topic(d.id)+' '+fresh.name+' 곁에서 새로 생긴 자리를 한참 살펴봤어요.';
+  const p=personality(d.id),pair=companionship(s,d);
+  return topic(d.id)+(pair?` ${lookup(pair.other.id).name} 곁에서 ${pair.kind==='nap'?'나란히 잠을 잤어요.':'그림자 놀이를 했어요.'}`:nearFavorite(s,d)?` ${p.favorite.action}`:` ${p.mood.idle}`);
+ });
+ if(!parts.length)parts.push(s.adventures.length||s.starTrips?.trip?'루미가 작은 지도를 펴고 모험을 떠난 친구들의 귀갓길을 살폈어요.':'보관함의 친구들이 각자의 꿈을 꾸며 다음 만남을 기다렸어요.');
+ const entry=record(s,'offline','네가 없는 동안에도',parts.join('\n'),now);
+ entry.starUids=friends.map(d=>d.uid);
+ if(visitor)entry.newDecoration=true;
+ s.life.welcome=entry.id;
+ return entry;
 }
 export function journalCards(entries){
  const meetings=entries.filter(e=>e.kind==='friend'&&!e.storyUid);
@@ -135,6 +151,21 @@ export function journalCards(entries){
  }
  return entries.filter(e=>!hidden.has(e)).map(e=>linked.has(e)?{...e,linkedStories:linked.get(e)}:e);
 }
-export function readLife(s){for(const e of s.life.journal)e.seen=true;s.life.welcome=null;}
+export function groupJournalHistory(entries){
+ const rows=[];
+ for(const entry of entries){
+  const last=rows.at(-1);
+  const sameStars=JSON.stringify(entry.starUids||[])===JSON.stringify(last?.starUids||[]);
+  if(last?.kind==='offline'&&entry.kind==='offline'&&!last.newDecoration&&!entry.newDecoration&&
+     !last.earnedSparkles&&!entry.earnedSparkles&&sameStars&&last.text===entry.text){
+   last.repeats=(last.repeats||1)+1;
+  }else rows.push({...entry});
+ }
+ return rows;
+}
+export function readLife(s,ids){
+ for(const e of s.life.journal)if(!ids||ids.includes(e.id))e.seen=true;
+ if(!ids||ids.includes(s.life.welcome))s.life.welcome=null;
+}
 
 Object.assign(FURNITURE_SPOTS,{starlamp:{x:20,y:18},glassjar:{x:78,y:76},wishboard:{x:38,y:18},postbox:{x:10,y:61},prism:{x:80,y:44},starmobile:{x:48,y:15},workbench:{x:72,y:60},candle:{x:34,y:73},blanket:{x:58,y:70},terrarium:{x:18,y:79}});

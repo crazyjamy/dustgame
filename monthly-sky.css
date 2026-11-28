@@ -144,3 +144,30 @@
 }
 #modal .month-episode b { word-break: keep-all; overflow-wrap: anywhere; }
 #modal .month-episode:enabled small { color: var(--color-brand-primary); }
+
+#modal .month-reader-icon {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  min-height: 32px;
+  margin: 0 auto 6px;
+  color: var(--color-brand-primary, #c1d9ff);
+  font-size: 24px;
+  line-height: 1;
+}
+#modal .month-reader-icon svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+#modal .month-reader-icon line { stroke-width: 1.5; }
+
+#modal .month-latest {
+  margin: 0.85rem 0;
+  padding: 0.85rem;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 0.75rem;
+  background: var(--color-glass-card);
+}
+#modal .month-latest small { color: var(--color-text-secondary); }
+#modal .month-latest h4 { margin: 0.35rem 0; }

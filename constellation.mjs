@@ -21,6 +21,7 @@ export function light(state,name,postcard,day=today()){
  if(!entry.names.includes(name))entry.names.push(name);
  entry.count=book.counts[figure];if(postcard)entry.letters++;
 }
+export const constellationFigure=name=>figures.find(([label])=>label===name);
 export function art(figure,count){
  const [,stars,edges=stars.slice(1).map((_,i)=>[i,i+1])]=figure;
  const points=stars.map(([ra,dec])=>[-ra*15*Math.cos(stars[0][1]*Math.PI/180),-dec]);

@@ -2556,6 +2556,26 @@ button.decor {padding:0;border:0;background:transparent;color:inherit}
 #modal .trip-avatar svg {width:100%;height:100%}
 #modal .trip-report progress {width:100%;height:6px;display:block;margin:12px 0 6px;accent-color:var(--color-brand-primary)}
 
+#modal .trip-return { display: grid; gap: 12px; text-align: left; }
+#modal .trip-return-card {
+  display: grid; gap: 8px; padding: 12px 14px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-card);
+  background: var(--glass-panel-sheen), var(--color-glass-card);
+}
+#modal .trip-return .trip-heading { margin: 0; }
+#modal .trip-return h3 { font-size: var(--text-body-large); }
+#modal .trip-return-card p { margin: 0; color: var(--color-text-secondary); }
+#modal .trip-return-rewards { display: flex; flex-wrap: wrap; gap: 6px; }
+#modal .trip-return .reward-amount[data-kind="gold"] { color: var(--color-currency-gold); }
+#modal .trip-return-blueprint { display: flex; align-items: center; gap: 6px; font-size: var(--text-label); }
+#modal .trip-return-blueprint svg { width: 16px; height: 16px; flex: none; }
+#modal .trip-return-progress > div { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 4px 12px; }
+#modal .trip-return-progress h3, #modal .trip-return-progress progress { margin: 0; }
+#modal .trip-return-progress span { color: var(--color-brand-primary); font-size: var(--text-label); }
+#modal .trip-return-actions { display: grid; gap: 8px; }
+#modal .trip-return-actions .full { min-height: var(--size-reading-target); margin: 0; }
+
 /* Shape roles shared by the room, collection, shop and reading surfaces. */
 :is(#main, #modal, #dustPopup, .topbar, .navigation) :is(.button, .text-button, .close, .filter-choice),
 #modal .modal-heading .close, #toastDismiss,

@@ -9,9 +9,9 @@ function postcardStop(s,pet,random){
  return stops[Math.floor(random()*stops.length)].id;
 }
 export const destinations=[
- {name:'풀잎별',symbol:'leaf',level:1,material:'나뭇가지',furniture:'나무 스툴',art:'woodStool',materialArt:'twig',color:'골드',price:6,gold:5,places:['풀숲','나무 그늘','오솔길'],quests:['떨어진 나뭇가지 모으기','바람에 굴러간 잔가지 찾기']},
- {name:'물방울별',symbol:'dew',level:3,essence:'dew',material:'빛조개',furniture:'조개 조명',art:'shellLamp',materialArt:'glowShell',color:'반짝이',price:2,gold:8,places:['물가','연잎 아래','얕은 여울'],quests:['연못에서 빛나는 조개 찾기','여울에 숨은 조개 줍기']},
- {name:'달빛별',symbol:'moon',level:5,material:'달빛석',furniture:'달빛 선반',art:'moonShelf',materialArt:'moonstone',color:'반짝이',price:3,gold:10,places:['달그늘','분화구','은빛 언덕'],quests:['달빛에 반짝이는 돌 찾기','분화구의 달빛석 모으기']}
+ {name:'풀잎별',symbol:'leaf',rewardEssence:'leaf',level:1,material:'나뭇가지',furniture:'나무 스툴',art:'woodStool',materialArt:'twig',color:'골드',price:6,gold:5,places:['풀숲','나무 그늘','오솔길'],quests:['떨어진 나뭇가지 모으기','바람에 굴러간 잔가지 찾기']},
+ {name:'물방울별',symbol:'dew',rewardEssence:'dew',level:3,essence:'dew',material:'빛조개',furniture:'조개 조명',art:'shellLamp',materialArt:'glowShell',color:'반짝이',price:2,gold:8,places:['물가','연잎 아래','얕은 여울'],quests:['연못에서 빛나는 조개 찾기','여울에 숨은 조개 줍기']},
+ {name:'달빛별',symbol:'moon',rewardEssence:'moon',level:5,material:'달빛석',furniture:'달빛 선반',art:'moonShelf',materialArt:'moonstone',color:'반짝이',price:3,gold:10,places:['달그늘','분화구','은빛 언덕'],quests:['달빛에 반짝이는 돌 찾기','분화구의 달빛석 모으기']}
 ];
 export const recipeQuantity=3;
 export const tripSeconds=[20,45,90];
@@ -57,7 +57,7 @@ export function collectTrip(s,now=Date.now(),random=Math.random){
   if(visited)recordAfterwordReturn(s,pet,visited.id,now);
  }
  const i=Math.floor(t.q/2);s.adventureCount++;if(t.q%2===0)j.blueprints[i]=true;
- const essence=['leaf','dew','moon'][i];
+ const essence=destinations[i].rewardEssence;
  s.materials.essence[essence]+=basketEssenceBonus(activeLevel(s,'basket'));
  s.sparkles+=Math.ceil(activeLevel(s,'blanket')/2);
  j.counts[t.q]++;j.stock[i]++;s.gold+=tripGold(s,i);j.trip=null;return true;

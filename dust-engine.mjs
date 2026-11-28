@@ -13,7 +13,7 @@ export const level=xp=>1+Math.floor(xp/2);
 export const unlockedStories=dust=>Math.min(level(dust.xp)-1,STORIES[dust.id].length);
 export const inRoom=s=>s.dusts.filter(d=>!d.stored&&!isAway(s,d.uid));
 export function createState(now=Date.now()){return initLife(initEconomy({version:1,gold:60,dusts:[{uid:1,id:'crumb',xp:0,stored:false,readStories:[]}],nextUid:2,selectedUid:1,sparkles:6,materials:{group:{daily:3,pop:3,dream:3},rarity:{common:4,rare:2,legend:1},essence:Object.fromEntries(ESSENCES.map(e=>[e.id,e.id==='moon'?8:e.added?3:5]))},pending:null,adventures:[],adventureCount:0,keeperRoute:'bookshelf',giftAt:0,gifts:0,petAt:0},now),now);}
-export function migrateCats(raw){const c=JSON.parse(raw);if(c.version!==2||!c.cats?.length)throw Error();const s=createState(),ids={butter:'crumb',denim:'pink',momo:'puff'};s.dusts=c.cats.map((d,i)=>({uid:i+1,id:ids[d.id]||'crumb',xp:Math.max(0,Math.min(10,Math.floor(d.xp/10)||0)),stored:false,readStories:[]}));s.nextUid=s.dusts.length+1;s.selectedUid=1;s.sparkles=Math.max(0,c.food||24);return initEconomy(s);}
+export function migrateCats(raw){const c=JSON.parse(raw);if(c.version!==2||!c.cats?.length)throw Error();const s=createState();s.importedCats=true;const ids={butter:'crumb',denim:'pink',momo:'puff'};s.dusts=c.cats.map((d,i)=>({uid:i+1,id:ids[d.id]||'crumb',xp:Math.max(0,Math.min(10,Math.floor(d.xp/10)||0)),stored:false,readStories:[]}));s.nextUid=s.dusts.length+1;s.selectedUid=1;s.sparkles=Math.max(0,c.food||24);return initEconomy(s);}
 export function restore(raw,now=Date.now()){const s=JSON.parse(raw);if(s.materials?.essence)for(const e of ESSENCES)if(e.added&&s.materials.essence[e.id]===undefined)s.materials.essence[e.id]=3;if(s.version!==1||!Array.isArray(s.dusts)||!s.dusts.length||s.dusts.length>10000||!s.dusts.every(d=>getDust(d.id)&&Number.isSafeInteger(d.uid)&&d.uid>0&&Number.isInteger(d.xp)&&d.xp>=0&&d.xp<=10)||new Set(s.dusts.map(d=>d.uid)).size!==s.dusts.length||!Number.isSafeInteger(s.nextUid)||s.nextUid<=Math.max(...s.dusts.map(d=>d.uid)))throw Error('invalid dusts');for(const k of ['sparkles','giftAt','gifts','petAt'])if(!Number.isFinite(s[k])||s[k]<0)throw Error('invalid value');for(const [key,items]of[['group',GROUPS],['rarity',RARITIES],['essence',ESSENCES]])for(const x of items)if(!Number.isInteger(s.materials?.[key]?.[x.id])||s.materials[key][x.id]<0)throw Error('invalid materials');if(s.pending&&(!getDust(s.pending.id)||!Number.isFinite(s.pending.end)))throw Error('invalid pending');if(s.pending?.mode!==undefined&&!['random','recipe'].includes(s.pending.mode))throw Error('invalid birth mode');for(const d of s.dusts){if(d.stored===undefined)d.stored=false;if(typeof d.stored!=='boolean')throw Error('invalid storage');if(d.readStories===undefined)d.readStories=[];if(!Array.isArray(d.readStories)||new Set(d.readStories).size!==d.readStories.length||!d.readStories.every(i=>Number.isInteger(i)&&i>=0&&i<unlockedStories(d)))throw Error('invalid stories');}initAdventures(s);if(!s.dusts.some(d=>d.uid===s.selectedUid&&!d.stored&&!isAway(s,d.uid)))s.selectedUid=inRoom(s)[0]?.uid??null;return initLife(initEconomy(s,now),now);}
 export const recipe=selection=>DUSTS.find(d=>d.group===selection.group&&d.rarity===selection.rarity&&d.essence===selection.essence);
 export function checkMix(s,v={}){if(!hasHomeSpace(s)&&!hasStorageSpace(s))return {ok:false,message:'방과 보관함이 가득 찼어요. 은하계를 업그레이드해 주세요.'};if(s.pending)return{ok:false,message:'별이 모이고 있어요.'};const selected=['group','rarity','essence'].filter(k=>v?.[k]);if(!selected.length)return{ok:true,mode:'random',cost:0};if(selected.length<3)return{ok:false,message:'재료 세 가지를 모두 골라주세요. 모두 비우면 랜덤으로 만나요.'};const dust=recipe(v);if(!dust)return{ok:false,message:'아직 발견되지 않은 조합이에요.'};const cost=RARITIES.find(r=>r.id===v.rarity).cost;if(s.materials.group[v.group]<1||s.materials.rarity[v.rarity]<1||s.materials.essence[v.essence]<cost)return{ok:false,message:'재료가 모자라요. 모험을 떠나거나 상점에서 재료를 사보세요.'};return{ok:true,mode:'recipe',dust,cost};}
@@ -22,6 +22,18 @@ export function finishMix(s,now=Date.now()){if(!s.pending||now<s.pending.end)ret
 // Retain the old API for callers of earlier builds; sparkles no longer grant XP.
 export function feed(){return {ok:false,message:'같은 종류의 별 두 마리를 합쳐 키워주세요.'};}
 export function mergeCandidates(s,uid){const d=s.dusts.find(d=>d.uid===uid);if(!d||d.xp>=10||d.stored||isAway(s,uid))return [];return s.dusts.filter(x=>x.uid!==uid&&x.id===d.id&&x.xp<10&&!x.stored&&!isAway(s,x.uid));}
+// UID 1 is the starter assigned by createState. Migrated cat saves have no starter.
+export function firstSola(s){
+ if(s.importedCats||s.dusts.some(d=>d.xp>=2||d.readStories.length))return null;
+ return s.dusts.find(d=>d.uid===1&&d.id==='crumb'&&d.xp<2)||null;
+}
+export function firstSolaPair(s,uid){
+ const starter=firstSola(s);
+ if(!starter)return null;
+ const matches=mergeCandidates(s,starter.uid);
+ if(matches.length!==1||matches[0].xp>=2)return null;
+ return uid===starter.uid||uid===matches[0].uid?[starter.uid,matches[0].uid]:null;
+}
 export function mergeResultLevel(first,second){return Math.max(level(first.xp),level(second.xp))+1;}
 export function mergeDust(s,uid,otherUid,now=Date.now()){
  const dust=s.dusts.find(d=>d.uid===uid),other=mergeCandidates(s,uid).find(d=>d.uid===otherUid);
